@@ -23,16 +23,18 @@
 *
 **********************************************************************
 */
-static uint32_t g_wTimeMaxValue  = MAX_VALUE_32_BIT;
+static uint32_t s_wTimeMaxValue  = MAX_VALUE_32_BIT;
 
-static timer_table_t* g_ptTimerTableHead = NULL;
+static timer_table_t* s_ptTimerTableHead = NULL;
 
-static timer_tick_fn g_pfGetSysTick = NULL;
+static timer_tick_fn s_pfGetSysTick = NULL;
 
-static timer_hook_t g_tHooks = {
+static timer_hook_t s_tHooks = {
     malloc,
     free
 };
+
+static bool s_bTimerInitOk = false;
 
 /**
  * \brief Initialize the timer control block.
@@ -47,14 +49,19 @@ bool soft_timer_init(timer_tick_fn pfGetSysTick, uint32_t wMaxTime)
         return false;
     }
 
-    g_ptTimerTableHead = (timer_table_t*)g_tHooks.malloc_fn(sizeof(timer_table_t));
-    if (NULL == g_ptTimerTableHead) {
+    if (s_bTimerInitOk) {
+        return true;
+    }
+
+    s_ptTimerTableHead = (timer_table_t*)s_tHooks.malloc_fn(sizeof(timer_table_t));
+    if (NULL == s_ptTimerTableHead) {
         return false;
     }
 
-    g_ptTimerTableHead->next = NULL;
-    g_pfGetSysTick = pfGetSysTick;
-    g_wTimeMaxValue = wMaxTime;
+    s_ptTimerTableHead->next = NULL;
+    s_pfGetSysTick = pfGetSysTick;
+    s_wTimeMaxValue = wMaxTime;
+    s_bTimerInitOk = true;
 
     return true;
 }
@@ -69,8 +76,8 @@ bool soft_timer_init_hook(timer_hook_t *pHooks)
         return false;
     }
 
-    g_tHooks.malloc_fn = pHooks->malloc_fn;
-    g_tHooks.free_fn = pHooks->free_fn;
+    s_tHooks.malloc_fn = pHooks->malloc_fn;
+    s_tHooks.free_fn = pHooks->free_fn;
 
     return true;
 }
@@ -79,25 +86,25 @@ timer_table_t* soft_timer_create(uint32_t wTimeout, bool bPeriodic, timer_callba
 {
     timer_table_t* ptTimerNode = NULL;
     timer_table_t* ptFind = NULL;
-    if (NULL == g_ptTimerTableHead) {
+    if (NULL == s_ptTimerTableHead) {
         return NULL;
     }
 
-    ptTimerNode = (timer_table_t*)g_tHooks.malloc_fn(sizeof(timer_table_t));
+    ptTimerNode = (timer_table_t*)s_tHooks.malloc_fn(sizeof(timer_table_t));
     if (NULL == ptTimerNode) {
         return NULL;
     }
 
     ptTimerNode->next = NULL;
     ptTimerNode->data.bPeriodic = bPeriodic;
-    ptTimerNode->data.wStart = g_pfGetSysTick();
+    ptTimerNode->data.wStart = s_pfGetSysTick();
     ptTimerNode->data.wNow = ptTimerNode->data.wStart;
     ptTimerNode->data.wElapse = 0;
     ptTimerNode->data.wTimeout = wTimeout;
     ptTimerNode->data.pfTimerCallback = pfTimerCallback;
     ptTimerNode->data.pArg = pArg;
 
-    for (ptFind = g_ptTimerTableHead; NULL != ptFind->next; ptFind=ptFind->next) {
+    for (ptFind = s_ptTimerTableHead; NULL != ptFind->next; ptFind=ptFind->next) {
         // do nothing
     }
     ptFind->next = ptTimerNode;
@@ -113,10 +120,10 @@ bool soft_timer_delete(timer_table_t* ptNode)
         return false;
     }
 
-    for (ptFind = g_ptTimerTableHead; NULL != ptFind; ptFind = ptFind->next) {
+    for (ptFind = s_ptTimerTableHead; NULL != ptFind; ptFind = ptFind->next) {
         if (ptNode == ptFind->next) {
             ptFind->next = ptNode->next;
-            g_tHooks.free_fn(ptNode);
+            s_tHooks.free_fn(ptNode);
             ptNode = NULL;
             return true;
         }
@@ -131,7 +138,7 @@ bool soft_timer_reset(timer_table_t* ptNode)
         return false;
     }
 
-    ptNode->data.wStart = g_pfGetSysTick();
+    ptNode->data.wStart = s_pfGetSysTick();
     return true;
 }
 
@@ -140,17 +147,17 @@ bool soft_timer_process(void)
     timer_table_t* ptFind = NULL;
     timer_table_t* ptNodeFree = NULL;
 
-    if (NULL == g_ptTimerTableHead) {
+    if (NULL == s_ptTimerTableHead) {
         return false;
     }
 
-    for (ptFind = g_ptTimerTableHead->next; ptFind != NULL;) {
-        ptFind->data.wNow = g_pfGetSysTick();
+    for (ptFind = s_ptTimerTableHead->next; ptFind != NULL;) {
+        ptFind->data.wNow = s_pfGetSysTick();
 
         if(ptFind->data.wNow >= ptFind->data.wStart) {
             ptFind->data.wElapse = ptFind->data.wNow - ptFind->data.wStart;
         } else {
-            ptFind->data.wElapse = (g_wTimeMaxValue - ptFind->data.wNow) + (ptFind->data.wStart - 0);
+            ptFind->data.wElapse = (s_wTimeMaxValue - ptFind->data.wNow) + (ptFind->data.wStart - 0);
         }
 
         if(ptFind->data.wElapse >= ptFind->data.wTimeout) {
