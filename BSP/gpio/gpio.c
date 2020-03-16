@@ -16,8 +16,7 @@
 
 #include ".\gpio.h"
 #include ".\xhal_gpio.h"
-#include "..\..\hal\mcu\stm32f1xx\Inc\stm32f1xx_hal_conf.h"
-
+#include ".\hal_gpio.h"
 /*********************************************************************
 *
 *       Global data
@@ -48,17 +47,17 @@ static inline int32_t get_map_pos(uint16_t hwPort)
     return TOTAL_GPIO_NUM == i ? XHAL_FAIL : i;
 }
 
-int32_t xhal_gpio_get(gpio_dev_t *ptGpio, uint32_t *pwValue)
+int32_t xhal_gpio_get(gpio_dev_t *ptGpio, int32_t *pnValue)
 {
     int32_t nPos = 0;
 
-    if (NULL == ptGpio || NULL == pwValue) {
+    if (NULL == ptGpio || NULL == pnValue) {
         return XHAL_FAIL;
     }
 
     nPos = get_map_pos(ptGpio->chPort);
     if (XHAL_FAIL != nPos) {
-        *pwValue = (GPIO_PIN_SET == HAL_GPIO_ReadPin(c_tGpioMap[nPos].pGpioGroup, c_tGpioMap[nPos].hwPin)) ? \
+        *pnValue = (GPIO_PIN_SET == HAL_GPIO_ReadPin(c_tGpioMap[nPos].pGpioGroup, c_tGpioMap[nPos].hwPin)) ? \
                     GPIO_LEVEL_HIGH : GPIO_LEVEL_LOW;
         return XHAL_OK;
     }
@@ -112,17 +111,17 @@ int32_t xhal_gpio_init_by_port(uint8_t chPort)
     return XHAL_OK;
 }
 
-int32_t xhal_gpio_get_by_port(uint8_t chPort, uint32_t *pwValue)
+int32_t xhal_gpio_get_by_port(uint8_t chPort, int32_t *pnValue)
 {
     int32_t nPos = 0;
 
-    if (NULL == pwValue) {
+    if (NULL == pnValue) {
         return XHAL_FAIL;
     }
 
     nPos = get_map_pos(chPort);
     if (XHAL_FAIL != nPos) {
-        *pwValue = (GPIO_PIN_SET == HAL_GPIO_ReadPin(c_tGpioMap[nPos].pGpioGroup, c_tGpioMap[nPos].hwPin)) ? \
+        *pnValue = (GPIO_PIN_SET == HAL_GPIO_ReadPin(c_tGpioMap[nPos].pGpioGroup, c_tGpioMap[nPos].hwPin)) ? \
                     GPIO_LEVEL_HIGH : GPIO_LEVEL_LOW;
         return XHAL_OK;
     }

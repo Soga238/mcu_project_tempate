@@ -9,33 +9,22 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       xhal_gpio.h *                                                *
+*       at_types.h *                                                 *
 *                                                                    *
 **********************************************************************
 */
-#ifndef __XHAL_GPIO_H__
-#define __XHAL_GPIO_H__
+#ifndef __AT_TYPES_H__
+#define __AT_TYPES_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define rt_size_t       unsigned long
+#define rt_int32_t      int32_t
     
-#include "..\bsp_cfg.h"
-
-/*********************************************************************
-*
-*       Types
-*
-**********************************************************************
-*/
-typedef struct {
-    uint16_t    hwPort;
-    void        *pGpioGroup;
-    uint16_t    hwPin;
-}gpio_mapping_t;
-
 #ifdef __cplusplus
-    }
+}
 #endif
 
 #endif

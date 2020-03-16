@@ -9,34 +9,29 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       xhal_gpio.h *                                                *
+*       at_utils.h *                                                 *
 *                                                                    *
 **********************************************************************
 */
-#ifndef __XHAL_GPIO_H__
-#define __XHAL_GPIO_H__
+#ifndef __AT_UTILS_H__
+#define __AT_UTILS_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
-#include "..\bsp_cfg.h"
 
-/*********************************************************************
-*
-*       Types
-*
-**********************************************************************
-*/
-typedef struct {
-    uint16_t    hwPort;
-    void        *pGpioGroup;
-    uint16_t    hwPin;
-}gpio_mapping_t;
+/* Includes --------------------------------------------------------*/
+#include "..\at_cfg.h"
+#include <stdarg.h>
+
+/* Exported constants ----------------------------------------------*/
+/* Exported functions --------------------------------------------- */
+extern const uint8_t *at_get_last_cmd(int32_t *pnLength);
+extern const uint8_t* at_extract_last_cmd(uint8_t* pchBuf, int32_t* pnLength);
+extern int32_t at_vprintf(void *_, const char *format, va_list args);
 
 #ifdef __cplusplus
-    }
+}
 #endif
-
 #endif
 /*************************** End of file ****************************/

@@ -9,33 +9,29 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       xhal_gpio.h *                                                *
+*       json_cmd_cfg.h *                                             *
 *                                                                    *
 **********************************************************************
 */
-#ifndef __XHAL_GPIO_H__
-#define __XHAL_GPIO_H__
+#ifndef __JSON_CMD_CFG_H__
+#define __JSON_CMD_CFG_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
-#include "..\bsp_cfg.h"
 
-/*********************************************************************
-*
-*       Types
-*
-**********************************************************************
-*/
-typedef struct {
-    uint16_t    hwPort;
-    void        *pGpioGroup;
-    uint16_t    hwPin;
-}gpio_mapping_t;
+#include "..\service_cfg.h"
+
+#ifndef JSON_CMD_NAME_SIZE
+#define JSON_CMD_NAME_SIZE       16
+#endif
+
+#ifndef JSON_CMD_NUMBER
+#define JSON_CMD_NUMBER          8
+#endif
 
 #ifdef __cplusplus
-    }
+}
 #endif
 
 #endif

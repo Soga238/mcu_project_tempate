@@ -9,34 +9,34 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       xhal_gpio.h *                                                *
+*       hal_gpio.h *                                                 *
 *                                                                    *
 **********************************************************************
 */
-#ifndef __XHAL_GPIO_H__
-#define __XHAL_GPIO_H__
+#ifndef __HAL_GPIO_H__
+#define __HAL_GPIO_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
-#include "..\bsp_cfg.h"
 
-/*********************************************************************
-*
-*       Types
-*
-**********************************************************************
-*/
-typedef struct {
-    uint16_t    hwPort;
-    void        *pGpioGroup;
-    uint16_t    hwPin;
-}gpio_mapping_t;
+/* Includes --------------------------------------------------------*/
+#include "..\bsp_cfg.h"
+#include "stm32f10x.h"
+
+/* Exported constants ----------------------------------------------*/
+typedef enum {
+    GPIO_PIN_RESET = 0u,
+    GPIO_PIN_SET
+} GPIO_PinState;
+
+/* Exported functions --------------------------------------------- */
+extern GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+extern void HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState);
+extern void HAL_GPIO_TogglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 
 #ifdef __cplusplus
-    }
+}
 #endif
-
 #endif
 /*************************** End of file ****************************/

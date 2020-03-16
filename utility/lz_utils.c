@@ -1,7 +1,20 @@
+/*********************************************************************
+*                      Hangzhou Lingzhi Lzlinks                      *
+*                        Internet of Things                          *
+**********************************************************************
+*                                                                    *
+*            (c) 2018 - 8102 Hangzhou Lingzhi Lzlinks                *
+*                                                                    *
+*       www.lzlinks.com     Support: embedzjh@gmail.com              *
+*                                                                    *
+**********************************************************************
+*                                                                    *
+*       lz_utils.c *                                                 *
+*                                                                    *
+**********************************************************************
+*/
 #include ".\lz_utils.h"
 #include <string.h>
-
-#define MINMIUM_BYTE_SIZE   3
 
 uint16_t char_hl_short(uint8_t chHigh, uint8_t chLow)
 {
@@ -14,7 +27,6 @@ uint16_t short_xch_hl(uint16_t hwValue)
 }
 
 #ifdef BYTE_ALGINED_REQUIRED
-
 void short_copy_xch(void *dst, const void *src, uint32_t nNumofShort, bool bSwitch)
 {
     typedef uint8_t (*ARRAY2)[2];
@@ -34,9 +46,7 @@ void short_copy_xch(void *dst, const void *src, uint32_t nNumofShort, bool bSwit
         }
     }
 }
-
 #else
-
 void short_copy_xch(void *dst, const void *src, int32_t nNumofShort, bool bSwitch)
 {
     uint16_t *pt = (uint16_t *)dst;
@@ -46,11 +56,9 @@ void short_copy_xch(void *dst, const void *src, int32_t nNumofShort, bool bSwitc
         *pt = bSwitch ? short_xch_hl(*ps) : *ps;
     }
 }
-
 #endif
 
 #ifdef CALC_CRC_WITH_TABLE
-
 static const uint16_t hwCRCTable[] = {
     0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
     0XC601, 0X06C0, 0X0780, 0XC741, 0X0500, 0XC5C1, 0XC481, 0X0440,
@@ -85,10 +93,8 @@ static const uint16_t hwCRCTable[] = {
     0X4400, 0X84C1, 0X8581, 0X4540, 0X8701, 0X47C0, 0X4680, 0X8641,
     0X8201, 0X42C0, 0X4380, 0X8341, 0X4100, 0X81C1, 0X8081, 0X4040
 };
-
 uint16_t crc16_with_table (const uint8_t *pchData, uint16_t hwLength)
 {
-
     uint8_t chTemp;
     uint16_t hwCRCWord = 0xFFFF;
 
@@ -101,7 +107,6 @@ uint16_t crc16_with_table (const uint8_t *pchData, uint16_t hwLength)
 }
 
 #else
-
 uint16_t crc16(uint16_t hwInitValue, const uint8_t *pchBuf, uint16_t hwLength)
 {
     uint16_t hwCRC = hwInitValue;
@@ -115,16 +120,17 @@ uint16_t crc16(uint16_t hwInitValue, const uint8_t *pchBuf, uint16_t hwLength)
     }
     return hwCRC;
 }
-
 #endif
 
 bool check_crc16(const uint8_t *pchBuf, uint16_t hwLength)
 {
     uint16_t hwCRC = 0;
 
-    if (MINMIUM_BYTE_SIZE <= hwLength) {
+    if (3 <= hwLength) {
         hwCRC = char_hl_short(pchBuf[hwLength - 1], pchBuf[hwLength - 2]);
         return hwCRC == CRC16(pchBuf, hwLength - 2);
     }
     return false;
 }
+
+/*************************** End of file ****************************/
