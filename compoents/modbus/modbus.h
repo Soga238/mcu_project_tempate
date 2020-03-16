@@ -28,7 +28,8 @@
 #define MB_READ_COILCNT_MAX         (0x07D0)    /*! 读取线圈的最大长度         */
 
 #define MB_MINMIUM_FRAME_SIZE       (5)         /*！ MOBDUS协议帧最小长度      */
-
+#define COIL_VALUE_OFF              0x00
+#define COIL_VALUE_ON               0x01
 /*
 *********************************************************************************
 *                               MODBUS 功能码
