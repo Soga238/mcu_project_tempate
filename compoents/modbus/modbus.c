@@ -14,6 +14,7 @@
 **********************************************************************
 */
 #include ".\modbus.h"
+#include "cmsis_os2.h"
 
 /*********************************************************************
 *
@@ -47,6 +48,10 @@
 *
 **********************************************************************
 */
+static uint32_t __get_tick_1ms(void)
+{
+    return osKernelGetTickCount();
+}
 
 WEAK void port_hold_register_cb(mb_master_t *ptMaster, const mb_request_t *ptRequest, const mb_response_t *ptResponse)
 {
@@ -394,6 +399,7 @@ void mb_master_poll(mb_master_t *ptMaster)
         if (1 == ptMaster->chRecvBlock) {
             mb_master_poll_in_block(ptMaster);
         } else {
+            soft_timer_process();
             mb_master_poll_in_noblock(ptMaster);
         }
     }
@@ -432,6 +438,8 @@ bool mb_control_init(mb_control_t *ptCtl, serial_ctl_t *ptSerialConfig, uint8_t 
     ptCtl->tSerialCtl.pSndBuf      = ptSerialConfig->pSndBuf;
 
     ptCtl->chRecvBlock = chRecvBlock > 0;
+
+    soft_timer_init(__get_tick_1ms, MAX_VALUE_32_BIT);
 
     return true;
 }
