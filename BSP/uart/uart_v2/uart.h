@@ -96,10 +96,7 @@ typedef void (*uart_func_t)(void *parameter, uint8_t *pchBuf, uint16_t hwLength)
 extern int32_t xhal_uart_init(uart_dev_t *uart);
 extern int32_t xhal_uart_send_in_dma_mode(uart_dev_t *ptUartDev, const void *pData, uint32_t wSize, uint32_t wTimeout);
 extern int32_t xhal_uart_recv_in_dma_mode(uart_dev_t *ptUartDev, uint8_t *pDst, uint32_t wBytes, uint32_t wTimeout);
-extern uint32_t xhal_uart_get_rx_count(uart_dev_t* ptDev);
 extern int32_t xhal_uart_deinit(uart_dev_t *ptDev);
-extern int32_t xhal_uart_is_send_completed(uart_dev_t* ptDev);
-extern int32_t xhal_uart_is_recv_completed(uart_dev_t* ptDev);
 
 #ifdef __cplusplus
     }

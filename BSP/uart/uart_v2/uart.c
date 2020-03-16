@@ -16,7 +16,7 @@
 
 #include ".\uart.h"
 #include ".\xhal_uart.h"
-#include "..\..\hal\mcu\stm32f103rc\modbus_proxy\Inc\stm32f1xx_hal_conf.h"
+#include "..\..\hal\mcu\stm32f1xx\Inc\stm32f1xx_hal_conf.h"
 
 #include "Driver_USART.h"
 #include "cmsis_os2.h"
@@ -64,14 +64,10 @@ extern const uart_mapping_t c_tUartMap[TOTAL_UART_NUM];
 
 static void usart_event_callback_num_0(uint32_t event);
 static void usart_event_callback_num_1(uint32_t event);
-static void usart_event_callback_num_2(uint32_t event);
-static void usart_event_callback_num_3(uint32_t event);
 
 static usart_singal_handler_t s_tSingalHandlerMap[TOTAL_UART_NUM] = {
     {.fnSingalEventCB = usart_event_callback_num_0},
     {.fnSingalEventCB = usart_event_callback_num_1},
-    {.fnSingalEventCB = usart_event_callback_num_2},
-//    {.fnSingalEventCB = usart_event_callback_num_3},
 };
 
 /*********************************************************************
@@ -86,7 +82,8 @@ static int32_t uart_flow_control_transform(uint8_t chFlowControl, uint32_t *pwRe
 
 static int32_t get_map_pos(uint16_t hwPort)
 {
-    int32_t i = 0;
+    uint8_t i = 0;
+
     for (i = 0; (i < TOTAL_UART_NUM) && (hwPort != c_tUartMap[i].chPort); i++);
     return TOTAL_GPIO_NUM == hwPort ? XHAL_FAIL : i;
 }
@@ -95,10 +92,13 @@ int32_t xhal_uart_init(uart_dev_t *ptDev)
 {
     int32_t nRet, nPos;
     uint32_t wValue = 0, wTemp = 0;
+
     ARM_DRIVER_USART *ptDrv = NULL;
     usart_singal_handler_t *ptHandler = NULL;
 
-    ASSERT(NULL != ptDev);
+    if (NULL == ptDev) {
+        return XHAL_FAIL;
+    }
 
     nPos = get_map_pos(ptDev->chPort);
     if (XHAL_FAIL == nPos) {
@@ -147,10 +147,13 @@ int32_t xhal_uart_init(uart_dev_t *ptDev)
 int32_t xhal_uart_deinit(uart_dev_t *ptDev)
 {
     int32_t nPos;
+
     ARM_DRIVER_USART *ptDrv = NULL;
     usart_singal_handler_t *ptHandler = NULL;
 
-    ASSERT(NULL != ptDev);
+    if (NULL == ptDev) {
+        return XHAL_FAIL;
+    }
 
     nPos = get_map_pos(ptDev->chPort);
     if (XHAL_FAIL == nPos) {
@@ -172,10 +175,13 @@ int32_t xhal_uart_deinit(uart_dev_t *ptDev)
 int32_t xhal_uart_send_in_dma_mode(uart_dev_t *ptDev, const void *pData, uint32_t wSize, uint32_t wTimeout)
 {
     int32_t nPos;
+
     ARM_DRIVER_USART *ptDrv = NULL;
     usart_singal_handler_t *ptHandler = NULL;
 
-    ASSERT(NULL != ptDev);
+    if (NULL == ptDev) {
+        return XHAL_FAIL;
+    }
 
     nPos = get_map_pos(ptDev->chPort);
     if (XHAL_FAIL == nPos) {
@@ -190,16 +196,21 @@ int32_t xhal_uart_send_in_dma_mode(uart_dev_t *ptDev, const void *pData, uint32_
         osEventFlagsWait(ptHandler->tEventFlagId, USART_EVENT_TX_COMPLETE, osFlagsWaitAny, wTimeout);
         return XHAL_OK;
     }
+
     return XHAL_FAIL;
 }
 
 int32_t xhal_uart_recv_in_dma_mode(uart_dev_t *ptDev, uint8_t *pDst, uint32_t wBytes, uint32_t wTimeout)
 {
     int32_t nPos;
+    uint32_t wRetval;
+
     ARM_DRIVER_USART *ptDrv = NULL;
     usart_singal_handler_t *ptHandler = NULL;
 
-    ASSERT(NULL != ptDev);
+    if (NULL == ptDev) {
+        return XHAL_FAIL;
+    }
 
     nPos = get_map_pos(ptDev->chPort);
     if (XHAL_FAIL == nPos) {
@@ -210,54 +221,16 @@ int32_t xhal_uart_recv_in_dma_mode(uart_dev_t *ptDev, uint8_t *pDst, uint32_t wB
     ptDrv = (ARM_DRIVER_USART *)c_tUartMap[nPos].ptUartPhy;
     ptHandler = &s_tSingalHandlerMap[nPos];
 
-    ptDrv->Control(ARM_USART_ABORT_RECEIVE, 1); // abort uart receive
+    // 使用外部缓冲区
     ptDrv->Receive(pDst, wBytes);
+    // ptDrv->Receive(c_tUartMap[nPos].pchBuf, MIN(wBytes, c_tUartMap[nPos].hwBufSize));
 
-    osEventFlagsWait(ptHandler->tEventFlagId, USART_EVENT_RECEIVE_ABOUT, osFlagsWaitAny, wTimeout);
-    return (int32_t)ptDrv->GetRxCount();
-}
-
-uint32_t xhal_uart_get_rx_count(uart_dev_t *ptDev)
-{
-    int32_t nPos;
-    ARM_DRIVER_USART *ptDrv = NULL;
-
-    ASSERT(NULL != ptDev);
-
-    nPos = get_map_pos(ptDev->chPort);
-    ptDrv = (ARM_DRIVER_USART *)c_tUartMap[nPos].ptUartPhy;
-    return (XHAL_FAIL != nPos) ? ptDrv->GetRxCount() : 0;
-}
-
-int32_t xhal_uart_is_send_completed(uart_dev_t *ptDev)
-{
-    int32_t nPos;
-    ARM_DRIVER_USART *ptDrv = NULL;
-    ARM_USART_STATUS tStatus;
-
-    ASSERT(NULL != ptDev);
-
-    nPos = get_map_pos(ptDev->chPort);
-    ptDrv = (ARM_DRIVER_USART *)c_tUartMap[nPos].ptUartPhy;
-    tStatus = ptDrv->GetStatus();
-    return (0 == tStatus.tx_busy) ? XHAL_OK : XHAL_FAIL;
-}
-
-int32_t xhal_uart_is_recv_completed(uart_dev_t *ptDev)
-{
-    int32_t nPos;
-    usart_singal_handler_t* ptHandler = NULL;
-    uint32_t wRetval = 0;
-
-    ASSERT(NULL != ptDev);
-
-    nPos = get_map_pos(ptDev->chPort);
-    ptHandler = &s_tSingalHandlerMap[nPos];
-
-    wRetval = osEventFlagsGet(ptHandler->tEventFlagId);
-    if (USART_EVENT_RECEIVE_ABOUT & wRetval) {
-        return XHAL_OK;
+    wRetval = osEventFlagsWait(ptHandler->tEventFlagId, USART_EVENT_RECEIVE_ABOUT, osFlagsWaitAny, wTimeout);
+    if (!(wRetval & 0x10000000)) { // event flags before clearing or error code if highest bit set.
+        ptDrv->Control(ARM_USART_ABORT_RECEIVE, 1);
+        return (int32_t)ptDrv->GetRxCount();
     }
+
     return XHAL_FAIL;
 }
 
@@ -377,29 +350,5 @@ static void usart_event_callback_num_1(uint32_t wEvent)
 
     if (ARM_USART_ERROR_EVENT_ALL & wEvent) {
         error_event_trigger(1, ARM_USART_ERROR_EVENT_ALL & wEvent);
-    }
-}
-
-// 序列号为2的串口事件回调函数
-static void usart_event_callback_num_2(uint32_t wEvent)
-{
-    if (ARM_USART_EVENT_ALL & wEvent) {
-        event_triger(2, wEvent);
-    }
-
-    if (ARM_USART_ERROR_EVENT_ALL & wEvent) {
-        error_event_trigger(2, ARM_USART_ERROR_EVENT_ALL & wEvent);
-    }
-}
-
-// 序列号为3的串口事件回调函数
-static void usart_event_callback_num_3(uint32_t wEvent)
-{
-    if (ARM_USART_EVENT_ALL & wEvent) {
-        event_triger(3, wEvent);
-    }
-
-    if (ARM_USART_ERROR_EVENT_ALL & wEvent) {
-        error_event_trigger(3, ARM_USART_ERROR_EVENT_ALL & wEvent);
     }
 }
