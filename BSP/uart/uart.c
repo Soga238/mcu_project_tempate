@@ -16,8 +16,6 @@
 
 #include ".\uart.h"
 #include ".\xhal_uart.h"
-#include "..\..\hal\mcu\stm32f103rc\modbus_proxy\Inc\stm32f1xx_hal_conf.h"
-
 #include "Driver_USART.h"
 #include "cmsis_os2.h"
 
@@ -88,7 +86,7 @@ static int32_t get_map_pos(uint16_t hwPort)
 {
     int32_t i = 0;
     for (i = 0; (i < TOTAL_UART_NUM) && (hwPort != c_tUartMap[i].chPort); i++);
-    return TOTAL_GPIO_NUM == hwPort ? XHAL_FAIL : i;
+    return TOTAL_UART_NUM == i ? XHAL_FAIL : i;
 }
 
 int32_t xhal_uart_init(uart_dev_t *ptDev)
@@ -161,6 +159,7 @@ int32_t xhal_uart_deinit(uart_dev_t *ptDev)
     ptDrv = (ARM_DRIVER_USART *)c_tUartMap[nPos].ptUartPhy;
     ptHandler = &s_tSingalHandlerMap[nPos];
 
+    ptDrv->Control(ARM_USART_ABORT_TRANSFER, 1);
     ptDrv->Uninitialize();
 
     osEventFlagsDelete(ptHandler->tEventFlagId);
@@ -186,6 +185,7 @@ int32_t xhal_uart_send_in_dma_mode(uart_dev_t *ptDev, const void *pData, uint32_
     ptDrv = (ARM_DRIVER_USART *)c_tUartMap[nPos].ptUartPhy;
     ptHandler = &s_tSingalHandlerMap[nPos];
 
+    osEventFlagsClear(ptHandler->tEventFlagId, USART_EVENT_TX_COMPLETE);
     if (ARM_DRIVER_OK == ptDrv->Send(pData, wSize)) {
         osEventFlagsWait(ptHandler->tEventFlagId, USART_EVENT_TX_COMPLETE, osFlagsWaitAny, wTimeout);
         return XHAL_OK;
@@ -210,10 +210,11 @@ int32_t xhal_uart_recv_in_dma_mode(uart_dev_t *ptDev, uint8_t *pDst, uint32_t wB
     ptDrv = (ARM_DRIVER_USART *)c_tUartMap[nPos].ptUartPhy;
     ptHandler = &s_tSingalHandlerMap[nPos];
 
+    osEventFlagsClear(ptHandler->tEventFlagId, USART_EVENT_RECEIVE_ABOUT);
     ptDrv->Control(ARM_USART_ABORT_RECEIVE, 1); // abort uart receive
     ptDrv->Receive(pDst, wBytes);
-
     osEventFlagsWait(ptHandler->tEventFlagId, USART_EVENT_RECEIVE_ABOUT, osFlagsWaitAny, wTimeout);
+    
     return (int32_t)ptDrv->GetRxCount();
 }
 

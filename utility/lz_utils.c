@@ -93,10 +93,10 @@ static const uint16_t hwCRCTable[] = {
     0X4400, 0X84C1, 0X8581, 0X4540, 0X8701, 0X47C0, 0X4680, 0X8641,
     0X8201, 0X42C0, 0X4380, 0X8341, 0X4100, 0X81C1, 0X8081, 0X4040
 };
-uint16_t crc16_with_table (const uint8_t *pchData, uint16_t hwLength)
+uint16_t crc16_with_table (uint16_t hwInitValue, const uint8_t *pchData, uint16_t hwLength)
 {
     uint8_t chTemp;
-    uint16_t hwCRCWord = 0xFFFF;
+    uint16_t hwCRCWord = hwInitValue;
 
     while (hwLength--) {
         chTemp = *pchData++ ^ hwCRCWord;

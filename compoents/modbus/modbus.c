@@ -40,7 +40,7 @@
 #define EV_MASTER_START_SEND                (1 << 3)
 
 #define CRC16_INITVALUE                     0xFFFF
-#define CALC_MODBUS_CRC16(ptr, len)         crc16(CRC16_INITVALUE, ptr, len)
+#define CALC_MODBUS_CRC16(ptr, len)         MODBUS_CRC16(ptr, len)
 
 /*********************************************************************
 *
@@ -339,7 +339,10 @@ static void mb_master_poll_in_noblock(mb_master_t *ptMaster)
         case SEND_REQUEST:
             if (NULL != ptMaster->tSerialCtl.fnSend) {
                 ptMaster->tRequest.ptTimer = soft_timer_create(ptMaster->tRequest.wTimeout,
-                                             false, recv_timeout_callback, ptMaster);
+                                             false,
+                                             recv_timeout_callback,
+                                             ptMaster);
+
                 if (NULL == ptMaster->tRequest.ptTimer) {
                     ptMaster->chState = HANDLE_ERROR;
                     break;
@@ -363,10 +366,11 @@ static void mb_master_poll_in_noblock(mb_master_t *ptMaster)
                 soft_timer_delete(ptMaster->tRequest.ptTimer);
                 ptMaster->chState = HANDLE_RESPONSE;
             } else {
-                ptMaster->tSerialCtl.hwRcvLen =
-                    ptMaster->tSerialCtl.fnRecv(ptMaster->tSerialCtl.pRcvBuf, ptMaster->tSerialCtl.hwRcvBufSize);
+                ptMaster->tSerialCtl.hwRcvLen = ptMaster->tSerialCtl.fnRecv(ptMaster->tSerialCtl.pRcvBuf,
+                                                ptMaster->tSerialCtl.hwRcvBufSize);
                 if (0 < ptMaster->tSerialCtl.hwRcvLen) {
-                    // do nothing
+                    soft_timer_delete(ptMaster->tRequest.ptTimer);
+                    ptMaster->chState = HANDLE_RESPONSE;
                 } else if (mb_wait_event(ptMaster, EV_MASTER_RECV_TIMEOUT)) {
                     ptMaster->chState = HANDLE_ERROR;
                     break;
@@ -376,8 +380,7 @@ static void mb_master_poll_in_noblock(mb_master_t *ptMaster)
             }
 
         case HANDLE_RESPONSE:
-            if (mb_rcv_frame_handle(ptMaster->tSerialCtl.pRcvBuf,
-                                    ptMaster->tSerialCtl.hwRcvLen, &ptMaster->tResponse)) {
+            if (mb_rcv_frame_handle(ptMaster->tSerialCtl.pRcvBuf, ptMaster->tSerialCtl.hwRcvLen, &ptMaster->tResponse)) {
                 handle_callback(ptMaster, &ptMaster->tRequest, &ptMaster->tResponse);
                 ptMaster->chState = START;
                 break;

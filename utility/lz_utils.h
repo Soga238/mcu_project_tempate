@@ -25,10 +25,10 @@
 
 #define CALC_CRC_WITH_TABLE
 #ifdef CALC_CRC_WITH_TABLE
-#define CRC16(BUFFER, LENGTH)   crc16_with_table(BUFFER, LENGTH)
-extern uint16_t crc16_with_table (const uint8_t *pchData, uint16_t hwLength);
+#define MODBUS_CRC16(BUFFER, LENGTH)   crc16_with_table(0xFFFF, BUFFER, LENGTH)
+extern uint16_t crc16_with_table (uint16_t hwInitValue, const uint8_t *pchData, uint16_t hwLength);
 #else
-#define CRC16(BUFFER, LENGTH)   crc16(0xFFFF, BUFFER, LENGTH)
+#define MODBUS_CRC16(BUFFER, LENGTH)   crc16(0xFFFF, BUFFER, LENGTH)
 extern uint16_t crc16(uint16_t hwInitValue, const uint8_t *pchBuf, uint16_t hwLength);
 #endif
 
