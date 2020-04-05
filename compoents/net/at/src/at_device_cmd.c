@@ -69,14 +69,14 @@ bool at_cmd_phy_connect(struct at_client *ptClient)
     }
 
     for (i = 0; i < CONNECT_COUNT_MAX; i++) {
-        if (RT_EOK != AT_EXECUTE(ATCMD_ECHO_OFF)) {
+        if (RT_EOK == AT_EXECUTE(ATCMD_ECHO_OFF)) {
             break;
         }
     }
 
 __exit:
     at_delete_resp(ptResp);
-    return CONNECT_COUNT_MAX == i;
+    return CONNECT_COUNT_MAX != i;
 }
 
 bool at_cmd_get_sim_info(struct at_client *ptClient, gsm_param_t *ptSimInfo)
