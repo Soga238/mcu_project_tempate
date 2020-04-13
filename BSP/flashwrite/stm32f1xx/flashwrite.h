@@ -9,15 +9,16 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       compoents_cfg.h *                                            *
+*       Flash * FLASH Write                                          *
 *                                                                    *
 **********************************************************************
 */
+#ifndef FLASH_WRITE_H
+#define FLASH_WRITE_H
 
-#ifndef __COMPOENTS_CFG__
-#define __COMPOENTS_CFG__
+#include "..\bsp_cfg.h"
 
-#include "..\usr_app\usr_app_cfg.h"
+extern int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize);
 
 #endif
 

@@ -9,16 +9,17 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       compoents_cfg.h *                                            *
+*       flashwrite_cfg.h *                                           *
 *                                                                    *
 **********************************************************************
 */
 
-#ifndef __COMPOENTS_CFG__
-#define __COMPOENTS_CFG__
+#include "..\bsp_cfg.h"
 
-#include "..\usr_app\usr_app_cfg.h"
-
+#if defined(STM32F401xC)
+#define FLASH_SECTOR_TABLE_SIZE 6   // Number of flash sectors, defined by user
+#else
+#define FLASH_SECTOR_TABLE_SIZE 0
 #endif
 
 /*************************** End of file ****************************/

@@ -51,19 +51,19 @@ at_response_t at_create_resp(rt_size_t buf_size, rt_size_t line_num, rt_int32_t 
     at_response_t resp = NULL;
 
     if (RESP_BUF_SIZE_MAX < buf_size) {
-        ALOG_W("No memory for response object!");
+        ALOG_W("No memory for response object!\r\n");
         return NULL;
     }
 
     resp = (at_response_t)osMemoryPoolAlloc(s_tMemPoolResp, 0);
     if (NULL == resp) {
-        ALOG_W("No memory for response object!");
+        ALOG_W("No memory for response object!\r\n");
         return  NULL;
     }
 
     resp->buf = osMemoryPoolAlloc(s_tMemPoolRespBuf, 0);
     if (NULL == resp->buf) {
-        ALOG_W("No memory for response buffer!");
+        ALOG_W("No memory for response buffer!\r\n");
         osMemoryPoolFree(s_tMemPoolResp, resp);
         return  NULL;
     }
@@ -103,7 +103,7 @@ at_response_t at_resp_set_info(at_response_t resp, rt_size_t buf_size, rt_size_t
 
     /*! \note use RTX static memory */
     if (RESP_BUF_SIZE_MAX < buf_size) {
-        ALOG_W("No memory for response object!");
+        ALOG_W("No memory for response object!\r\n");
         return NULL;
     }
 
@@ -128,21 +128,21 @@ const char *at_resp_get_line(at_response_t resp, rt_size_t resp_line)
     ASSERT(NULL != resp);
 
     if (resp_line > resp->line_counts || resp_line <= 0) {
-        ALOG_W("at get %d line data failed.", resp_line);
+        ALOG_W("at get %d line data failed\r\n", resp_line);
         return  NULL;
     }
 
     resp_buf = resp->buf;
-    for (line_num = 1; line_num < resp->line_counts; ++line_num) {
+    for (line_num = 1; line_num <= resp->line_counts; ++line_num) {
         if (resp_line == line_num) {
-            break;
+            return resp_buf;
         }
         // Each one line data ends with zero.
         // You need add 1 manually, when calculating the length of a line data.
         resp_buf += strlen(resp_buf) + 1;
     }
 
-    return resp_buf;
+    return NULL;
 }
 
 /**
@@ -160,12 +160,12 @@ const char *at_resp_get_line_by_kw(at_response_t resp, const char *keyword)
     resp_buf = resp->buf;
     for (line_num = 1; line_num <= resp->line_counts; ++line_num) {
         if (strstr(resp_buf, keyword)) {
-            break;
+            return resp_buf;
         }
         resp_buf += strlen(resp_buf) + 1;
     }
 
-    return resp_buf;
+    return NULL;
 }
 
 /**
@@ -254,14 +254,14 @@ int32_t at_obj_exec_cmd(at_client_t client, at_response_t resp, const char *expr
         status = osSemaphoreAcquire(client->resp_notice, resp->timeout);
         if (osOK == status) {
             if (client->resp_status != AT_RESP_OK) {
-                ALOG_W("exec(%s), state=%d!", at_get_last_cmd(&nLength), client->resp_status);
+                ALOG_W("exec(%s), state=%d!\r\n", at_get_last_cmd(&nLength), client->resp_status);
                 result = RT_ERROR;
             }
         } else if (osErrorTimeout == status) {
-            ALOG_W("exec(%s) timeout (%d ticks)!", at_get_last_cmd(&nLength), resp->timeout);
+            ALOG_W("exec(%s) timeout (%d ticks)!\r\n", at_get_last_cmd(&nLength), resp->timeout);
             result = RT_ETIMEOUT;
         } else {
-            ALOG_F("os error");
+            ALOG_W("os error\r\n");
             result = RT_ERROR;
         }
     }
@@ -310,14 +310,14 @@ int32_t at_obj_exec_cmd_with_buf(at_client_t client, at_response_t resp, uint8_t
         if (osOK == status) {
             // receive response from AT server
             if (client->resp_status != AT_RESP_OK) {
-                ALOG_W("exec(%s), state=%d!", at_extract_last_cmd(pchBuf, &nLength), client->resp_status);
+                ALOG_W("exec(%s), state=%d!\r\n", at_extract_last_cmd(pchBuf, &nLength), client->resp_status);
                 result = RT_ERROR;
             }
         } else if (osErrorTimeout == status) {
-            ALOG_W("exec(%s) timeout (%d ticks)!", at_extract_last_cmd(pchBuf, &nLength), resp->timeout);
+            ALOG_W("exec(%s) timeout (%d ticks)!\r\n", at_extract_last_cmd(pchBuf, &nLength), resp->timeout);
             result = RT_ETIMEOUT;
         } else {
-            ALOG_F("os error");
+            ALOG_W("os error\r\n");
             result = RT_ERROR;
         }
     }
@@ -342,7 +342,7 @@ void at_obj_set_urc_table(at_client_t client, const struct at_urc *urc_table, rt
 
     for (idx = 0; idx < table_sz; idx++) {
         ASSERT(urc_table[idx].cmd_prefix != NULL);
-        ASSERT(urc_table[idx].cmd_suffix != NULL);
+        //ASSERT(urc_table[idx].cmd_suffix != NULL);  // ?¨¦¨°?¨®D?¡ã¡Áo¦Ì???o¨®¡Áo
     }
 
     client->urc_table = urc_table;
@@ -370,8 +370,8 @@ static const struct at_urc *get_urc_obj(at_client_t client)
         prefix = client->urc_table[i].cmd_prefix;
         suffix = client->urc_table[i].cmd_suffix;
 
-        prefix_len = strlen(prefix);
-        suffix_len = strlen(suffix);
+        prefix_len = (NULL != prefix) ? strlen(prefix) : 0;
+        suffix_len = (NULL != suffix) ? strlen(suffix) : 0;
         if (buf_sz < prefix_len + suffix_len) {
             continue;
         }
@@ -407,7 +407,7 @@ static int at_recv_readline(at_client_t client)
         } else {
             // memset(client->recv_buffer, 0, client->recv_bufsz);
             client->cur_recv_len = 0;
-            ALOG_W("Read line failed");
+            ALOG_W("Read line failed\r\n");
             return RT_EFULL;
         }
 
@@ -435,7 +435,7 @@ void client_parser(at_client_t client)
     rt_size_t line_counts = 0;
 
     ASSERT(NULL != client);
-    ALOG_D("start client parser thread");
+    ALOG_D("start client parser thread\r\n");
 
     while (1) {
         if (0 >= at_recv_readline(client)) {
@@ -457,7 +457,7 @@ void client_parser(at_client_t client)
                 line_counts += 1;
             } else {
                 client->resp_status = AT_RESP_BUFF_FULL;
-                ALOG_W("The Response buffer size is out of buffer size");
+                ALOG_W("The Response buffer size is out of buffer size\r\n");
             }
 
             // check response result

@@ -51,7 +51,8 @@
         at_obj_exec_cmd_with_buf(__client, __resp, (uint8_t *)__macro_str, strlen(__macro_str))
 #define AT_EXECUTE(__macro_str) __AT_EXECUTE(ptClient, ptResp, __macro_str)
 
-#define CONNECT_COUNT_MAX           8u
+#define PHY_CONNECT_COUNT_MAX           8
+#define PHY_CONNECT_COUNT_SET           3
 
 /*********************************************************************
 *
@@ -61,22 +62,25 @@
 */
 bool at_cmd_phy_connect(struct at_client *ptClient)
 {
-    int8_t i = 0;
+    int8_t i, j;
     struct at_response *ptResp = at_create_resp(128, 2, 1000);
 
     if (NULL == ptResp) {
-        goto __exit;
+        return false;
     }
 
-    for (i = 0; i < CONNECT_COUNT_MAX; i++) {
+	/*! 连续发送8个ATE0 确保与AT设备的通讯连接正常*/
+    for (i = 0, j = 0; i < PHY_CONNECT_COUNT_MAX; i++) {
         if (RT_EOK == AT_EXECUTE(ATCMD_ECHO_OFF)) {
-            break;
+            ++j;
+        } else {
+            j = 0;
         }
     }
 
 __exit:
     at_delete_resp(ptResp);
-    return CONNECT_COUNT_MAX != i;
+    return j > PHY_CONNECT_COUNT_SET;
 }
 
 bool at_cmd_get_sim_info(struct at_client *ptClient, gsm_param_t *ptSimInfo)

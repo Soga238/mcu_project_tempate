@@ -18,7 +18,7 @@
 
 #include <stdint.h>
 
-extern uint8_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize);
+extern int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize);
 
 #endif
 

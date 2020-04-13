@@ -43,22 +43,22 @@
 **********************************************************************
 */
 
-static inline int8_t __xhal_get_gpio_val(uint8_t chPort)
+static int8_t __xhal_get_gpio_val(uint8_t chPort)
 {
-    uint32_t wGpioValue = 0;
+    int32_t nGpioValue = 0;
 
     /*! no safety */
-    xhal_gpio_get_by_port(chPort, &wGpioValue);
-    return (int8_t)(wGpioValue > 0);
+    xhal_gpio_get_by_port(chPort, &nGpioValue);
+    return (int8_t)(nGpioValue > 0);
 }
 
-static inline void __xhal_gpio_hw_init(const i2c_gpio_dev_t *ptDev)
+static void __xhal_gpio_hw_init(const i2c_gpio_dev_t *ptDev)
 {
     xhal_gpio_init_by_port(ptDev->chSclPinPort);
     xhal_gpio_init_by_port(ptDev->chSdaPinPort);
 }
 
-static inline void i2c_gpio_delay(const i2c_gpio_dev_t *ptDev)
+static void i2c_gpio_delay(const i2c_gpio_dev_t *ptDev)
 {
     volatile uint32_t wCount = ptDev->wSpeed;
 

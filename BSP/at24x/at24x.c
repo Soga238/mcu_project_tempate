@@ -53,7 +53,7 @@ typedef struct {
 */
 
 static i2c_dev_t s_tIIC = {
-    .chPort = 0,
+    .chPort = PORT_AT24X128,
     .tConfig = {
         .chAddressWidth = I2C_ADDRESS_WIDTH_10BIT,
         .hwDevAddr = 0,

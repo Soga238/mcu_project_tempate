@@ -19,10 +19,10 @@
 #include "Driver_USART.h"
 #include "cmsis_os2.h"
 
-#define USART_EVENT_RECEIVE_COMPLETE   (0x00000001U << 0)
-#define USART_EVENT_RX_TIMEOUT         (0x00000001U << 1)
-#define USART_EVENT_RX_OVERFLOW        (0x00000001U << 2)
-#define USART_EVENT_TX_COMPLETE        (0x00000001U << 3)
+#define USART_EVENT_RECEIVE_COMPLETE   (1UL << 0)
+#define USART_EVENT_RX_TIMEOUT         (1UL << 1)
+#define USART_EVENT_RX_OVERFLOW        (1UL << 2)
+#define USART_EVENT_TX_COMPLETE        (1UL << 3)
 
 #define USART_EVENT_RECEIVE_ABOUT      (USART_EVENT_RECEIVE_COMPLETE | USART_EVENT_RX_TIMEOUT | USART_EVENT_RX_OVERFLOW)
 #define USART_EVENT_ALL                (USART_EVENT_RECEIVE_ABOUT | USART_EVENT_TX_COMPLETE)
@@ -133,6 +133,7 @@ int32_t xhal_uart_init(uart_dev_t *ptDev)
     }
     wValue |= wTemp;
 
+    // TODO cmsis driver 第一次上电接收数据未启动DMA
     nRet = ptDrv->Initialize(ptHandler->fnSingalEventCB);
     nRet &= ptDrv->PowerControl(ARM_POWER_FULL);
     nRet &= ptDrv->Control(wValue, ptDev->tConfig.wBaudrate);
@@ -213,6 +214,7 @@ int32_t xhal_uart_recv_in_dma_mode(uart_dev_t *ptDev, uint8_t *pDst, uint32_t wB
     osEventFlagsClear(ptHandler->tEventFlagId, USART_EVENT_RECEIVE_ABOUT);
     ptDrv->Control(ARM_USART_ABORT_RECEIVE, 1); // abort uart receive
     ptDrv->Receive(pDst, wBytes);
+
     osEventFlagsWait(ptHandler->tEventFlagId, USART_EVENT_RECEIVE_ABOUT, osFlagsWaitAny, wTimeout);
     
     return (int32_t)ptDrv->GetRxCount();
@@ -257,6 +259,8 @@ int32_t xhal_uart_is_recv_completed(uart_dev_t *ptDev)
 
     wRetval = osEventFlagsGet(ptHandler->tEventFlagId);
     if (USART_EVENT_RECEIVE_ABOUT & wRetval) {
+        /*! clear receive complete event flag! */
+        osEventFlagsClear(ptHandler->tEventFlagId, USART_EVENT_RECEIVE_ABOUT);
         return XHAL_OK;
     }
     return XHAL_FAIL;

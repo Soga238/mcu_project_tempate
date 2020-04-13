@@ -28,18 +28,12 @@
 
 #define GET_SECTOR_START_ADDR(_ADDR)           (SECTOR_MASK & _ADDR)        // 获取一个扇区的起始地址
 
-static uint8_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
+static int32_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
 {
     uint32_t i = 0;
     uint32_t wTemp = 0;
-    uint8_t chOriginLocked = 0;
     FLASH_Status tStatus = FLASH_COMPLETE;
 
-    if (FLASH->CR & 0x00000080) {           // 判断FLASH是否被锁住
-        FLASH_Unlock();
-        chOriginLocked = 1;                 // 便于后面判断是否要重新锁住
-    }
-        
     FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);
 
     for (i = 0; i < (wSize >> 2); i++) {
@@ -50,7 +44,7 @@ static uint8_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
                 goto fail;
             }
         }
-        
+
         wTemp = pchBuf[i << 2];
         wTemp |= pchBuf[(i << 2) + 1] << 8;
         wTemp |= pchBuf[(i << 2) + 2] << 16;
@@ -66,7 +60,7 @@ static uint8_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
     }
 
     if (wSize & 0x02) {
-        
+
         if (0 == (wFlashAddr & (FLASH_PAGE_SIZE - 1))) {
             tStatus = FLASH_ErasePage(GET_SECTOR_START_ADDR(wFlashAddr));   // 页擦除
             if (tStatus != FLASH_COMPLETE) {
@@ -74,7 +68,7 @@ static uint8_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
                 goto fail;
             }
         }
-        
+
         wTemp = pchBuf[i << 2];
         wTemp |= pchBuf[(i << 2) + 1] << 8;
         tStatus = FLASH_ProgramHalfWord(wFlashAddr, wTemp);
@@ -84,15 +78,8 @@ static uint8_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
         }
     }
 
-    if (1 == chOriginLocked) {
-        FLASH_Lock();
-    }
     return 1;
-    
 fail:
-    if (1 == chOriginLocked) {
-        FLASH_Lock();
-    }
     return 0;
 }
 
@@ -104,19 +91,18 @@ fail:
  * \param wSize         字节数组长度
  *
  */
-uint8_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
+int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
 {
-    uint32_t wAddress = wFlashAddr;
-    uint16_t hwByteToWrite = 0;
+    uint32_t wAddress = wFlashAddr, wBytes, wPrimaskStatus;
     uint8_t *pchSrc = pchBuf;
-    uint8_t chReturn = 0;
-    uint32_t wPrimaskStatus = 0;
-    
+    int32_t  nReturn = 1;
+    uint8_t chOriginLocked = 0;
+
     if ((wFlashAddr < FLASH_BASE_ADDRESS) ||
-        (wFlashAddr + wSize) > (FLASH_BASE_ADDRESS + FLASH_TOTAL_SIZE)) {
+            (wFlashAddr + wSize) > (FLASH_BASE_ADDRESS + FLASH_TOTAL_SIZE)) {
         return 0;
     }
-    
+
     // 写入地址2字节对齐，写入字节个数为2的倍数
     if ((wFlashAddr & 0x01) || (wSize & 0x01)) {    // FALSH半字写入
         return 0;
@@ -125,19 +111,31 @@ uint8_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
     wPrimaskStatus = __get_PRIMASK();               // 获取中断状态
     __set_PRIMASK(1);                               // 关闭总中断
 
+    if (FLASH->CR & 0x00000080) {                   // 判断FLASH是否被锁住
+        FLASH_Unlock();
+        chOriginLocked = 1;                         // 便于后面判断是否要重新锁住
+    }
+
     while (wSize) {
-        hwByteToWrite = wSize >= FLASH_PAGE_SIZE ? FLASH_PAGE_SIZE : wSize;
-        chReturn = write_cpu_flash(wAddress, pchSrc, hwByteToWrite);
-        if (0 == chReturn) {
+        wBytes = wFlashAddr - GET_SECTOR_START_ADDR(wFlashAddr);
+        wBytes = wSize >= wBytes ? wBytes : wSize;
+        if (write_cpu_flash(wAddress, pchSrc, hwByteToWrite)) {
+            wAddress += wBytes;
+            pchSrc += wBytes;
+            wSize -= wBytes;
+        } else {
+            nReturn = 0;
             break;
         }
-        wAddress += hwByteToWrite;
-        pchSrc += hwByteToWrite;
-        wSize -= hwByteToWrite;
     }
+
+    if (1 == chOriginLocked) {
+        FLASH_Lock();
+    }
+
     __set_PRIMASK(wPrimaskStatus);                 // 避免误开中断
 
-    return chReturn;
+    return nReturn;
 }
 
 /*************************** End of file ****************************/
