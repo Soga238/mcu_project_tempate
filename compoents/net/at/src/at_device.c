@@ -112,7 +112,7 @@ bool at_device_init(void)
 {
     ringbuf_init(&g_tRingBuf, g_chBuffer, sizeof(g_chBuffer));
 
-    xhal_gpio_init(&s_tGSMPwrPin);  // GSMµçÔ´ºÍÔËĞĞ¿ØÖÆÒı½Å
+    xhal_gpio_init(&s_tGSMPwrPin);  // GSMç”µæºå’Œè¿è¡Œæ§åˆ¶å¼•è„š
     xhal_gpio_init(&s_tGSMRunPin);
 
     if (XHAL_OK != xhal_uart_init(&g_tATUart)) {

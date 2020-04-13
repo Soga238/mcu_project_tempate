@@ -54,7 +54,7 @@ int32_t find_compatible_cache_record_hook(void *res, void *data)
         return -1;
     }
 
-    if (ptCache->hwDataAddr <= ptSearch->hwDataAddr) { // TODO Ğ¡ÓÚµÈÓÚ¿ÉÒÔ°üº¬ 06 ºÍ 16
+    if (ptCache->hwDataAddr <= ptSearch->hwDataAddr) { // TODO å°äºç­‰äºå¯ä»¥åŒ…å« 06 å’Œ 16
         return 0;
     }
 
@@ -63,10 +63,10 @@ int32_t find_compatible_cache_record_hook(void *res, void *data)
 
 
 /**
- * \brief       Ñ°ÕÒºÍ request ÇëÇóÆ¥ÅäµÄ¼ÇÂ¼
- * \param[in]   res       ¶ÔÏóÄÚ´æµØÖ·
- * \param[in]   data      ¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       å¯»æ‰¾å’Œ request è¯·æ±‚åŒ¹é…çš„è®°å½•
+ * \param[in]   res       å¯¹è±¡å†…å­˜åœ°å€
+ * \param[in]   data      å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int32_t find_equal_cache_record_hook(void *res, void *data)
 {
@@ -87,10 +87,10 @@ int32_t find_equal_cache_record_hook(void *res, void *data)
 }
 
 /**
- * \brief       ¹ıÆÚ¼ÆÊıÆ÷Ôö¼õ¹³×Óº¯Êı
- * \param[in]   res       ¶ÔÏóÄÚ´æµØÖ·
- * \param[in]   data      ¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       è¿‡æœŸè®¡æ•°å™¨å¢å‡é’©å­å‡½æ•°
+ * \param[in]   res       å¯¹è±¡å†…å­˜åœ°å€
+ * \param[in]   data      å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int32_t decrease_counter_hook(void *ptCacheData, void *ptData)
 {
@@ -104,10 +104,10 @@ int32_t decrease_counter_hook(void *ptCacheData, void *ptData)
 }
 
 /**
- * \brief       Ñ°ÕÒ¹ıÆÚ¼ÆÊıÆ÷Îª0µÄ¹³×Óº¯Êı
- * \param[in]   res       ¶ÔÏóÄÚ´æµØÖ·
- * \param[in]   data      ¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       å¯»æ‰¾è¿‡æœŸè®¡æ•°å™¨ä¸º0çš„é’©å­å‡½æ•°
+ * \param[in]   res       å¯¹è±¡å†…å­˜åœ°å€
+ * \param[in]   data      å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int32_t find_expired_record_hook(void *ptCacheData, void *ptData)
 {
@@ -116,10 +116,10 @@ int32_t find_expired_record_hook(void *ptCacheData, void *ptData)
 }
 
 /**
- * \brief       ÊÍ·Å»º´æÄÚ´æµÄ¹³×Óº¯Êı
- * \param[in]   res       ¶ÔÏóÄÚ´æµØÖ·
- * \param[in]   data      ¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       é‡Šæ”¾ç¼“å­˜å†…å­˜çš„é’©å­å‡½æ•°
+ * \param[in]   res       å¯¹è±¡å†…å­˜åœ°å€
+ * \param[in]   data      å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int32_t destroy_cache_data_hook(void *ptCacheData)
 {
@@ -135,9 +135,9 @@ int32_t destroy_cache_data_hook(void *ptCacheData)
 }
 
 /**
- * \brief       É¾³ıÁ´±íÖĞ¹ıÆÚµÄ¼ÇÂ¼
- * \param[in]   ptList    Á´±í¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       åˆ é™¤é“¾è¡¨ä¸­è¿‡æœŸçš„è®°å½•
+ * \param[in]   ptList    é“¾è¡¨å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int32_t delete_expired_record_in_list(cache_data_list_t *ptList)
 {
@@ -145,9 +145,9 @@ int32_t delete_expired_record_in_list(cache_data_list_t *ptList)
 }
 
 /**
- * \brief       ±éÀúÁ´±í£¬Ôö¼õ¹ıÆÚ¼ÆÊıÆ÷
- * \param[in]   ptList    Á´±í¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       éå†é“¾è¡¨ï¼Œå¢å‡è¿‡æœŸè®¡æ•°å™¨
+ * \param[in]   ptList    é“¾è¡¨å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 void decrease_expiration_counter_in_list(cache_data_list_t *ptList)
 {
@@ -155,9 +155,9 @@ void decrease_expiration_counter_in_list(cache_data_list_t *ptList)
 }
 
 /**
- * \brief       ±éÀúÁ´±í£¬É¾³ı¸úrequestÆ¥ÅäÉÏµÄ¼ÇÂ¼
- * \param[in]   ptList    Á´±í¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       éå†é“¾è¡¨ï¼Œåˆ é™¤è·ŸrequeståŒ¹é…ä¸Šçš„è®°å½•
+ * \param[in]   ptList    é“¾è¡¨å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int32_t delete_equal_request_in_list(cache_data_list_t *ptList, proxy_request_t *ptRequest)
 {
@@ -165,10 +165,10 @@ int32_t delete_equal_request_in_list(cache_data_list_t *ptList, proxy_request_t 
 }
 
 /**
- * \brief       ¼ÆËã×Ö½ÚÕ¼ÓÃ¿Õ¼ä
- * \param[in]   chCode          MODBUS ¹¦ÄÜÂë
- * \param[in]   hwDataNumber    MODBUS Êı¾İ¶ÁÈ¡¸öÊı
- * \return      -1(Ê§°Ü)
+ * \brief       è®¡ç®—å­—èŠ‚å ç”¨ç©ºé—´
+ * \param[in]   chCode          MODBUS åŠŸèƒ½ç 
+ * \param[in]   hwDataNumber    MODBUS æ•°æ®è¯»å–ä¸ªæ•°
+ * \return      -1(å¤±è´¥)
  */
 uint8_t calc_storage_space_in_byte(uint8_t chCode, uint16_t hwDataNumber)
 {
@@ -193,10 +193,10 @@ uint8_t calc_storage_space_in_byte(uint8_t chCode, uint16_t hwDataNumber)
 }
 
 /**
- * \brief       ½«»º´æ¼ÇÂ¼×ª»»ÎªÏàÓ¦µÄ request ÇëÇó
- * \param[in]   ptCache     »º´æ¼ÇÂ¼¶ÔÏóÄÚ´æµØÖ·
- * \param[in]   ptRequest   requestÇëÇó¶ÔÏóÄÚ´æµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       å°†ç¼“å­˜è®°å½•è½¬æ¢ä¸ºç›¸åº”çš„ request è¯·æ±‚
+ * \param[in]   ptCache     ç¼“å­˜è®°å½•å¯¹è±¡å†…å­˜åœ°å€
+ * \param[in]   ptRequest   requestè¯·æ±‚å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int32_t cache_data_transform_request(const cache_data_t *ptCache, proxy_request_t *ptRequest)
 {
@@ -225,7 +225,7 @@ int32_t cache_data_transform_request(const cache_data_t *ptCache, proxy_request_
         return -1;
     }
 
-    ptRequest->chPortSrc = CH_INTERNAL_CACHE_PORT;    // ÄÚ²¿»º´æ¶Ë¿Ú
+    ptRequest->chPortSrc = CH_INTERNAL_CACHE_PORT;    // å†…éƒ¨ç¼“å­˜ç«¯å£
     ptRequest->chID = ptCache->chID;
     ptRequest->chPortDstBuf[0] = ptCache->chPort;
     ptRequest->chPortDstNum = 1;
@@ -237,8 +237,8 @@ int32_t cache_data_transform_request(const cache_data_t *ptCache, proxy_request_
 }
 
 /**
-* \brief       ¸üĞÂÖØµşÇøÓòµÄ¼Ä´æÆ÷Êı¾İ£¬16Î»³¤¶È
-* \return      -1(Ê§°Ü)
+* \brief       æ›´æ–°é‡å åŒºåŸŸçš„å¯„å­˜å™¨æ•°æ®ï¼Œ16ä½é•¿åº¦
+* \return      -1(å¤±è´¥)
 */
 static int32_t refresh_overlapping_area_registers(struct modbus_overlapping_address *ptObejct)
 {
@@ -269,8 +269,8 @@ static int32_t refresh_overlapping_area_registers(struct modbus_overlapping_addr
 }
 
 /**
-* \brief       ¸üĞÂÖØµşÇøÓòµÄÏßÈ¦Öµ£¬µ¥Î»bit
-* \return      -1(Ê§°Ü)
+* \brief       æ›´æ–°é‡å åŒºåŸŸçš„çº¿åœˆå€¼ï¼Œå•ä½bit
+* \return      -1(å¤±è´¥)
 */
 static int32_t refresh_overlapping_area_coils(struct modbus_overlapping_address *ptObejct)
 {
@@ -312,8 +312,8 @@ static int32_t refresh_overlapping_area_coils(struct modbus_overlapping_address 
 }
 
 /**
-* \brief       ¸üĞÂÉè±¸Êı¾İºÍ»º´æÊı¾İµÄÖØµş²¿·Ö
-* \return      -1(Ê§°Ü)
+* \brief       æ›´æ–°è®¾å¤‡æ•°æ®å’Œç¼“å­˜æ•°æ®çš„é‡å éƒ¨åˆ†
+* \return      -1(å¤±è´¥)
 */
 int32_t refresh_cache_data_object_hook(void *res, void *data)
 {

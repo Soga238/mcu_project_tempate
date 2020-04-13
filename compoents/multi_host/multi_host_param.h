@@ -4,50 +4,50 @@
 #include "./multi_host_cfg.h"
 
 #define ADDRESS_MAP_NUM     1
-#define MODBUS_CMD_MUM      8    /*! modbus ÃüÁî, Êı¾İÔ´»òÕßÄ¿µÄµØÆäÖĞÖÁÉÙÓĞÒ»¸öÊÇÄÚ²¿´Ó»ú*/
+#define MODBUS_CMD_MUM      8    /*! modbus å‘½ä»¤, æ•°æ®æºæˆ–è€…ç›®çš„åœ°å…¶ä¸­è‡³å°‘æœ‰ä¸€ä¸ªæ˜¯å†…éƒ¨ä»æœº*/
 
 typedef struct {
-    bool        bWriteExpiration;       // Ğ´ÈëÊı¾İ£¬Ôò¸Ã´Ó»ú¶ÔÓ¦µÄÊı¾İÊ§Ğ§
-    bool        bInternalSlave;         // ÄÚ²¿´Ó»ú
-    uint16_t    hwCacheExpirationTime;  // ÄÚ²¿»º´æÊ§Ğ§Ê±¼ä 0ms ~ 60s 0±íÊ¾²»»º´æ
-    uint16_t    hwInstructionInterval;  // Ö¸ÁîÖ´ĞĞ¼ä¸ô
+    bool        bWriteExpiration;       // å†™å…¥æ•°æ®ï¼Œåˆ™è¯¥ä»æœºå¯¹åº”çš„æ•°æ®å¤±æ•ˆ
+    bool        bInternalSlave;         // å†…éƒ¨ä»æœº
+    uint16_t    hwCacheExpirationTime;  // å†…éƒ¨ç¼“å­˜å¤±æ•ˆæ—¶é—´ 0ms ~ 60s 0è¡¨ç¤ºä¸ç¼“å­˜
+    uint16_t    hwInstructionInterval;  // æŒ‡ä»¤æ‰§è¡Œé—´éš”
 } proxy_setting_t;
 
 typedef struct {
-    uint32_t    wBaudRate;              // ²¨ÌØÂÊ
-    uint16_t    hwWordLength;            // Êı¾İ³¤¶È
-    uint16_t    hwStopBits;             // Í£Ö¹
-    uint16_t    hwParity;               // ÆæÅ¼Ğ£ÑéÎ»
+    uint32_t    wBaudRate;              // æ³¢ç‰¹ç‡
+    uint16_t    hwWordLength;            // æ•°æ®é•¿åº¦
+    uint16_t    hwStopBits;             // åœæ­¢
+    uint16_t    hwParity;               // å¥‡å¶æ ¡éªŒä½
 } serial_config_t;
 
 typedef enum {
-    MODBUS_RTU = 0,                     // Ä¬ÈÏRTU
-    MODBUS_ASCII,                       // ²»Ö§³Ö
-    MODBUS_TCP                          // ²»Ö§³Ö
+    MODBUS_RTU = 0,                     // é»˜è®¤RTU
+    MODBUS_ASCII,                       // ä¸æ”¯æŒ
+    MODBUS_TCP                          // ä¸æ”¯æŒ
 } modbus_format_t;
 
 typedef enum {
-    MASTER = 0,                         // Ö÷»ú - ½Ó´Ó»úÉè±¸
-    SLAVE,                              // ´Ó»ú - ½ÓÖ÷»úÉè±¸
-    MONITOR                             // ¼à¿Ø - ²¢Èë×ÜÏßÍøÂç
+    MASTER = 0,                         // ä¸»æœº - æ¥ä»æœºè®¾å¤‡
+    SLAVE,                              // ä»æœº - æ¥ä¸»æœºè®¾å¤‡
+    MONITOR                             // ç›‘æ§ - å¹¶å…¥æ€»çº¿ç½‘ç»œ
 } port_role_t;
 
 typedef struct {
-    uint8_t     chPort;                 // ¶Ë¿ÚºÅ
+    uint8_t     chPort;                 // ç«¯å£å·
     modbus_format_t tFormat;            // MODBUS RTU OR ASCII
-    uint16_t    hwTimeout;              // ¶Ë¿ÚÍ¨Ñ¶³¬Ê±£¨µÈ´ı»Ø°ü×î´óÊ±¼ä£©
-    serial_config_t tConfig;            // ¶Ë¿Ú´®¿ÚÓ²¼ş²ÎÊıÉèÖÃ
+    uint16_t    hwTimeout;              // ç«¯å£é€šè®¯è¶…æ—¶ï¼ˆç­‰å¾…å›åŒ…æœ€å¤§æ—¶é—´ï¼‰
+    serial_config_t tConfig;            // ç«¯å£ä¸²å£ç¡¬ä»¶å‚æ•°è®¾ç½®
 } port_config_t;
 
 typedef struct {
     uint8_t chPort;
     port_role_t     tRole;              // 0 Master 1 Slave 2 Monitor/Listenr
     struct {
-        uint8_t chSlaveStart;           // ´Ó»úµØÖ·ÆğÊ¼    Ä¬ÈÏ0
-        uint8_t chSlaveEnd;             // ´Ó»úµØÖ·½áÊø    Ä¬ÈÏ0
-        uint8_t chIdStart;              // ÄÚ²¿µØÖ·¿ªÊ¼   Ä¬ÈÏ0
-        uint8_t chIdEnd;                // ÄÚ²¿µØÖ·½áÊø   Ä¬ÈÏ0
-    } tBuf[ADDRESS_MAP_NUM];            // ´Ó»úµØÖ·ºÍÄÚ²¿µØÖ·µÄÓ³Éä¹ØÏµ±í
+        uint8_t chSlaveStart;           // ä»æœºåœ°å€èµ·å§‹    é»˜è®¤0
+        uint8_t chSlaveEnd;             // ä»æœºåœ°å€ç»“æŸ    é»˜è®¤0
+        uint8_t chIdStart;              // å†…éƒ¨åœ°å€å¼€å§‹   é»˜è®¤0
+        uint8_t chIdEnd;                // å†…éƒ¨åœ°å€ç»“æŸ   é»˜è®¤0
+    } tBuf[ADDRESS_MAP_NUM];            // ä»æœºåœ°å€å’Œå†…éƒ¨åœ°å€çš„æ˜ å°„å…³ç³»è¡¨
 }port_resource_t;
 
 extern const uint8_t g_chPortBuf[TOTAL_PORT_NUM];

@@ -26,11 +26,11 @@
 **********************************************************************
 */
 
-#define MB_READ_REGCNT_MIN             (0x0001)      /*! ¶ÁÈ¡±£³Ö¼Ä´æÆ÷µÄ×îĞ¡³¤¶È */
-#define MB_READ_REGCNT_MAX             (0x007D)      /*! ¶ÁÈ¡±£³Ö¼Ä´æÆ÷µÄ×î´ó³¤¶È */
+#define MB_READ_REGCNT_MIN             (0x0001)      /*! è¯»å–ä¿æŒå¯„å­˜å™¨çš„æœ€å°é•¿åº¦ */
+#define MB_READ_REGCNT_MAX             (0x007D)      /*! è¯»å–ä¿æŒå¯„å­˜å™¨çš„æœ€å¤§é•¿åº¦ */
 
-#define MB_READ_COILCNT_MIN            (0x0001)      /*! ¶ÁÈ¡ÏßÈ¦µÄ×îĞ¡³¤¶È      */
-#define MB_READ_COILCNT_MAX            (0x07D0)      /*! ¶ÁÈ¡ÏßÈ¦µÄ×î´ó³¤¶È      */
+#define MB_READ_COILCNT_MIN            (0x0001)      /*! è¯»å–çº¿åœˆçš„æœ€å°é•¿åº¦      */
+#define MB_READ_COILCNT_MAX            (0x07D0)      /*! è¯»å–çº¿åœˆçš„æœ€å¤§é•¿åº¦      */
 
 /*********************************************************************
 *
@@ -39,7 +39,7 @@
 **********************************************************************
 */
 
-#define PROCESS_TIME                    150         /*! Ô¤¹ÀÔ¶¶ËÉè±¸´¦Àí modbus Ö¸ÁîËùĞèµÄÊ±¼ä£¬µ¥Î»ºÁÃë */
+#define PROCESS_TIME                    150         /*! é¢„ä¼°è¿œç«¯è®¾å¤‡å¤„ç† modbus æŒ‡ä»¤æ‰€éœ€çš„æ—¶é—´ï¼Œå•ä½æ¯«ç§’ */
 
 /*********************************************************************
 *
@@ -49,11 +49,11 @@
 */
 
 /**
- * \brief       IDºÅ×ªMODBUS´Ó»úµØÖ·
- * \param[in]   chPort     ¶Ë¿ÚºÅ
- * \param[in]   chId       IDÖµ
- * \param[out]  pchSlave   MODBUS´Ó»úµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       IDå·è½¬MODBUSä»æœºåœ°å€
+ * \param[in]   chPort     ç«¯å£å·
+ * \param[in]   chId       IDå€¼
+ * \param[out]  pchSlave   MODBUSä»æœºåœ°å€
+ * \return      -1(å¤±è´¥)
  */
 int8_t id_to_address(uint8_t chPort, uint8_t chId, uint8_t *pchSlave)
 {
@@ -76,11 +76,11 @@ int8_t id_to_address(uint8_t chPort, uint8_t chId, uint8_t *pchSlave)
 }
 
 /**
- * \brief       MODBUS´Ó»úµØÖ·×ªIDºÅ
- * \param[in]   chPort     ¶Ë¿ÚºÅ
- * \param[in]   chSlave    MODBUS´Ó»úµØÖ·
- * \param[out]  *pchID     Ö¸ÏòID±äÁ¿µÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       MODBUSä»æœºåœ°å€è½¬IDå·
+ * \param[in]   chPort     ç«¯å£å·
+ * \param[in]   chSlave    MODBUSä»æœºåœ°å€
+ * \param[out]  *pchID     æŒ‡å‘IDå˜é‡çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 static int8_t address_to_id(uint8_t chPort, uint8_t chSlave, uint8_t *pchID)
 {
@@ -103,9 +103,9 @@ static int8_t address_to_id(uint8_t chPort, uint8_t chSlave, uint8_t *pchID)
 }
 
 /**
- * \brief       Îª request ÇëÇóÌí¼Ó×ª·¢Ä¿µÄ¶Ë¿ÚºÅ
- * \param[in]   ptRequest     Ö¸Ïòrequest½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       ä¸º request è¯·æ±‚æ·»åŠ è½¬å‘ç›®çš„ç«¯å£å·
+ * \param[in]   ptRequest     æŒ‡å‘requestç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 static int32_t add_dst_port_to_request(proxy_request_t *ptRequest)
 {
@@ -136,9 +136,9 @@ static int32_t add_dst_port_to_request(proxy_request_t *ptRequest)
 }
 
 /**
- * \brief       ¼ÆËã request_cfg ÇëÓ¦µÄ modbus Ğ­ÒéÕ¼ÓÃµÄ×Ö½Ú³¤¶È
- * \param[in]   ptCfg     Ö¸Ïò request_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       è®¡ç®— request_cfg è¯·åº”çš„ modbus åè®®å ç”¨çš„å­—èŠ‚é•¿åº¦
+ * \param[in]   ptCfg     æŒ‡å‘ request_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 static int32_t calc_request_body_size(const request_cfg_t *ptCfg)
 {
@@ -170,9 +170,9 @@ static int32_t calc_request_body_size(const request_cfg_t *ptCfg)
 }
 
 /**
- * \brief       ¼ÆËã response_cfg ¶ÔÓ¦µÄ modbus Ğ­ÒéÕ¼ÓÃµÄ×Ö½Ú³¤¶È
- * \param[in]   ptCfg     Ö¸Ïò resonse_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       è®¡ç®— response_cfg å¯¹åº”çš„ modbus åè®®å ç”¨çš„å­—èŠ‚é•¿åº¦
+ * \param[in]   ptCfg     æŒ‡å‘ resonse_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 static int32_t calc_response_body_size(const response_cfg_t *pCfg)
 {
@@ -201,11 +201,11 @@ static int32_t calc_response_body_size(const response_cfg_t *pCfg)
 }
 
 /**
- * \brief       ¸ù¾İÒ»×é·ûºÏ MODBUS Ğ­ÒéµÄ×Ö½ÚÊı¾İ£¬Éú³É request_cfg_t ÀàĞÍµÄ½á¹¹Ìå
- * \param[in]   pchBuffer     Ö¸Ïò×Ö½ÚÊı×éµÄÍ·Ö¸Õë
- * \param[in]   hwBufferSize  ×Ö½ÚÊı×é³¤¶È
- * \param[out]  ptCfg         Ö¸Ïò request_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ ¹æ®ä¸€ç»„ç¬¦åˆ MODBUS åè®®çš„å­—èŠ‚æ•°æ®ï¼Œç”Ÿæˆ request_cfg_t ç±»å‹çš„ç»“æ„ä½“
+ * \param[in]   pchBuffer     æŒ‡å‘å­—èŠ‚æ•°ç»„çš„å¤´æŒ‡é’ˆ
+ * \param[in]   hwBufferSize  å­—èŠ‚æ•°ç»„é•¿åº¦
+ * \param[out]  ptCfg         æŒ‡å‘ request_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 static int32_t make_request_cfg(uint8_t *pchBuffer, uint16_t hwBufferSize, request_cfg_t *ptCfg)
 {
@@ -273,11 +273,11 @@ static int32_t make_request_cfg(uint8_t *pchBuffer, uint16_t hwBufferSize, reque
 }
 
 /**
- * \brief       ¸ù¾İÒ»×é MODBUS ×Ö½ÚÊı¾İ£¬Éú³É response_cfg_t ÀàĞÍµÄ½á¹¹Ìå
- * \param[in]   pchBuffer     Ö¸Ïò×Ö½ÚÊı×éµÄÍ·Ö¸Õë
- * \param[in]   hwBufferSize  ×Ö½ÚÊı×é³¤¶È
- * \param[out]  ptCfg         Ö¸Ïò response_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ ¹æ®ä¸€ç»„ MODBUS å­—èŠ‚æ•°æ®ï¼Œç”Ÿæˆ response_cfg_t ç±»å‹çš„ç»“æ„ä½“
+ * \param[in]   pchBuffer     æŒ‡å‘å­—èŠ‚æ•°ç»„çš„å¤´æŒ‡é’ˆ
+ * \param[in]   hwBufferSize  å­—èŠ‚æ•°ç»„é•¿åº¦
+ * \param[out]  ptCfg         æŒ‡å‘ response_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 static int32_t make_response_cfg(uint8_t *pchBuffer, uint16_t hwBufferSize, response_cfg_t *ptCfg)
 {
@@ -309,7 +309,7 @@ static int32_t make_response_cfg(uint8_t *pchBuffer, uint16_t hwBufferSize, resp
             ptCfg->hwDataAddr = CHAR_HL_SHORT(pchBuffer[2], pchBuffer[3]);
             ptCfg->pchHR = &pchBuffer[4];
 
-            // Ê¹ÓÃ volatile ĞŞÊÎ hwCoilValue ±ÜÃâÓÅ»¯´Ë¶Î´úÂë
+            // ä½¿ç”¨ volatile ä¿®é¥° hwCoilValue é¿å…ä¼˜åŒ–æ­¤æ®µä»£ç 
             if (MB_FUNC_WRITE_SINGLE_COIL == ptCfg->chCode) {
                 hwCoilValue = CHAR_HL_SHORT(pchBuffer[4], pchBuffer[5]);
                 if ((COIL_VALUE_OFF == hwCoilValue) || (COIL_VALUE_ON == hwCoilValue)) {
@@ -326,7 +326,7 @@ static int32_t make_response_cfg(uint8_t *pchBuffer, uint16_t hwBufferSize, resp
             ptCfg->hwOutputNumber = CHAR_HL_SHORT(pchBuffer[4], pchBuffer[5]);
             break;
 
-        // Òì³£´úÂë
+        // å¼‚å¸¸ä»£ç 
         case (0x80 + MB_FUNC_READ_INPUT_REGISTERS):
         case (0x80 + MB_FUNC_READ_HOLDING_REGISTERS):
         case (0x80 + MB_FUNC_READ_DISCRETE_INPUTS):
@@ -346,10 +346,10 @@ static int32_t make_response_cfg(uint8_t *pchBuffer, uint16_t hwBufferSize, resp
 
 
 /**
- * \brief       ½«´Ó¶Ë¿Ú½ÓÊÕµ½µÄÀàĞÍÎª raw_data_t µÄÊı¾İ£¬×ª»»³É response ÇëÇó¸ñÊ½
- * \param[in]   ptRawData     Ö¸Ïò raw_data_t ÀàĞÍµÄ½á¹¹ÌåµÄÊı¾İ
- * \param[out]  ptCfg         Ö¸Ïò response_cfg_t ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       å°†ä»ç«¯å£æ¥æ”¶åˆ°çš„ç±»å‹ä¸º raw_data_t çš„æ•°æ®ï¼Œè½¬æ¢æˆ response è¯·æ±‚æ ¼å¼
+ * \param[in]   ptRawData     æŒ‡å‘ raw_data_t ç±»å‹çš„ç»“æ„ä½“çš„æ•°æ®
+ * \param[out]  ptCfg         æŒ‡å‘ response_cfg_t ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 int32_t raw_data_transform_response(raw_data_t *ptRawData, proxy_response_t *ptResponse)
 {
@@ -374,10 +374,10 @@ int32_t raw_data_transform_response(raw_data_t *ptRawData, proxy_response_t *ptR
 }
 
 /**
- * \brief       ½«´Ó¶Ë¿Ú½ÓÊÕµ½µÄÀàĞÍÎª raw_data_t µÄÊı¾İ£¬×ª»»³É request ÇëÇó¸ñÊ½
- * \param[in]   ptRawData     Ö¸Ïò raw_data_t ÀàĞÍµÄ½á¹¹ÌåµÄÊı¾İ
- * \param[out]  ptCfg         Ö¸Ïò request_cfg_t ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       å°†ä»ç«¯å£æ¥æ”¶åˆ°çš„ç±»å‹ä¸º raw_data_t çš„æ•°æ®ï¼Œè½¬æ¢æˆ request è¯·æ±‚æ ¼å¼
+ * \param[in]   ptRawData     æŒ‡å‘ raw_data_t ç±»å‹çš„ç»“æ„ä½“çš„æ•°æ®
+ * \param[out]  ptCfg         æŒ‡å‘ request_cfg_t ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 int32_t raw_data_transform_request(raw_data_t *ptRawData, proxy_request_t *ptRequest)
 {
@@ -406,11 +406,11 @@ int32_t raw_data_transform_request(raw_data_t *ptRawData, proxy_request_t *ptReq
 }
 
 /**
- * \brief       ¸ù¾İ request_cfg_t ÀàĞÍµÄ½á¹¹Ìå£¬Éú³É MODBUS Ğ­ÒéÌåÊı¾İ
- * \param[in]   pchBuffer     Ö¸Ïò×Ö½ÚÊı×éµÄÍ·Ö¸Õë
- * \param[in]   hwBufferSize  ×Ö½ÚÊı×é³¤¶È
- * \param[out]  ptCfg         Ö¸Ïò request_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ ¹æ® request_cfg_t ç±»å‹çš„ç»“æ„ä½“ï¼Œç”Ÿæˆ MODBUS åè®®ä½“æ•°æ®
+ * \param[in]   pchBuffer     æŒ‡å‘å­—èŠ‚æ•°ç»„çš„å¤´æŒ‡é’ˆ
+ * \param[in]   hwBufferSize  å­—èŠ‚æ•°ç»„é•¿åº¦
+ * \param[out]  ptCfg         æŒ‡å‘ request_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 int32_t make_request_body(uint8_t *pchBuffer, uint16_t hwBufferSize, const request_cfg_t *ptCfg)
 {
@@ -453,11 +453,11 @@ int32_t make_request_body(uint8_t *pchBuffer, uint16_t hwBufferSize, const reque
 }
 
 /**
- * \brief       ¸ù¾İ response_cfg_t ÀàĞÍµÄ½á¹¹Ìå£¬Éú³É MODBUS Ğ­ÒéÌåÊı¾İ
- * \param[in]   pchBuffer     Ö¸Ïò×Ö½ÚÊı×éµÄÍ·Ö¸Õë
- * \param[in]   hwBufferSize  ×Ö½ÚÊı×é³¤¶È
- * \param[out]  ptCfg         Ö¸Ïò response_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ ¹æ® response_cfg_t ç±»å‹çš„ç»“æ„ä½“ï¼Œç”Ÿæˆ MODBUS åè®®ä½“æ•°æ®
+ * \param[in]   pchBuffer     æŒ‡å‘å­—èŠ‚æ•°ç»„çš„å¤´æŒ‡é’ˆ
+ * \param[in]   hwBufferSize  å­—èŠ‚æ•°ç»„é•¿åº¦
+ * \param[out]  ptCfg         æŒ‡å‘ response_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 int32_t make_response_body(uint8_t *pchBuffer, uint16_t hwBufferSize, const response_cfg_t *ptCfg)
 {
@@ -504,10 +504,10 @@ int32_t make_response_body(uint8_t *pchBuffer, uint16_t hwBufferSize, const resp
 }
 
 /**
- * \brief       ±È½Ï request ÇëÇóºÍ response Ó¦´ğÊÇ·ñÆ¥Åä
- * \param[in]   ptReqCfg        Ö¸Ïò request_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \param[in]   ptRespCfg       Ö¸Ïò response_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ¯”è¾ƒ request è¯·æ±‚å’Œ response åº”ç­”æ˜¯å¦åŒ¹é…
+ * \param[in]   ptReqCfg        æŒ‡å‘ request_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \param[in]   ptRespCfg       æŒ‡å‘ response_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 int32_t is_response_match_request(const request_cfg_t *ptReqCfg, const response_cfg_t *ptRespCfg)
 {
@@ -548,10 +548,10 @@ int32_t is_response_match_request(const request_cfg_t *ptReqCfg, const response_
 }
 
 /**
- * \brief       ÍêÈ«¿½±´Ò»¸ö request ÇëÇó
- * \param[in]   ptRequest        Ö¸Ïò request ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \return      requestÇëÇóµÄ¿½±´
- *              NULL(¿½±´Ê§°Ü)
+ * \brief       å®Œå…¨æ‹·è´ä¸€ä¸ª request è¯·æ±‚
+ * \param[in]   ptRequest        æŒ‡å‘ request ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      requestè¯·æ±‚çš„æ‹·è´
+ *              NULL(æ‹·è´å¤±è´¥)
  */
 proxy_request_t *proxy_mb_request_copy(const proxy_request_t *ptRequest)
 {
@@ -585,18 +585,18 @@ proxy_request_t *proxy_mb_request_copy(const proxy_request_t *ptRequest)
 }
 
 /**
- * \brief       ÔÚ¸ø¶¨²¨ÌØÂÊµÄÌõ¼şÏÂ£¬¼ÆËã×Ö½ÚÊı¾İ´«ÊäÊ±¼ä
- * \param[in]   wBaudrate        ²¨ÌØÂÊ
- * \param[in]   hwSendLength     ×Ö½Ú·¢ËÍ³¤¶È
- * \return      ´«ÊäÊ±¼ä£¬µ¥Î»ºÁÃë
+ * \brief       åœ¨ç»™å®šæ³¢ç‰¹ç‡çš„æ¡ä»¶ä¸‹ï¼Œè®¡ç®—å­—èŠ‚æ•°æ®ä¼ è¾“æ—¶é—´
+ * \param[in]   wBaudrate        æ³¢ç‰¹ç‡
+ * \param[in]   hwSendLength     å­—èŠ‚å‘é€é•¿åº¦
+ * \return      ä¼ è¾“æ—¶é—´ï¼Œå•ä½æ¯«ç§’
  */
 static uint32_t get_transfer_time(uint32_t wBaudrate, uint16_t hwSendLength)
 {
     uint32_t wTransTime = 0;
 
     /*!
-        ÒÔ²¨ÌØÂÊ 9600 Îª»ù×¼£¬1 + 8 + 1£¬ ´ó¸Å1msÒ»¸ö×Ö·û¡£200ms ÔòÊÇ´¦ÀíÊı¾İËùĞè
-        Ê±¼äµÄÔ¤¹ÀÖµ
+        ä»¥æ³¢ç‰¹ç‡ 9600 ä¸ºåŸºå‡†ï¼Œ1 + 8 + 1ï¼Œ å¤§æ¦‚1msä¸€ä¸ªå­—ç¬¦ã€‚200ms åˆ™æ˜¯å¤„ç†æ•°æ®æ‰€éœ€
+        æ—¶é—´çš„é¢„ä¼°å€¼
     */
     switch (wBaudrate) {
         case 2400:
@@ -625,10 +625,10 @@ static uint32_t get_transfer_time(uint32_t wBaudrate, uint16_t hwSendLength)
 }
 
 /**
- * \brief       ¼ÆËã´ÓÖ÷»ú·¢ËÍÇëÇó£¬µ½´Ó»ú·µ»ØÓ¦´ğµÄµÈ´ıÊ±¼ä£¨Ô¤¹ÀÖµ£©
- * \param[in]   ptData        Ö¸Ïò raw_data_t ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \param[in]   wBaudrate     ²¨ÌØÂÊ
- * \return      µÈ´ıÊ±¼ä£¬µ¥Î»ºÁÃë
+ * \brief       è®¡ç®—ä»ä¸»æœºå‘é€è¯·æ±‚ï¼Œåˆ°ä»æœºè¿”å›åº”ç­”çš„ç­‰å¾…æ—¶é—´ï¼ˆé¢„ä¼°å€¼ï¼‰
+ * \param[in]   ptData        æŒ‡å‘ raw_data_t ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \param[in]   wBaudrate     æ³¢ç‰¹ç‡
+ * \return      ç­‰å¾…æ—¶é—´ï¼Œå•ä½æ¯«ç§’
  */
 uint32_t calc_wait_response_time(const raw_data_t *ptData, uint32_t wBaudrate)
 {
@@ -657,8 +657,8 @@ uint32_t calc_wait_response_time(const raw_data_t *ptData, uint32_t wBaudrate)
 }
 
 /**
-* \brief       ÅĞ¶ÏÒ»¸ö request ÊÇÒ»¸öĞ´²Ù×÷
-* \param[in]   ptRequest        Ö¸Ïò request ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
+* \brief       åˆ¤æ–­ä¸€ä¸ª request æ˜¯ä¸€ä¸ªå†™æ“ä½œ
+* \param[in]   ptRequest        æŒ‡å‘ request ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
 * \return      true
 *              false
 */
@@ -683,10 +683,10 @@ bool is_request_write_operation(const proxy_request_t *ptRequest)
 }
 
 /**
-* \brief       ¼ÆËãÁ½¸öÇøÓòµÄÖØµş²¿·Ö
-* \param[in]   ptInput  °üº¬Á½¸öÇøÓòĞÅÏ¢µÄÊäÈë½á¹¹Ìå
-* \param[out]  ptOutput °üº¬ÖØµşÇøÓòĞÅÏ¢µÄÊä³ö½á¹¹Ìå
-* \return      -1(Ê§°Ü)
+* \brief       è®¡ç®—ä¸¤ä¸ªåŒºåŸŸçš„é‡å éƒ¨åˆ†
+* \param[in]   ptInput  åŒ…å«ä¸¤ä¸ªåŒºåŸŸä¿¡æ¯çš„è¾“å…¥ç»“æ„ä½“
+* \param[out]  ptOutput åŒ…å«é‡å åŒºåŸŸä¿¡æ¯çš„è¾“å‡ºç»“æ„ä½“
+* \return      -1(å¤±è´¥)
 */
 int32_t calc_overlapping_area(const overlapping_area_input_t *ptInput, overlapping_area_output_t *ptOutput)
 {

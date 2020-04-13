@@ -26,7 +26,7 @@ typedef struct a_block_link {
 
 static const uint16_t c_hwHeapStructSize = ((sizeof(block_lint_t) + (PORT_BYTE_ALIGNMENT - 1)) & ~PORT_BYTE_ALIGNMENT_MASK);
 
-/*! 在分散加载文件定义ram空间给heap使用 */
+/*! 鍦ㄥ垎鏁ｅ姞杞芥枃浠跺畾涔塺am绌洪棿缁檋eap浣跨敤 */
 static uint8_t g_chHeap[CONFIG_TOTAL_HEAP_SIZE] AT_ADDR(0x20009800);
 
 static block_lint_t g_tBlockStart, *g_ptBlockEnd;

@@ -21,7 +21,7 @@ static void i2c_delay(void)
 
 void i2c_start(void)
 {
-    /* µ±SCL¸ßµçÆ½Ê±£¬SDA³öÏÖÒ»¸öÏÂÌøÑØ±íÊ¾I2C×ÜÏßÆô¶¯ĞÅºÅ */
+    /* å½“SCLé«˜ç”µå¹³æ—¶ï¼ŒSDAå‡ºç°ä¸€ä¸ªä¸‹è·³æ²¿è¡¨ç¤ºI2Cæ€»çº¿å¯åŠ¨ä¿¡å· */
     I2C_SDA_1();
     I2C_SCL_1();
     i2c_delay();
@@ -34,7 +34,7 @@ void i2c_start(void)
 
 void i2c_stop(void)
 {
-    /* µ±SCL¸ßµçÆ½Ê±£¬SDA³öÏÖÒ»¸öÉÏÌøÑØ±íÊ¾I2C×ÜÏßÍ£Ö¹ĞÅºÅ */
+    /* å½“SCLé«˜ç”µå¹³æ—¶ï¼ŒSDAå‡ºç°ä¸€ä¸ªä¸Šè·³æ²¿è¡¨ç¤ºI2Cæ€»çº¿åœæ­¢ä¿¡å· */
     I2C_SDA_0();
     I2C_SCL_1();
     i2c_delay();
@@ -47,7 +47,7 @@ void i2c_send_byte(uint8_t ucByte)
 {
     uint8_t i;
 
-    // i2c_startºó´ËÊ±SCL´¦ÓÚµÍµçÆ½
+    // i2c_startåæ­¤æ—¶SCLå¤„äºä½ç”µå¹³
     for (i = 0; i < 8; i++) {
         if (ucByte & (0x80 >> i)) {
             I2C_SDA_1();
@@ -61,7 +61,7 @@ void i2c_send_byte(uint8_t ucByte)
     }
 
     i2c_delay();
-    I2C_SDA_1();    // ÊÍ·Å×ÜÏß
+    I2C_SDA_1();    // é‡Šæ”¾æ€»çº¿
     i2c_delay();
 }
 
@@ -73,7 +73,7 @@ uint8_t i2c_read_byte(void)
 
     for (i = 0; i < 8; i++) {
         value <<= 1;
-        I2C_SCL_1();    // ÊÍ·Å×ÜÏß
+        I2C_SCL_1();    // é‡Šæ”¾æ€»çº¿
         i2c_delay();
 
         if (I2C_SDA_READ()) {
@@ -88,14 +88,14 @@ uint8_t i2c_read_byte(void)
 uint8_t i2c_wait_ack(void)
 {
     uint8_t rc = 0;
-    // µÈ´ı´Ó»úÀ­µÍSDA Õı³£´ËÊ±SDA±»À­µÍ£¬µÚ9¸öÂö³åSCLºóSDA»Ö¸´¸ßµçÆ½
+    // ç­‰å¾…ä»æœºæ‹‰ä½SDA æ­£å¸¸æ­¤æ—¶SDAè¢«æ‹‰ä½ï¼Œç¬¬9ä¸ªè„‰å†²SCLåSDAæ¢å¤é«˜ç”µå¹³
     I2C_SDA_1();
     i2c_delay();
     I2C_SCL_1();
     i2c_delay();
 
     if (I2C_SDA_READ()) {
-        rc = 1; // Éè±¸ÎŞÏìÓ¦
+        rc = 1; // è®¾å¤‡æ— å“åº”
     }
 
     I2C_SCL_0();
@@ -106,7 +106,7 @@ uint8_t i2c_wait_ack(void)
 
 void i2c_ack(void)
 {
-    // ÔÚµÚ9¸öÊ±ÖÓÂö³å£¬À­µÍSDA
+    // åœ¨ç¬¬9ä¸ªæ—¶é’Ÿè„‰å†²ï¼Œæ‹‰ä½SDA
     I2C_SDA_0();
     i2c_delay();
     I2C_SCL_1();
@@ -119,7 +119,7 @@ void i2c_ack(void)
 
 void i2c_nack(void)
 {
-    // ÔÚµÚ9¸öÊ±ÖÓÂö³å£¬SDA±£³Ö¸ßµçÆ½
+    // åœ¨ç¬¬9ä¸ªæ—¶é’Ÿè„‰å†²ï¼ŒSDAä¿æŒé«˜ç”µå¹³
     I2C_SDA_1();
     i2c_delay();
     I2C_SCL_1();
@@ -136,7 +136,7 @@ uint8_t i2c_check_device(uint8_t addr)
         i2c_send_byte(addr | I2C_WR);
         ucAck = i2c_wait_ack();
         i2c_stop();
-        return ucAck;   //·µ»Ø0±íÊ¾ÓĞÏìÓ¦
+        return ucAck;   //è¿”å›0è¡¨ç¤ºæœ‰å“åº”
     }
     return 1;
 }

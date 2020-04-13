@@ -25,7 +25,7 @@
 **********************************************************************
 */
 
-#define MAX_VALUE_32_BIT        (0xFFFFFFFF) /* 32bit×î´ómsÊı         */
+#define MAX_VALUE_32_BIT        (0xFFFFFFFF) /* 32bitæœ€å¤§msæ•°         */
 #define MAX_VALUE_16_BIT        (0xFFFF)
 
 /*********************************************************************
@@ -39,19 +39,19 @@ typedef uint32_t (*timer_tick_fn)(void);
 
 typedef struct _timer
 {
-    bool                bPeriodic;           /* µ¥´Î´¥·¢/ÖÜÆÚ´¥·¢     */
-    uint32_t            wStart;              /* ¼ÆÊ±Æ÷ÆğÊ¼Ê±¼ä        */
-    uint32_t            wNow;                /* ¼ÆÊ±Æ÷µ±Ç°Ê±¼ä        */
-    uint32_t            wElapse;             /* ¼ÆÊ±Æ÷ÒÑ¹ıÊ±¼ä        */
-    uint32_t            wTimeout;            /* ¼ÆÊ±Æ÷¼ÆÊ±Ê±¼ä        */
-    timer_callback_fn   pfTimerCallback;     /* ¼ÆÊ±»Øµôº¯Êı          */
-    void               *pArg;                /* »Øµ÷º¯ÊıµÄ²ÎÊı        */
+    bool                bPeriodic;           /* å•æ¬¡è§¦å‘/å‘¨æœŸè§¦å‘     */
+    uint32_t            wStart;              /* è®¡æ—¶å™¨èµ·å§‹æ—¶é—´        */
+    uint32_t            wNow;                /* è®¡æ—¶å™¨å½“å‰æ—¶é—´        */
+    uint32_t            wElapse;             /* è®¡æ—¶å™¨å·²è¿‡æ—¶é—´        */
+    uint32_t            wTimeout;            /* è®¡æ—¶å™¨è®¡æ—¶æ—¶é—´        */
+    timer_callback_fn   pfTimerCallback;     /* è®¡æ—¶å›æ‰å‡½æ•°          */
+    void               *pArg;                /* å›è°ƒå‡½æ•°çš„å‚æ•°        */
 } timer_t;
 
 typedef struct _timer_table
 {
-    timer_t               data;              /* ±¾¼ÆÊ±Æ÷½áµãÊı¾İ      */
-    struct _timer_table  *next;              /* ÏÂÒ»¸ö¶¨Ê±Æ÷½áµãµØÖ·  */
+    timer_t               data;              /* æœ¬è®¡æ—¶å™¨ç»“ç‚¹æ•°æ®      */
+    struct _timer_table  *next;              /* ä¸‹ä¸€ä¸ªå®šæ—¶å™¨ç»“ç‚¹åœ°å€  */
 } timer_table_t;
 
 typedef struct _malloc_hook

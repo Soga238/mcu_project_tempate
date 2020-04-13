@@ -25,7 +25,7 @@
 **********************************************************************
 */
 
-// ½ÓÊÕËùÓĞ¶Ë¿ÚµÄÊı¾İ
+// æ¥æ”¶æ‰€æœ‰ç«¯å£çš„æ•°æ®
 def_simple_fsm(receive_data,
                def_params(
                    raw_data_t *ptData;
@@ -38,7 +38,7 @@ end_def_simple_fsm(receive_data)
 declare_fsm_implementation(receive_data);
 declare_fsm_initialiser(receive_data);
 
-// ·¢ËÍµ¥¶Ë¿ÚµÄÊı¾İ
+// å‘é€å•ç«¯å£çš„æ•°æ®
 def_simple_fsm(send_port_data,
                def_params(
                    raw_data_t *ptData;
@@ -48,7 +48,7 @@ end_def_simple_fsm(send_port_data)
 declare_fsm_implementation(send_port_data);
 declare_fsm_initialiser(send_port_data, args(uint8_t chPort))
 
-// ·¢ËÍËùÓĞ¶Ë¿ÚµÄÊı¾İ
+// å‘é€æ‰€æœ‰ç«¯å£çš„æ•°æ®
 def_simple_fsm(send_data,
                def_params(
                    raw_data_t *ptData;
@@ -58,7 +58,7 @@ end_def_simple_fsm(send_data)
 declare_fsm_implementation(send_data);
 declare_fsm_initialiser(send_data);
 
-// ×ª·¢Êı¾İ
+// è½¬å‘æ•°æ®
 def_simple_fsm(forward_raw_data,
                def_params(
                    raw_data_t *ptData;
@@ -85,10 +85,10 @@ declare_fsm_implementation(forward_raw_data)
 static struct port_lock_t {
     uint8_t chPort;
     critical_sector_t tLock;
-} s_tLockBuffer[TOTAL_PORT_NUM];    // Ã¿¸ö¶Ë¿Ú¶ÔÓ¦µÄ·¢ËÍËø
+} s_tLockBuffer[TOTAL_PORT_NUM];    // æ¯ä¸ªç«¯å£å¯¹åº”çš„å‘é€é”
 
-dlink_list_t s_tLinkRawDataRecv;    // ¶Ë¿ÚÔ­Ê¼Êı¾İ½ÓÊÕ´æ´¢Á´±í£¬²»Çø·ÖÖ÷´Ó»ú
-dlink_list_t s_tLinkRawDataSend;    // ¶Ë¿ÚÔ­Ê¼Êı¾İ·¢ËÍ´æ´¢Á´±í£¬²»Çø·ÖÖ÷´Ó»ú
+dlink_list_t s_tLinkRawDataRecv;    // ç«¯å£åŸå§‹æ•°æ®æ¥æ”¶å­˜å‚¨é“¾è¡¨ï¼Œä¸åŒºåˆ†ä¸»ä»æœº
+dlink_list_t s_tLinkRawDataSend;    // ç«¯å£åŸå§‹æ•°æ®å‘é€å­˜å‚¨é“¾è¡¨ï¼Œä¸åŒºåˆ†ä¸»ä»æœº
 
 /*********************************************************************
 *
@@ -109,7 +109,7 @@ static int32_t find_same_port_hook(void *res, void *data);
 */
 
 /**
- * \brief   ³õÊ¼»¯Êı¾İ½ÓÊÕÁ´±íºÍÊı¾İ·¢ËÍÁ´±í
+ * \brief   åˆå§‹åŒ–æ•°æ®æ¥æ”¶é“¾è¡¨å’Œæ•°æ®å‘é€é“¾è¡¨
  */
 
 void multi_host_recv_send_init(void)
@@ -125,7 +125,7 @@ void multi_host_recv_send_init(void)
 }
 
 /**
- * \brief   ±éÀú¶Ë¿Ú½ÓÊÕº¯Êı£¬ÊÕµ½Êı¾İ²åÈëµ½Êı¾İ½ÓÊÕÁ´±íÖĞ
+ * \brief   éå†ç«¯å£æ¥æ”¶å‡½æ•°ï¼Œæ”¶åˆ°æ•°æ®æ’å…¥åˆ°æ•°æ®æ¥æ”¶é“¾è¡¨ä¸­
  * \return  fsm_rt_t
  */
 fsm_initialiser(receive_data)
@@ -142,7 +142,7 @@ fsm_implementation(receive_data)
     )
 
     state(CHEKC_PORT) {
-        if (RAW_DATA_FREE_SIZE() <= 2) { // ÏŞÖÆ±£´æÍâ²¿Êı¾İµÄ¸öÊı
+        if (RAW_DATA_FREE_SIZE() <= 2) { // é™åˆ¶ä¿å­˜å¤–éƒ¨æ•°æ®çš„ä¸ªæ•°
             fsm_on_going();
         }
 
@@ -186,7 +186,7 @@ fsm_implementation(receive_data)
 }
 
 /**
- * \brief       ´ÓÊı¾İ·¢ËÍÁ´±íÖĞÈ¡³öÊı¾İ²¢Á¢¼´·¢ËÍ
+ * \brief       ä»æ•°æ®å‘é€é“¾è¡¨ä¸­å–å‡ºæ•°æ®å¹¶ç«‹å³å‘é€
  * \return      fsm_rt_t
  */
 fsm_initialiser(send_data)
@@ -212,7 +212,7 @@ fsm_implementation(send_data)
 }
 
 /**
-* \brief       ´ÓÊı¾İ·¢ËÍÁ´±íÖĞÈ¡³öÊı¾İ²¢Á¢¼´·¢ËÍ
+* \brief       ä»æ•°æ®å‘é€é“¾è¡¨ä¸­å–å‡ºæ•°æ®å¹¶ç«‹å³å‘é€
 * \return      fsm_rt_t
 */
 fsm_initialiser(send_port_data, args(uint8_t chPort))
@@ -256,10 +256,10 @@ fsm_implementation(send_port_data)
 }
 
 /**
- * \brief       ¸ù¾İ¶Ë¿ÚºÅ×ª·¢Êı¾İ
- * \param[in]   chDstPort   Ä¿±ê¶Ë¿ÚºÅ
- * \param[in]   pchBuf      ×Ö½ÚÊı×éÍ·Ö¸Õë
- * \param[in]   hwSize      ×Ö½ÚÊı¾İ³¤¶È
+ * \brief       æ ¹æ®ç«¯å£å·è½¬å‘æ•°æ®
+ * \param[in]   chDstPort   ç›®æ ‡ç«¯å£å·
+ * \param[in]   pchBuf      å­—èŠ‚æ•°ç»„å¤´æŒ‡é’ˆ
+ * \param[in]   hwSize      å­—èŠ‚æ•°æ®é•¿åº¦
  * \return      fsm_rt_t
  */
 fsm_initialiser(forward_raw_data, args(uint8_t chDstPort, const uint8_t *pchBuf, uint16_t hwSize))
@@ -307,10 +307,10 @@ fsm_implementation(forward_raw_data)
 }
 
 /**
- * \brief       ²éÕÒÍ¬Ò»¸ö¶ÔÏóµÄ¹³×Óº¯Êı
- * \param[in]   res         ¶ÔÏóÄÚ´æµØÖ·
- * \param[in]   data        ¶ÔÏóÄÚ´æµØÖ·
- * \return      -1£¨Ê§°Ü£©
+ * \brief       æŸ¥æ‰¾åŒä¸€ä¸ªå¯¹è±¡çš„é’©å­å‡½æ•°
+ * \param[in]   res         å¯¹è±¡å†…å­˜åœ°å€
+ * \param[in]   data        å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1ï¼ˆå¤±è´¥ï¼‰
  */
 static int32_t find_same_raw_data_object_hook(void *res, void *data)
 {
@@ -318,10 +318,10 @@ static int32_t find_same_raw_data_object_hook(void *res, void *data)
 }
 
 /**
- * \brief       ¸ù¾İ¶Ë¿ÚºÅ²éÕÒ¶ÔÏóµÄ¹³×Óº¯Êı
- * \param[in]   res         ¶ÔÏóÄÚ´æµØÖ·
- * \param[in]   data        ¶ÔÏóÄÚ´æµØÖ·
- * \return      -1£¨Ê§°Ü£©
+ * \brief       æ ¹æ®ç«¯å£å·æŸ¥æ‰¾å¯¹è±¡çš„é’©å­å‡½æ•°
+ * \param[in]   res         å¯¹è±¡å†…å­˜åœ°å€
+ * \param[in]   data        å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1ï¼ˆå¤±è´¥ï¼‰
  */
 static int32_t find_same_port_hook(void *res, void *data)
 {
@@ -332,9 +332,9 @@ static int32_t find_same_port_hook(void *res, void *data)
 }
 
 /**
- * \brief       ¸ù¾İÔ´¶Ë¿ÚºÅ´ÓÊı¾İ½ÓÊÕÁ´±íÖĞ»ñÈ¡Êı¾İ
- * \param[in]   chPort       Ô´¶Ë¿ÚºÅ
- * \return      NULL£¨Ê§°Ü£©
+ * \brief       æ ¹æ®æºç«¯å£å·ä»æ•°æ®æ¥æ”¶é“¾è¡¨ä¸­è·å–æ•°æ®
+ * \param[in]   chPort       æºç«¯å£å·
+ * \return      NULLï¼ˆå¤±è´¥ï¼‰
  */
 raw_data_t *receive_raw_data_by_source_port(uint8_t chPort)
 {
@@ -349,9 +349,9 @@ raw_data_t *receive_raw_data_by_source_port(uint8_t chPort)
 }
 
 /**
- * \brief       ÊÍ·Å raw_data_t ÀàĞÍ×ÊÔ´µÄ¹³×Óº¯Êı
- * \param[in]   res         ¶ÔÏóÄÚ´æµØÖ·
- * \return      -1£¨Ê§°Ü£©
+ * \brief       é‡Šæ”¾ raw_data_t ç±»å‹èµ„æºçš„é’©å­å‡½æ•°
+ * \param[in]   res         å¯¹è±¡å†…å­˜åœ°å€
+ * \return      -1ï¼ˆå¤±è´¥ï¼‰
  */
 static int32_t destroy_raw_data_object_hook(void *res)
 {
@@ -362,9 +362,9 @@ static int32_t destroy_raw_data_object_hook(void *res)
 }
 
 /**
- * \brief       ´ÓÊı¾İ½ÓÊÕÁ´±íÖĞÇå³ıÏàÍ¬¶Ë¿ÚºÅµÄ¶ÔÏó
- * \param[in]   chPort         Ô´¶Ë¿ÚºÅ
- * \return      -1£¨Ê§°Ü£©
+ * \brief       ä»æ•°æ®æ¥æ”¶é“¾è¡¨ä¸­æ¸…é™¤ç›¸åŒç«¯å£å·çš„å¯¹è±¡
+ * \param[in]   chPort         æºç«¯å£å·
+ * \return      -1ï¼ˆå¤±è´¥ï¼‰
  */
 void clear_received_raw_data_object(uint8_t chPort)
 {
@@ -372,11 +372,11 @@ void clear_received_raw_data_object(uint8_t chPort)
 }
 
 /**
- * \brief       ½«½ÓÊÕµ½µÄÊı¾İ×ª»»Îª raw_data_t ÀàĞÍ±£´æÆğÀ´
- * \param[in]   chPort         Ô´¶Ë¿ÚºÅ
- * \param[in]   pchBuf         ×Ö½ÚÊı×éÍ·Ö¸Õë
- * \param[in]   hwBufSize      ×Ö½ÚÊı×é³¤¶È
- * \return      -1£¨Ê§°Ü£©
+ * \brief       å°†æ¥æ”¶åˆ°çš„æ•°æ®è½¬æ¢ä¸º raw_data_t ç±»å‹ä¿å­˜èµ·æ¥
+ * \param[in]   chPort         æºç«¯å£å·
+ * \param[in]   pchBuf         å­—èŠ‚æ•°ç»„å¤´æŒ‡é’ˆ
+ * \param[in]   hwBufSize      å­—èŠ‚æ•°ç»„é•¿åº¦
+ * \return      -1ï¼ˆå¤±è´¥ï¼‰
  */
 static raw_data_t *create_raw_data_object(uint8_t chPort, const uint8_t *pchBuf, uint16_t hwBufSize)
 {
@@ -392,9 +392,9 @@ static raw_data_t *create_raw_data_object(uint8_t chPort, const uint8_t *pchBuf,
 }
 
 /**
-* \brief       »ñÈ¡¶Ë¿Ú·¢ËÍËø
-* \param[in]   chPort         Ô´¶Ë¿ÚºÅ
-* \return      -1£¨Ê§°Ü£©
+* \brief       è·å–ç«¯å£å‘é€é”
+* \param[in]   chPort         æºç«¯å£å·
+* \return      -1ï¼ˆå¤±è´¥ï¼‰
 */
 static critical_sector_t *get_lock(uint8_t chPort)
 {

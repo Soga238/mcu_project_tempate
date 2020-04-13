@@ -81,7 +81,7 @@
 
 #define AT24X128_DEV_ADDR           0xA0
 
-/*£¡ KEY */
+/*ï¿½ï¿½ KEY */
 
 #define KEY_VALUE1                  0xA0
 

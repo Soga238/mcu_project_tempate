@@ -9,7 +9,7 @@
 
 #define QUEUE_SIZE              2
 
-// ¸ù¾İ¶Ë¿Ú½ÇÉ«£¬´¦Àíraw_data¡£ ÈôÊÇ´Ó»úraw_data ×ª proxy_response_t
+// æ ¹æ®ç«¯å£è§’è‰²ï¼Œå¤„ç†raw_dataã€‚ è‹¥æ˜¯ä»æœºraw_data è½¬ proxy_response_t
 def_simple_fsm(process_raw_data_list,
                def_params(
                    uint8_t chIndex;
@@ -34,7 +34,7 @@ declare_fsm_implementation(process_request_list)
 
 //--------------------------------------------------------
 
-// ¶ÁÈ¡Êı¾İ²¢×ª·¢
+// è¯»å–æ•°æ®å¹¶è½¬å‘
 def_simple_fsm(process_slave_port,
                def_params(
                    uint8_t chPort;
@@ -75,7 +75,7 @@ static osMessageQueueId_t get_slave_queue_by_port(uint8_t chPort);
 static void register_slave_port_queue(uint8_t chPort, osMessageQueueId_t tQueueId);
 
 /**
- *   ´úÀíÖ÷»ú³õÊ¼»¯²ÎÊı
+ *   ä»£ç†ä¸»æœºåˆå§‹åŒ–å‚æ•°
 */
 void modbus_proxy_device_init(void)
 {
@@ -95,7 +95,7 @@ void modbus_proxy_device_init(void)
         }
     }
 
-    /*! TODO ²¢·¢¶ÁÈ¡£¬¿ÉÄÜÎŞ·¨±£Ö¤requestÇëÇó±£Ğò´¦Àí */
+    /*! TODO å¹¶å‘è¯»å–ï¼Œå¯èƒ½æ— æ³•ä¿è¯requestè¯·æ±‚ä¿åºå¤„ç† */
     init_fsm(process_slave_port, &s_tProcessSlavePort, args(CH_PORT4));
     init_fsm(process_slave_port, &s_tProcessSlavePort_2, args(CH_PORT4));
 
@@ -109,7 +109,7 @@ void modbus_proxy_device_init(void)
 }
 
 /*
- *  ´úÀíÖ÷»ú´¦Àíº¯Êı
+ *  ä»£ç†ä¸»æœºå¤„ç†å‡½æ•°
  **/
 void modbus_proxy_device_process_task(void)
 {
@@ -126,7 +126,7 @@ void modbus_proxy_device_process_task(void)
 }
 
 /*
- *  ´úÀíÖ÷»ú·¢ËÍÈÎÎñ´¦Àíº¯Êı£¬¶ÀÁ¢·¢ËÍÈÎÎñÊÇ·ÀÖ¹·¢ËÍ»á×èÈûÈÎÎñµÄÖ´ĞĞ
+ *  ä»£ç†ä¸»æœºå‘é€ä»»åŠ¡å¤„ç†å‡½æ•°ï¼Œç‹¬ç«‹å‘é€ä»»åŠ¡æ˜¯é˜²æ­¢å‘é€ä¼šé˜»å¡ä»»åŠ¡çš„æ‰§è¡Œ
  **/
 void modbus_proxy_device_send_task(void)
 {
@@ -134,8 +134,8 @@ void modbus_proxy_device_send_task(void)
 }
 
 /*
- * ´¦Àí¶Ë¿ÚÇëÇó£¬»ñÈ¡Ö÷»ú¶Ë¿ÚµÄÇëÇó£¬Èç¹ûÊÇÄÚ²¿ÇëÇóÖ±½Ó·µ»Ø¡£
- * ĞèÒª×ª·¢µÄÇëÇó£¬µÈ´ıÓ¦´ğ¡£
+ * å¤„ç†ç«¯å£è¯·æ±‚ï¼Œè·å–ä¸»æœºç«¯å£çš„è¯·æ±‚ï¼Œå¦‚æœæ˜¯å†…éƒ¨è¯·æ±‚ç›´æ¥è¿”å›ã€‚
+ * éœ€è¦è½¬å‘çš„è¯·æ±‚ï¼Œç­‰å¾…åº”ç­”ã€‚
 */
 
 fsm_initialiser(process_slave_port, args(uint8_t chPort))
@@ -176,7 +176,7 @@ fsm_implementation(process_slave_port)
             }
 
             // Read operation
-            if (0 == this.ptSetting->hwCacheExpirationTime) { // 0±íÊ¾²»»º´æ
+            if (0 == this.ptSetting->hwCacheExpirationTime) { // 0è¡¨ç¤ºä¸ç¼“å­˜
                 init_fsm(safe_read_and_write_operation, &this.tOperation, args(this.ptRequest));
                 update_state_to(READ_DATA);
             } else {
@@ -301,7 +301,7 @@ fsm_implementation(process_request_list)
     }
 
     state(BROADCAST_REQUEST) {
-        // todo ´æÔÚ¶à¸ö¶Ë¿ÚÏû·ÑÍ¬Ò»¸öÇëÇó£¬¶ø²»ÊÇÇëÇóµÄ¿½±´
+        // todo å­˜åœ¨å¤šä¸ªç«¯å£æ¶ˆè´¹åŒä¸€ä¸ªè¯·æ±‚ï¼Œè€Œä¸æ˜¯è¯·æ±‚çš„æ‹·è´
         for (uint8_t i = 0; i < this.ptRequest->chPortDstNum; i++) {
             this.tQueueID = get_slave_queue_by_port(this.ptRequest->chPortDstBuf[i]);
             if (NULL == this.tQueueID) {

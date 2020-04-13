@@ -19,24 +19,24 @@
 
 #include "../../usr_app/usr_app_cfg.h"
 
-#define USR_PORT_NUM            4                   // �û�ʹ�õĶ˿���
+#define USR_PORT_NUM            4                   // 用户使用的端口数
 
-#define TOTAL_PORT_NUM          (USR_PORT_NUM + 1)  // ȫ���Ķ˿���
-#define CH_INTERNAL_CACHE_PORT  0xA0                // �ڲ�����˿�
+#define TOTAL_PORT_NUM          (USR_PORT_NUM + 1)  // 全部的端口数
+#define CH_INTERNAL_CACHE_PORT  0xA0                // 内部缓存端口
 #define RAW_DATA_BUF_SIZE       253
 
 /**
- *  \brief �˿ڶ�ȡ���泬ʱʱ��
+ *  \brief 端口读取缓存超时时间
  */
 #define MINMIUM_READ_CACHE_WAIT_TIME        75
 
 /**
- *  \brief ��Ϊ���ö�ȡ���洦��ʱ�䣨��λ���룩������ظ����졣
+ *  \brief 人为设置读取缓存处理时间（单位毫秒），避免回复过快。
  */
 #define MINMIUM_READ_CACHE_PROCESS_TIME     25
 
 /**
- *  \brief ��־��ӡ���أ�0��ʾ�رմ�ӡ����
+ *  \brief 日志打印开关，0表示关闭打印功能
  */
 
 #define MULTI_HOST_LOG_ENABLE   0

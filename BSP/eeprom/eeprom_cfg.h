@@ -7,18 +7,18 @@
 
 #ifdef AT24C02
     #define EE_MODEL_NAME       "AT24C02"
-    #define EE_DEV_ADDR         0xA0        /* Éè±¸µØÖ· */
-    #define EE_PAGE_SIZE        8           /* Ò³Ãæ´óÐ¡(×Ö½Ú) */
-    #define EE_SIZE             256         /* ×ÜÈÝÁ¿(×Ö½Ú) */
-    #define EE_ADDR_BYTES       1           /* µØÖ·×Ö½Ú¸öÊý */
+    #define EE_DEV_ADDR         0xA0        /* è®¾å¤‡åœ°å€ */
+    #define EE_PAGE_SIZE        8           /* é¡µé¢å¤§å°(å­—èŠ‚) */
+    #define EE_SIZE             256         /* æ€»å®¹é‡(å­—èŠ‚) */
+    #define EE_ADDR_BYTES       1           /* åœ°å€å­—èŠ‚ä¸ªæ•° */
 #endif
 
 #ifdef AT24C16
     #define EE_MODEL_NAME       "AT24C16"
-    #define EE_DEV_ADDR         0xA0        /* Éè±¸µØÖ· */
-    #define EE_PAGE_SIZE        16          /* Ò³Ãæ´óÐ¡(×Ö½Ú) */
-    #define EE_SIZE             2048        /* ×ÜÈÝÁ¿(×Ö½Ú) */
-    #define EE_ADDR_BYTES       1           /* µØÖ·×Ö½Ú¸öÊý */
+    #define EE_DEV_ADDR         0xA0        /* è®¾å¤‡åœ°å€ */
+    #define EE_PAGE_SIZE        16          /* é¡µé¢å¤§å°(å­—èŠ‚) */
+    #define EE_SIZE             2048        /* æ€»å®¹é‡(å­—èŠ‚) */
+    #define EE_ADDR_BYTES       1           /* åœ°å€å­—èŠ‚ä¸ªæ•° */
 #endif
 
 
@@ -33,7 +33,7 @@
 #define PORT_I2C_WP        GPIOA
 #define PIN_I2C_WP         GPIO_PIN_0
 
-/* ¶¨ÒåÐ´±£»¤Òý½Å */
+/* å®šä¹‰å†™ä¿æŠ¤å¼•è„š */
 #define EEPROM_WP_1()         do{PORT_I2C_WP->BSRR = PIN_I2C_WP;}while(0) 
 #define EEPROM_WP_0()         do{PORT_I2C_WP->BRR = PIN_I2C_WP;}while(0)
 

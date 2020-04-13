@@ -27,7 +27,7 @@
 **********************************************************************
 */
 
-// ½«raw_data ×ª»»³É proxy_request_t
+// å°†raw_data è½¬æ¢æˆ proxy_request_t
 def_simple_fsm(transform_request,
                def_params(
                    raw_data_t *ptData;
@@ -38,7 +38,7 @@ end_def_simple_fsm(transform_request)
 declare_fsm_initialiser(transform_request)
 declare_fsm_implementation(transform_request, args(uint8_t chPort))
 
-// ½«raw_data ×ª»»³É proxy_response_t
+// å°†raw_data è½¬æ¢æˆ proxy_response_t
 def_simple_fsm(transform_response,
                def_params(
                    raw_data_t *ptData;
@@ -49,7 +49,7 @@ end_def_simple_fsm(rawdata_transfotransform_responserm_response)
 declare_fsm_initialiser(transform_response)
 declare_fsm_implementation(transform_response, args(uint8_t chPort))
 
-// »ñÈ¡ÎŞ»º´æµÄÓ¦´ğ£¬¼´Ö±½Ó´Ó¶Ë¿Ú»ñÈ¡Éè±¸Êı¾İ
+// è·å–æ— ç¼“å­˜çš„åº”ç­”ï¼Œå³ç›´æ¥ä»ç«¯å£è·å–è®¾å¤‡æ•°æ®
 def_simple_fsm(read_and_write_operation,
                def_params(
                    uint8_t chPort;
@@ -65,7 +65,7 @@ end_def_simple_fsm(read_and_write_operation)
 declare_fsm_initialiser(read_and_write_operation, args(proxy_request_t *ptRequest))
 declare_fsm_implementation(read_and_write_operation, args(proxy_response_t **pptResponse))
 
-// »ñÈ¡ÎŞ»º´æµÄÓ¦´ğ£¬¼´Ö±½Ó´Ó¶Ë¿Ú»ñÈ¡Éè±¸Êı¾İ
+// è·å–æ— ç¼“å­˜çš„åº”ç­”ï¼Œå³ç›´æ¥ä»ç«¯å£è·å–è®¾å¤‡æ•°æ®
 def_simple_fsm(safe_read_and_write_operation,
                def_params(
                    fsm(read_and_write_operation) tOperation;
@@ -83,8 +83,8 @@ declare_fsm_implementation(safe_read_and_write_operation, args(proxy_response_t 
 **********************************************************************
 */
 
-dlink_list_t s_tLinkRequestRecv;            // Ö÷»ú¶Ë¿ÚÇëÇó½ÓÊÕÁ´±í
-dlink_list_t s_tLiknResponseRecv;           // ´Ó»ú¶Ë¿ÚÓ¦´ğ½ÓÊÕÁ´±í
+dlink_list_t s_tLinkRequestRecv;            // ä¸»æœºç«¯å£è¯·æ±‚æ¥æ”¶é“¾è¡¨
+dlink_list_t s_tLiknResponseRecv;           // ä»æœºç«¯å£åº”ç­”æ¥æ”¶é“¾è¡¨
 
 static struct port_operation_lock_t {
     uint8_t chPort;
@@ -110,9 +110,9 @@ static critical_sector_t *get_operation_lock(uint8_t chPort);
 */
 
 /**
- * \brief       ½ÓÊÕ¶Ë¿ÚµÄÊı¾İ£¬²¢°Ñ¸ÃÊı¾İ×ª»»Îª request ÇëÇó,
- *              ×îºó²åÈëµ½ request ÇëÇóÁ´±íÖĞ
- * \param[in]   chPort     ¶Ë¿ÚºÅ
+ * \brief       æ¥æ”¶ç«¯å£çš„æ•°æ®ï¼Œå¹¶æŠŠè¯¥æ•°æ®è½¬æ¢ä¸º request è¯·æ±‚,
+ *              æœ€åæ’å…¥åˆ° request è¯·æ±‚é“¾è¡¨ä¸­
+ * \param[in]   chPort     ç«¯å£å·
  * \return      fsm_rt_t
  */
 fsm_initialiser(transform_request)
@@ -165,9 +165,9 @@ fsm_implementation(transform_request, args(uint8_t chPort))
 }
 
 /**
- * \brief       ½ÓÊÕ¶Ë¿ÚµÄÊı¾İ£¬²¢°Ñ¸ÃÊı¾İ×ª»»Îª response Ó¦´ğ,
- *              ×îºó²åÈëµ½ response Ó¦´ğÁ´±íÖĞ
- * \param[in]   chPort     ¶Ë¿ÚºÅ
+ * \brief       æ¥æ”¶ç«¯å£çš„æ•°æ®ï¼Œå¹¶æŠŠè¯¥æ•°æ®è½¬æ¢ä¸º response åº”ç­”,
+ *              æœ€åæ’å…¥åˆ° response åº”ç­”é“¾è¡¨ä¸­
+ * \param[in]   chPort     ç«¯å£å·
  * \return      fsm_rt_t
  */
 fsm_initialiser(transform_response)
@@ -220,8 +220,8 @@ fsm_implementation(transform_response, args(uint8_t chPort))
 }
 
 /**
- * \brief       ×ª·¢Êı¾İ¸øMODBUS´Ó»ú£¬²¢»ñÈ¡MODBUS´Ó»úÓ¦´ğ
- * \param[in]   ptRequest     request ÇëÇó½á¹¹ÌåÖ¸Õë
+ * \brief       è½¬å‘æ•°æ®ç»™MODBUSä»æœºï¼Œå¹¶è·å–MODBUSä»æœºåº”ç­”
+ * \param[in]   ptRequest     request è¯·æ±‚ç»“æ„ä½“æŒ‡é’ˆ
  * \return      fsm_rt_t
  */
 fsm_initialiser(read_and_write_operation, args(proxy_request_t *ptRequest))
@@ -229,7 +229,7 @@ init_body(
     const port_config_t *ptCfg = NULL;
 
     this.ptRequest = ptRequest;
-    this.chPort = this.ptRequest->chPortDstBuf[0];  // Ö»¿ÉÄÜÊÇÒ»¸ö¶Ë¿Ú
+    this.chPort = this.ptRequest->chPortDstBuf[0];  // åªå¯èƒ½æ˜¯ä¸€ä¸ªç«¯å£
 
     ptCfg = proxy_get_port_config(this.chPort);
     this.wBaudrate = ptCfg->tConfig.wBaudRate;
@@ -279,9 +279,9 @@ fsm_implementation(read_and_write_operation, args(proxy_response_t **pptResponse
 }
 
 /**
-* \brief       ÔÚÒ»¶ÎÊ±¼äÄÚ£¬¶Ô¶Ë¿ÚµÄ¶ÁĞ´²Ù×÷½øĞĞ±£»¤£¬·ÀÖ¹¶Ô¶Ë¿ÚµÄ²¢·¢¶ÁĞ´
-* \param[in]   ptRequest     request ÇëÇó½á¹¹ÌåÖ¸Õë
-* \param[in]   ptLock        Ô­×Ó²Ù×÷±£»¤Ëø
+* \brief       åœ¨ä¸€æ®µæ—¶é—´å†…ï¼Œå¯¹ç«¯å£çš„è¯»å†™æ“ä½œè¿›è¡Œä¿æŠ¤ï¼Œé˜²æ­¢å¯¹ç«¯å£çš„å¹¶å‘è¯»å†™
+* \param[in]   ptRequest     request è¯·æ±‚ç»“æ„ä½“æŒ‡é’ˆ
+* \param[in]   ptLock        åŸå­æ“ä½œä¿æŠ¤é”
 * \return      fsm_rt_t
 */
 fsm_initialiser(safe_read_and_write_operation, args(proxy_request_t *ptRequest))
@@ -314,7 +314,7 @@ fsm_implementation(safe_read_and_write_operation, args(proxy_response_t **pptRes
 
 
 /**
- * \brief ³õÊ¼»¯ request ºÍ resposne ´æ´¢Á´±í
+ * \brief åˆå§‹åŒ– request å’Œ resposne å­˜å‚¨é“¾è¡¨
  */
 void multi_host_request_response_init(void)
 {
@@ -328,7 +328,7 @@ void multi_host_request_response_init(void)
 }
 
 /**
- * \brief  ´Ó request ÇëÇóÁ´±í£¬È¡³öµÚÒ»ÌõÇëÇó
+ * \brief  ä» request è¯·æ±‚é“¾è¡¨ï¼Œå–å‡ºç¬¬ä¸€æ¡è¯·æ±‚
  */
 proxy_request_t *receive_request(void)
 {
@@ -336,7 +336,7 @@ proxy_request_t *receive_request(void)
 }
 
 /**
- * \brief  Ñ°ÕÒÏàÍ¬¶Ë¿ÚºÅµÄ¹³×Óº¯Êı
+ * \brief  å¯»æ‰¾ç›¸åŒç«¯å£å·çš„é’©å­å‡½æ•°
  */
 static int32_t find_same_source_port_hook(void *res, void *data)
 {
@@ -347,7 +347,7 @@ static int32_t find_same_source_port_hook(void *res, void *data)
 }
 
 /**
- * \brief  ÊÍ·ÅÄÚ´æ¿Õ¼äµÄ¹³×Óº¯Êı
+ * \brief  é‡Šæ”¾å†…å­˜ç©ºé—´çš„é’©å­å‡½æ•°
  */
 static int32_t destroy_response_object_hook(void *res)
 {
@@ -359,8 +359,8 @@ static int32_t destroy_response_object_hook(void *res)
 }
 
 /**
- * \brief       ¸ù¾İ´«µİµÄ¶Ë¿ÚºÅ£¬´Ó response Ó¦´ğÁ´±íÖĞÕÒ³öµÚÒ»ÌõÆ¥ÅäµÄÊı¾İ
- * \param[in]   chPort     ¶Ë¿ÚºÅ
+ * \brief       æ ¹æ®ä¼ é€’çš„ç«¯å£å·ï¼Œä» response åº”ç­”é“¾è¡¨ä¸­æ‰¾å‡ºç¬¬ä¸€æ¡åŒ¹é…çš„æ•°æ®
+ * \param[in]   chPort     ç«¯å£å·
  */
 static proxy_response_t *receive_response_object(uint8_t chSourcePort)
 {
@@ -372,8 +372,8 @@ static proxy_response_t *receive_response_object(uint8_t chSourcePort)
 }
 
 /**
- * \brief       ¸ù¾İ´«µİµÄ¶Ë¿ÚºÅ£¬´Ó response Ó¦´ğÁ´±íÉ¾³ı¶Ë¿ÚºÅÏàÍ¬µÄÓ¦´ğ
- * \param[in]   chPort     ¶Ë¿ÚºÅ
+ * \brief       æ ¹æ®ä¼ é€’çš„ç«¯å£å·ï¼Œä» response åº”ç­”é“¾è¡¨åˆ é™¤ç«¯å£å·ç›¸åŒçš„åº”ç­”
+ * \param[in]   chPort     ç«¯å£å·
  */
 static void clear_received_response_object(uint8_t chSourcePort)
 {
@@ -381,8 +381,8 @@ static void clear_received_response_object(uint8_t chSourcePort)
 }
 
 /**
-* \brief       »ñÈ¡²Ù×÷Ëø
-* \param[in]   chPort     ¶Ë¿ÚºÅ
+* \brief       è·å–æ“ä½œé”
+* \param[in]   chPort     ç«¯å£å·
 */
 static critical_sector_t *get_operation_lock(uint8_t chPort)
 {

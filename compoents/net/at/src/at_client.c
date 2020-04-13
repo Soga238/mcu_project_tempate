@@ -342,7 +342,7 @@ void at_obj_set_urc_table(at_client_t client, const struct at_urc *urc_table, rt
 
     for (idx = 0; idx < table_sz; idx++) {
         ASSERT(urc_table[idx].cmd_prefix != NULL);
-        //ASSERT(urc_table[idx].cmd_suffix != NULL);  // ?¨¦¨°?¨®D?¡ã¡Áo¦Ì???o¨®¡Áo
+        //ASSERT(urc_table[idx].cmd_suffix != NULL);  // ?ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½D?ï¿½ï¿½ï¿½oï¿½ï¿½???oï¿½ï¿½ï¿½ï¿½o
     }
 
     client->urc_table = urc_table;

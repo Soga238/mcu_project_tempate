@@ -19,14 +19,14 @@
 
 #include "stm32f10x.h"
 
-// ´óÈİÁ¿ÏµÁĞ
+// å¤§å®¹é‡ç³»åˆ—
 #if (FLASH_PAGE_SIZE == 0x0800)
     #define SECTOR_MASK                 (0xFFFFF800)
 #else
     #define SECTOR_MASK                 (0xFFFFFC00)
 #endif
 
-#define GET_SECTOR_START_ADDR(_ADDR)           (SECTOR_MASK & _ADDR)        // »ñÈ¡Ò»¸öÉÈÇøµÄÆğÊ¼µØÖ·
+#define GET_SECTOR_START_ADDR(_ADDR)           (SECTOR_MASK & _ADDR)        // è·å–ä¸€ä¸ªæ‰‡åŒºçš„èµ·å§‹åœ°å€
 
 static int32_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
 {
@@ -38,7 +38,7 @@ static int32_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
 
     for (i = 0; i < (wSize >> 2); i++) {
         if (0 == (wFlashAddr & (FLASH_PAGE_SIZE - 1))) {
-            tStatus = FLASH_ErasePage(GET_SECTOR_START_ADDR(wFlashAddr));   // Ò³²Á³ı
+            tStatus = FLASH_ErasePage(GET_SECTOR_START_ADDR(wFlashAddr));   // é¡µæ“¦é™¤
             if (tStatus != FLASH_COMPLETE) {
                 LOG_ERROR("erase fail");
                 goto fail;
@@ -62,7 +62,7 @@ static int32_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
     if (wSize & 0x02) {
 
         if (0 == (wFlashAddr & (FLASH_PAGE_SIZE - 1))) {
-            tStatus = FLASH_ErasePage(GET_SECTOR_START_ADDR(wFlashAddr));   // Ò³²Á³ı
+            tStatus = FLASH_ErasePage(GET_SECTOR_START_ADDR(wFlashAddr));   // é¡µæ“¦é™¤
             if (tStatus != FLASH_COMPLETE) {
                 LOG_ERROR("erase fail");
                 goto fail;
@@ -84,11 +84,11 @@ fail:
 }
 
 /**
- * \brief FLASHĞ´Èëº¯Êı
+ * \brief FLASHå†™å…¥å‡½æ•°
  *
- * \param wFlashAddr    32Î»Ğ´ÈëµØÖ·
- * \param pchBuf        ×Ö½ÚÊı×éÖ¸Õë
- * \param wSize         ×Ö½ÚÊı×é³¤¶È
+ * \param wFlashAddr    32ä½å†™å…¥åœ°å€
+ * \param pchBuf        å­—èŠ‚æ•°ç»„æŒ‡é’ˆ
+ * \param wSize         å­—èŠ‚æ•°ç»„é•¿åº¦
  *
  */
 int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
@@ -103,17 +103,17 @@ int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
         return 0;
     }
 
-    // Ğ´ÈëµØÖ·2×Ö½Ú¶ÔÆë£¬Ğ´Èë×Ö½Ú¸öÊıÎª2µÄ±¶Êı
-    if ((wFlashAddr & 0x01) || (wSize & 0x01)) {    // FALSH°ë×ÖĞ´Èë
+    // å†™å…¥åœ°å€2å­—èŠ‚å¯¹é½ï¼Œå†™å…¥å­—èŠ‚ä¸ªæ•°ä¸º2çš„å€æ•°
+    if ((wFlashAddr & 0x01) || (wSize & 0x01)) {    // FALSHåŠå­—å†™å…¥
         return 0;
     }
 
-    wPrimaskStatus = __get_PRIMASK();               // »ñÈ¡ÖĞ¶Ï×´Ì¬
-    __set_PRIMASK(1);                               // ¹Ø±Õ×ÜÖĞ¶Ï
+    wPrimaskStatus = __get_PRIMASK();               // è·å–ä¸­æ–­çŠ¶æ€
+    __set_PRIMASK(1);                               // å…³é—­æ€»ä¸­æ–­
 
-    if (FLASH->CR & 0x00000080) {                   // ÅĞ¶ÏFLASHÊÇ·ñ±»Ëø×¡
+    if (FLASH->CR & 0x00000080) {                   // åˆ¤æ–­FLASHæ˜¯å¦è¢«é”ä½
         FLASH_Unlock();
-        chOriginLocked = 1;                         // ±ãÓÚºóÃæÅĞ¶ÏÊÇ·ñÒªÖØĞÂËø×¡
+        chOriginLocked = 1;                         // ä¾¿äºåé¢åˆ¤æ–­æ˜¯å¦è¦é‡æ–°é”ä½
     }
 
     while (wSize) {
@@ -133,7 +133,7 @@ int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
         FLASH_Lock();
     }
 
-    __set_PRIMASK(wPrimaskStatus);                 // ±ÜÃâÎó¿ªÖĞ¶Ï
+    __set_PRIMASK(wPrimaskStatus);                 // é¿å…è¯¯å¼€ä¸­æ–­
 
     return nReturn;
 }

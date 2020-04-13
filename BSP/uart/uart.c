@@ -113,7 +113,7 @@ int32_t xhal_uart_init(uart_dev_t *ptDev)
     }
 
     wValue |= ARM_USART_MODE_ASYNCHRONOUS;
-    wValue |= ARM_USART_DATA_BITS_8;    // ÓĞĞ£ÑéÎ»Ò²ÊÇ8Î»£¬ÓëST¿â²»Í¬
+    wValue |= ARM_USART_DATA_BITS_8;    // æœ‰æ ¡éªŒä½ä¹Ÿæ˜¯8ä½ï¼Œä¸STåº“ä¸åŒ
 
     nRet = uart_parity_transform(ptDev->tConfig.chParity, &wTemp);
     if (XHAL_OK != nRet) {
@@ -133,7 +133,7 @@ int32_t xhal_uart_init(uart_dev_t *ptDev)
     }
     wValue |= wTemp;
 
-    // TODO cmsis driver µÚÒ»´ÎÉÏµç½ÓÊÕÊı¾İÎ´Æô¶¯DMA
+    // TODO cmsis driver ç¬¬ä¸€æ¬¡ä¸Šç”µæ¥æ”¶æ•°æ®æœªå¯åŠ¨DMA
     nRet = ptDrv->Initialize(ptHandler->fnSingalEventCB);
     nRet &= ptDrv->PowerControl(ARM_POWER_FULL);
     nRet &= ptDrv->Control(wValue, ptDev->tConfig.wBaudrate);
@@ -330,7 +330,7 @@ static int32_t uart_flow_control_transform(uint8_t chFlowControl, uint32_t *pwRe
     return XHAL_OK;
 }
 
-// ´®¿Ú´íÎó´¥·¢
+// ä¸²å£é”™è¯¯è§¦å‘
 static void error_event_trigger(int32_t nPos, uint32_t wEvent)
 {
     ARM_DRIVER_USART *ptDrv = c_tUartMap[nPos].ptUartPhy;
@@ -339,7 +339,7 @@ static void error_event_trigger(int32_t nPos, uint32_t wEvent)
     ptDrv->Receive(c_tUartMap[nPos].pchBuf, c_tUartMap[nPos].hwBufSize);
 }
 
-// ´®¿Ú·¢ËÍ½ÓÊÕÊÂ¼ş´¥·¢
+// ä¸²å£å‘é€æ¥æ”¶äº‹ä»¶è§¦å‘
 static void event_triger(int32_t nPos, uint32_t wEvent)
 {
     usart_singal_handler_t *ptHandler = &s_tSingalHandlerMap[nPos];
@@ -361,7 +361,7 @@ static void event_triger(int32_t nPos, uint32_t wEvent)
     }
 }
 
-// ĞòÁĞºÅÎª0µÄ´®¿ÚÊÂ¼ş»Øµ÷º¯Êı
+// åºåˆ—å·ä¸º0çš„ä¸²å£äº‹ä»¶å›è°ƒå‡½æ•°
 static void usart_event_callback_num_0(uint32_t wEvent)
 {
     if (ARM_USART_EVENT_ALL & wEvent) {
@@ -373,7 +373,7 @@ static void usart_event_callback_num_0(uint32_t wEvent)
     }
 }
 
-// ĞòÁĞºÅÎª1µÄ´®¿ÚÊÂ¼ş»Øµ÷º¯Êı
+// åºåˆ—å·ä¸º1çš„ä¸²å£äº‹ä»¶å›è°ƒå‡½æ•°
 static void usart_event_callback_num_1(uint32_t wEvent)
 {
     if (ARM_USART_EVENT_ALL & wEvent) {
@@ -385,7 +385,7 @@ static void usart_event_callback_num_1(uint32_t wEvent)
     }
 }
 
-// ĞòÁĞºÅÎª2µÄ´®¿ÚÊÂ¼ş»Øµ÷º¯Êı
+// åºåˆ—å·ä¸º2çš„ä¸²å£äº‹ä»¶å›è°ƒå‡½æ•°
 static void usart_event_callback_num_2(uint32_t wEvent)
 {
     if (ARM_USART_EVENT_ALL & wEvent) {
@@ -397,7 +397,7 @@ static void usart_event_callback_num_2(uint32_t wEvent)
     }
 }
 
-// ĞòÁĞºÅÎª3µÄ´®¿ÚÊÂ¼ş»Øµ÷º¯Êı
+// åºåˆ—å·ä¸º3çš„ä¸²å£äº‹ä»¶å›è°ƒå‡½æ•°
 static void usart_event_callback_num_3(uint32_t wEvent)
 {
     if (ARM_USART_EVENT_ALL & wEvent) {

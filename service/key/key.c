@@ -1,53 +1,53 @@
 /****************************************Copyright (c)***************************************
-**                                  ³£Öİ»ã°îµç×ÓÓĞÏŞ¹«Ë¾
+**                                  å¸¸å·æ±‡é‚¦ç”µå­æœ‰é™å…¬å¸
 **
 **                                 http://www.cnwinpark.cn
 **
 **
-**--------------ÎÄ¼şĞÅÏ¢---------------------------------------------------------------------
-** ÎÄ ¼ş Ãû:    key.c
-** ĞŞ¸ÄÈÕÆÚ:    2017-12-30
-** ÉÏ¸ö°æ±¾:
-** Ãè    Êö:
+**--------------æ–‡ä»¶ä¿¡æ¯---------------------------------------------------------------------
+** æ–‡ ä»¶ å:    key.c
+** ä¿®æ”¹æ—¥æœŸ:    2017-12-30
+** ä¸Šä¸ªç‰ˆæœ¬:
+** æ    è¿°:
 **
 **-------------------------------------------------------------------------------------------
-** ´´    ½¨:    JianHang
-** ´´½¨ÈÕÆÚ:    2017-12-30
-** °æ    ±¾:    1.0
-** Ãè    Êö:    °´¼üÇı¶¯º¯ÊıÎÄ¼ş£¬²»Ö§³Ö×éºÏ°´¼ü
+** åˆ›    å»º:    JianHang
+** åˆ›å»ºæ—¥æœŸ:    2017-12-30
+** ç‰ˆ    æœ¬:    1.0
+** æ    è¿°:    æŒ‰é”®é©±åŠ¨å‡½æ•°æ–‡ä»¶ï¼Œä¸æ”¯æŒç»„åˆæŒ‰é”®
 **
 **-------------------------------------------------------------------------------------------
-** ĞŞ    ¸Ä:
-** ĞŞ¸ÄÈÕÆÚ:
-** °æ    ±¾:
-** Ãè    Êö:
+** ä¿®    æ”¹:
+** ä¿®æ”¹æ—¥æœŸ:
+** ç‰ˆ    æœ¬:
+** æ    è¿°:
 **
 *********************************************************************************************/
 #include "key_queue.h"
 
-extern uint8_t get_key_scan_value( void );                 // °´¼üÉ¨Ãèº¯Êı£¨Íâ²¿¶¨Òå£©
+extern uint8_t get_key_scan_value( void );                 // æŒ‰é”®æ‰«æå‡½æ•°ï¼ˆå¤–éƒ¨å®šä¹‰ï¼‰
 
 /*
-    °´¼üÍ¨¹ı¶ÁÈ¡IO¿Ú¸ßµÍµçÆ½£¬ÅĞ¶Ï°´¼üÊÇ·ñ°´ÏÂ£¬³ÌĞòÁ¬Ğø
-    ¶ÁÈ¡ KEY_SCAN_COUNT ´Î£¬Èô±£³ÖµÍµçÆ½£¬È·¶¨°´¼üÕæµÄ±»°´ÏÂ
+    æŒ‰é”®é€šè¿‡è¯»å–IOå£é«˜ä½ç”µå¹³ï¼Œåˆ¤æ–­æŒ‰é”®æ˜¯å¦æŒ‰ä¸‹ï¼Œç¨‹åºè¿ç»­
+    è¯»å– KEY_SCAN_COUNT æ¬¡ï¼Œè‹¥ä¿æŒä½ç”µå¹³ï¼Œç¡®å®šæŒ‰é”®çœŸçš„è¢«æŒ‰ä¸‹
 */
-#define KEY_SCAN_COUNT                      3           // °´¼üÉ¨Ãè´ÎÊı
-#define KEY_LONG_PRESSED_COUNT              40          // ½øÈë°´¼ü³¤°´×´Ì¬¼ÆÊıãĞÖµ
-#define KEY_REPEAT_COUNT                    4           // ½øÈë°´¼üÁ¬·¢×´Ì¬¼ÆÊıãĞÖµ
-#define KEY_QUEUE_SIZE                      8           // °´¼ü¶ÓÁĞ³¤¶È
+#define KEY_SCAN_COUNT                      3           // æŒ‰é”®æ‰«ææ¬¡æ•°
+#define KEY_LONG_PRESSED_COUNT              40          // è¿›å…¥æŒ‰é”®é•¿æŒ‰çŠ¶æ€è®¡æ•°é˜ˆå€¼
+#define KEY_REPEAT_COUNT                    4           // è¿›å…¥æŒ‰é”®è¿å‘çŠ¶æ€è®¡æ•°é˜ˆå€¼
+#define KEY_QUEUE_SIZE                      8           // æŒ‰é”®é˜Ÿåˆ—é•¿åº¦
 
-static key_event_t key_fronted_buffer[KEY_QUEUE_SIZE];  // °´¼üÊÂ¼şÉú²úÕß»º´æÇø
-static key_event_t key_decotor_buffer[KEY_QUEUE_SIZE];  // °´¼üÊÂ¼şÏû·ÑÕß»º´æÇø
+static key_event_t key_fronted_buffer[KEY_QUEUE_SIZE];  // æŒ‰é”®äº‹ä»¶ç”Ÿäº§è€…ç¼“å­˜åŒº
+static key_event_t key_decotor_buffer[KEY_QUEUE_SIZE];  // æŒ‰é”®äº‹ä»¶æ¶ˆè´¹è€…ç¼“å­˜åŒº
 
-static key_queue_t key_fronted_queue;                   // °´¼üÊÂ¼şÉú²úÕß¶ÓÁĞ
-static key_queue_t key_decotor_queue;                   // °´¼üÊÂ¼şÏû·ÑÕß¶ÓÁĞ
+static key_queue_t key_fronted_queue;                   // æŒ‰é”®äº‹ä»¶ç”Ÿäº§è€…é˜Ÿåˆ—
+static key_queue_t key_decotor_queue;                   // æŒ‰é”®äº‹ä»¶æ¶ˆè´¹è€…é˜Ÿåˆ—
 
 /********************************************************************************************
-* º¯ÊıÃû³Æ£ºkey_init
-* ¹¦ÄÜËµÃ÷£º°´¼üÏà¹ØÅäÖÃ³õÊ¼»¯
-* ÊäÈë²ÎÊı£ºÎŞ
-* Êä³ö²ÎÊı£ºÎŞ
-* ÆäËüËµÃ÷£ºÎŞ
+* å‡½æ•°åç§°ï¼škey_init
+* åŠŸèƒ½è¯´æ˜ï¼šæŒ‰é”®ç›¸å…³é…ç½®åˆå§‹åŒ–
+* è¾“å…¥å‚æ•°ï¼šæ— 
+* è¾“å‡ºå‚æ•°ï¼šæ— 
+* å…¶å®ƒè¯´æ˜ï¼šæ— 
 *********************************************************************************************/
 void key_init( void )
 {
@@ -55,18 +55,18 @@ void key_init( void )
     Key_Queue_Init( &key_decotor_queue, key_decotor_buffer, KEY_QUEUE_SIZE );
 }
 
-#define KEY_CHECK_START                     0           // ¿ªÊ¼×´Ì¬
-#define KEY_CHECK_SCAN_PORT                 1           // É¨ÃèGPIO¶Ë¿Ú
-#define KEY_CHECK_SCAN_COUNT                2           // É¨Ãè¼ÆÊı
-#define KEY_CHECK_SCAN_END                  3           // É¨Ãè½áÊø
+#define KEY_CHECK_START                     0           // å¼€å§‹çŠ¶æ€
+#define KEY_CHECK_SCAN_PORT                 1           // æ‰«æGPIOç«¯å£
+#define KEY_CHECK_SCAN_COUNT                2           // æ‰«æè®¡æ•°
+#define KEY_CHECK_SCAN_END                  3           // æ‰«æç»“æŸ
 
 /********************************************************************************************
-* º¯ÊıÃû³Æ£ºkey_check
-* ¹¦ÄÜËµÃ÷£º°´¼ü¼üÖµ¶ÁÈ¡º¯Êı
-* ÊäÈë²ÎÊı£ºkeyValue   £º°´¼ü¶ÁÈ¡Íê³Éºó£¬±£´æÔÚkeyValueÖ¸ÏòµÄ¿Õ¼äÖĞ
-* Êä³ö²ÎÊı£º1£º   °´¼ü¼üÖµ¶ÁÈ¡Íê³É
-*           0£º   °´¼ü¼üÖµ¶ÁÈ¡ÖĞ
-* ÆäËüËµÃ÷£ºÎŞ
+* å‡½æ•°åç§°ï¼škey_check
+* åŠŸèƒ½è¯´æ˜ï¼šæŒ‰é”®é”®å€¼è¯»å–å‡½æ•°
+* è¾“å…¥å‚æ•°ï¼škeyValue   ï¼šæŒ‰é”®è¯»å–å®Œæˆåï¼Œä¿å­˜åœ¨keyValueæŒ‡å‘çš„ç©ºé—´ä¸­
+* è¾“å‡ºå‚æ•°ï¼š1ï¼š   æŒ‰é”®é”®å€¼è¯»å–å®Œæˆ
+*           0ï¼š   æŒ‰é”®é”®å€¼è¯»å–ä¸­
+* å…¶å®ƒè¯´æ˜ï¼šæ— 
 *********************************************************************************************/
 static int8_t key_check( uint8_t* keyValue )
 {
@@ -77,31 +77,31 @@ static int8_t key_check( uint8_t* keyValue )
 
     switch( s_chState ) {
     case KEY_CHECK_START:
-        s_chCount = 0;                                  // É¨Ãè¼ÆÊıÖµ³õÊ¼»¯Îª0
-        s_chState = KEY_CHECK_SCAN_PORT;                // Ìø×ªGPIO¶Ë¿ÚÉ¨Ãè
+        s_chCount = 0;                                  // æ‰«æè®¡æ•°å€¼åˆå§‹åŒ–ä¸º0
+        s_chState = KEY_CHECK_SCAN_PORT;                // è·³è½¬GPIOç«¯å£æ‰«æ
 
     case KEY_CHECK_SCAN_PORT:
-        s_chCurrentValue = get_key_scan_value();        // »ñÈ¡µ±Ç°°´¼üÖµ
-        if( s_chCurrentValue != s_chHistoryValue ) {    // ÀúÊ·¼üÖµºÍµ±Ç°É¨Ãè¼üÖµ²»Í¬£¬¸´Î»É¨Ãè¼ÆÊı
-            /*¼üÖµ²»Í¬ËµÃ÷°´¼ü×´Ì¬¸Ä±ä*/
+        s_chCurrentValue = get_key_scan_value();        // è·å–å½“å‰æŒ‰é”®å€¼
+        if( s_chCurrentValue != s_chHistoryValue ) {    // å†å²é”®å€¼å’Œå½“å‰æ‰«æé”®å€¼ä¸åŒï¼Œå¤ä½æ‰«æè®¡æ•°
+            /*é”®å€¼ä¸åŒè¯´æ˜æŒ‰é”®çŠ¶æ€æ”¹å˜*/
             s_chCount = 0;
-            s_chHistoryValue = s_chCurrentValue;        // ¸üĞÂÀúÊ·¼üÖµ
+            s_chHistoryValue = s_chCurrentValue;        // æ›´æ–°å†å²é”®å€¼
             break;
         } else {
-            s_chCount++;                                // É¨Ãè¼ÆÊı¼ÓÒ»
+            s_chCount++;                                // æ‰«æè®¡æ•°åŠ ä¸€
             s_chState = KEY_CHECK_SCAN_COUNT;
         }
 
     case KEY_CHECK_SCAN_COUNT:
-        if( s_chCount < KEY_SCAN_COUNT ) {              // É¨Ãè¼ÆÊıÎ´µ½ãĞÖµ
+        if( s_chCount < KEY_SCAN_COUNT ) {              // æ‰«æè®¡æ•°æœªåˆ°é˜ˆå€¼
             s_chState = KEY_CHECK_SCAN_PORT;
             break;
         }
-        s_chState = KEY_CHECK_SCAN_END;                 // ½øÈëÉ¨Ãè½áÊø×´Ì¬
+        s_chState = KEY_CHECK_SCAN_END;                 // è¿›å…¥æ‰«æç»“æŸçŠ¶æ€
 
     case KEY_CHECK_SCAN_END:
         s_chState = KEY_CHECK_START;
-        *keyValue = s_chCurrentValue;                  // ±£´æ´Ë´Î¶ÁÈ¡µÄ¼üÖµ
+        *keyValue = s_chCurrentValue;                  // ä¿å­˜æ­¤æ¬¡è¯»å–çš„é”®å€¼
         return 1;
 
     default:
@@ -116,12 +116,12 @@ static int8_t key_check( uint8_t* keyValue )
 #define KEY_TRIGER_EDGE_ACTIVED             2
 #define KEY_TRIGER_END                      3
 /********************************************************************************************
-* º¯ÊıÃû³Æ£ºkey_fronted
-* ¹¦ÄÜËµÃ÷£º¼ÇÂ¼°´¼ü¼üÖµ±ä»¯
-* ÊäÈë²ÎÊı£ºÎŞ
-* Êä³ö²ÎÊı£º1£º   ¼ÇÂ¼¼üÖµ±ä»¯Íê³É
-*           0£º   ¼ÇÂ¼¼üÖµ±ä»¯½øĞĞÖĞ
-* ÆäËüËµÃ÷£ºÎŞ
+* å‡½æ•°åç§°ï¼škey_fronted
+* åŠŸèƒ½è¯´æ˜ï¼šè®°å½•æŒ‰é”®é”®å€¼å˜åŒ–
+* è¾“å…¥å‚æ•°ï¼šæ— 
+* è¾“å‡ºå‚æ•°ï¼š1ï¼š   è®°å½•é”®å€¼å˜åŒ–å®Œæˆ
+*           0ï¼š   è®°å½•é”®å€¼å˜åŒ–è¿›è¡Œä¸­
+* å…¶å®ƒè¯´æ˜ï¼šæ— 
 *********************************************************************************************/
 static int8_t key_fronted( void )
 {
@@ -135,37 +135,37 @@ static int8_t key_fronted( void )
         s_chState = KEY_TRIGER_EDGE_CHECK;
 
     case KEY_TRIGER_EDGE_CHECK:
-        if( !key_check( &key_now_value ) ) {            // ²éÑ¯¼üÖµ£¬²¢±£´æÔÚkey_now_value
+        if( !key_check( &key_now_value ) ) {            // æŸ¥è¯¢é”®å€¼ï¼Œå¹¶ä¿å­˜åœ¨key_now_value
             break;
         }
 
-        if( key_now_value == key_history_value ) {      // ¼üÖµÎŞ±ä»¯£¬½áÊø´Ë´Î²éÑ¯
+        if( key_now_value == key_history_value ) {      // é”®å€¼æ— å˜åŒ–ï¼Œç»“æŸæ­¤æ¬¡æŸ¥è¯¢
             break;
         }
         s_chState = KEY_TRIGER_EDGE_ACTIVED;
 
     case KEY_TRIGER_EDGE_ACTIVED:
         /*
-            key_history_value±£´æÉÏÒ»´ÎµÄ°´¼üÖµ£¬²»ÎªNULLËµÃ÷°´¼üÖ®Ç°´¦ÓÚ
-            ±»°´ÏÂ×´Ì¬¡£½øÈë´Ë×´Ì¬£¬±ØĞë·¢Éú¼üÖµ±ä»¯£¬ËµÃ÷°´¼üÊÍ·Å
+            key_history_valueä¿å­˜ä¸Šä¸€æ¬¡çš„æŒ‰é”®å€¼ï¼Œä¸ä¸ºNULLè¯´æ˜æŒ‰é”®ä¹‹å‰å¤„äº
+            è¢«æŒ‰ä¸‹çŠ¶æ€ã€‚è¿›å…¥æ­¤çŠ¶æ€ï¼Œå¿…é¡»å‘ç”Ÿé”®å€¼å˜åŒ–ï¼Œè¯´æ˜æŒ‰é”®é‡Šæ”¾
         */
-        if( KEY_NULL != key_history_value ) {           // °´¼ü±»ÊÍ·Å
+        if( KEY_NULL != key_history_value ) {           // æŒ‰é”®è¢«é‡Šæ”¾
             tKey.tEvent = KEY_UP;
             tKey.keyValue = key_history_value;
-            Key_Enqueue( &key_fronted_queue, &tKey );   // °´¼üµ¯ÆğÊÂ¼şÈëÉú²úÕß¶ÓÁĞ
+            Key_Enqueue( &key_fronted_queue, &tKey );   // æŒ‰é”®å¼¹èµ·äº‹ä»¶å…¥ç”Ÿäº§è€…é˜Ÿåˆ—
         }
         /*
-            key_now_value±£´æ±¾´ÎµÄ°´¼üÖµ£¬²»ÎªNULLËµÃ÷°´¼ü´¦ÓÚ
-            ±»°´ÏÂ×´Ì¬¡£
+            key_now_valueä¿å­˜æœ¬æ¬¡çš„æŒ‰é”®å€¼ï¼Œä¸ä¸ºNULLè¯´æ˜æŒ‰é”®å¤„äº
+            è¢«æŒ‰ä¸‹çŠ¶æ€ã€‚
         */
-        if( KEY_NULL != key_now_value ) {               // °´¼ü±»°´ÏÂ
+        if( KEY_NULL != key_now_value ) {               // æŒ‰é”®è¢«æŒ‰ä¸‹
             tKey.tEvent = KEY_DOWN;
             tKey.keyValue = key_now_value;
-            Key_Enqueue( &key_fronted_queue, &tKey );   // °´¼ü°´ÏÂÊÂ¼şÈëÉú²úÕß¶ÓÁĞ
+            Key_Enqueue( &key_fronted_queue, &tKey );   // æŒ‰é”®æŒ‰ä¸‹äº‹ä»¶å…¥ç”Ÿäº§è€…é˜Ÿåˆ—
         }
         s_chState = KEY_TRIGER_END;
 
-    case KEY_TRIGER_END:                                // °´¼ü±ä»¯¼ÇÂ¼½áÊø×´Ì¬
+    case KEY_TRIGER_END:                                // æŒ‰é”®å˜åŒ–è®°å½•ç»“æŸçŠ¶æ€
         s_chState = KEY_TRIGER_START;
         key_history_value = key_now_value;
         return 0;
@@ -177,12 +177,12 @@ static int8_t key_fronted( void )
     return 1;
 }
 
-#define KEY_DETCTED_START                       0       // ³õÊ¼×´Ì¬
-#define KEY_DETCTED_WAIT_DOWN_EVENT             1       // µÈ´ı°´ÏÂÊÂ¼ş
-#define KEY_DETCTED_DETERMINE_EVENT_TYPE        2       // ÅĞ¶ÏÊÂ¼şÀàĞÍ
-#define KEY_DETCTED_WAIT_UP_EVENT               3       // µÈ´ıµ¯ÆğÊÂ¼ş
+#define KEY_DETCTED_START                       0       // åˆå§‹çŠ¶æ€
+#define KEY_DETCTED_WAIT_DOWN_EVENT             1       // ç­‰å¾…æŒ‰ä¸‹äº‹ä»¶
+#define KEY_DETCTED_DETERMINE_EVENT_TYPE        2       // åˆ¤æ–­äº‹ä»¶ç±»å‹
+#define KEY_DETCTED_WAIT_UP_EVENT               3       // ç­‰å¾…å¼¹èµ·äº‹ä»¶
 #define KEY_DETCETD_LONG_COUNT                  4
-#define KEY_DETCTED_DETERMINE_EVENT_TYPE2       5       // ÅĞ¶ÏÊÂ¼şÀàĞÍ
+#define KEY_DETCTED_DETERMINE_EVENT_TYPE2       5       // åˆ¤æ–­äº‹ä»¶ç±»å‹
 #define KEY_DETCTED_WAIT_UP_EVENT2              6
 #define KEY_DETCTED_REPEAT_COUNT                7
 #define KEY_DETCTED_WAIT_LONG_PRESSED_FINISH    8
@@ -190,11 +190,11 @@ static int8_t key_fronted( void )
 #define RESET_FSM_STATE() do{s_chState = KEY_DETCTED_START;}while(0)
 
 /********************************************************************************************
-* º¯ÊıÃû³Æ£ºkey_detcted
-* ¹¦ÄÜËµÃ÷£º°´¼üÊÂ¼ş²úÉúº¯Êı
-* ÊäÈë²ÎÊı£ºÎŞ
-* Êä³ö²ÎÊı£ºÎŞ
-* ÆäËüËµÃ÷£ºÎŞ
+* å‡½æ•°åç§°ï¼škey_detcted
+* åŠŸèƒ½è¯´æ˜ï¼šæŒ‰é”®äº‹ä»¶äº§ç”Ÿå‡½æ•°
+* è¾“å…¥å‚æ•°ï¼šæ— 
+* è¾“å‡ºå‚æ•°ï¼šæ— 
+* å…¶å®ƒè¯´æ˜ï¼šæ— 
 *********************************************************************************************/
 void key_detcted( void )
 {
@@ -207,24 +207,24 @@ void key_detcted( void )
         long_count = 0;
         s_chState = KEY_DETCTED_WAIT_DOWN_EVENT;
 
-    case KEY_DETCTED_WAIT_DOWN_EVENT:                   // µÈ´ı°´¼ü´¥·¢
+    case KEY_DETCTED_WAIT_DOWN_EVENT:                   // ç­‰å¾…æŒ‰é”®è§¦å‘
         if( 0 == Key_Dequeue( &key_fronted_queue, &tKey ) ) {
-            break;                                      // ÍË³öº¯Êı
+            break;                                      // é€€å‡ºå‡½æ•°
         }
 
         s_chState = KEY_DETCTED_DETERMINE_EVENT_TYPE;
 
-    case KEY_DETCTED_DETERMINE_EVENT_TYPE:              // ÅĞ¶Ï°´¼üÀàĞÍ
-        if( KEY_UP == tKey.tEvent ) {                   // µÚÒ»¸ö¾ÍÊÇµ¯ÆğÊÂ¼ş£¬Ö±½ÓÍË³öº¯Êı
+    case KEY_DETCTED_DETERMINE_EVENT_TYPE:              // åˆ¤æ–­æŒ‰é”®ç±»å‹
+        if( KEY_UP == tKey.tEvent ) {                   // ç¬¬ä¸€ä¸ªå°±æ˜¯å¼¹èµ·äº‹ä»¶ï¼Œç›´æ¥é€€å‡ºå‡½æ•°
             s_chState = KEY_DETCTED_WAIT_DOWN_EVENT;
             break;
         }
 
-        Key_Enqueue( &key_decotor_queue, &tKey );       // DOWNÊÂ¼şÈë¶Ó
+        Key_Enqueue( &key_decotor_queue, &tKey );       // DOWNäº‹ä»¶å…¥é˜Ÿ
         s_chState = KEY_DETCTED_WAIT_UP_EVENT;
 
 
-    case KEY_DETCTED_WAIT_UP_EVENT:                     //Ò»¶¨Ê±¼äÄÚ£¬°´¼üÎ´ÊÍ·Å£¬½øÈë³¤°´ÅĞ¶Ï
+    case KEY_DETCTED_WAIT_UP_EVENT:                     //ä¸€å®šæ—¶é—´å†…ï¼ŒæŒ‰é”®æœªé‡Šæ”¾ï¼Œè¿›å…¥é•¿æŒ‰åˆ¤æ–­
         if( 0 == Key_Dequeue( &key_fronted_queue, &tKey ) ) {
             s_chState = KEY_DETCETD_LONG_COUNT;
             long_count++;
@@ -233,21 +233,21 @@ void key_detcted( void )
 
         s_chState = KEY_DETCTED_DETERMINE_EVENT_TYPE2;
 
-    case KEY_DETCTED_DETERMINE_EVENT_TYPE2:             // Èç¹û°´¼üÊÍ·Å£¬ÍË³ö£¬·ñÔò³¤°´×´Ì¬Ñ­»·
+    case KEY_DETCTED_DETERMINE_EVENT_TYPE2:             // å¦‚æœæŒ‰é”®é‡Šæ”¾ï¼Œé€€å‡ºï¼Œå¦åˆ™é•¿æŒ‰çŠ¶æ€å¾ªç¯
         if( tKey.tEvent == KEY_DOWN ) {
             s_chState = KEY_DETCTED_WAIT_UP_EVENT;
         } else {
-            Key_Enqueue( &key_decotor_queue, &tKey );   // Î´µ½³¤°´¾ÍÊÍ·Å
+            Key_Enqueue( &key_decotor_queue, &tKey );   // æœªåˆ°é•¿æŒ‰å°±é‡Šæ”¾
             tKey.tEvent = KEY_PRESSED;
-            Key_Enqueue( &key_decotor_queue, &tKey );   // Ò»´Î¶Ì°´ÊÂ¼şÈë¶Ó
+            Key_Enqueue( &key_decotor_queue, &tKey );   // ä¸€æ¬¡çŸ­æŒ‰äº‹ä»¶å…¥é˜Ÿ
             RESET_FSM_STATE();
             return ;
         }
 
         break;
 
-    case KEY_DETCETD_LONG_COUNT:                        // ³¤°´¼ÆÊ±
-        if( long_count >= KEY_LONG_PRESSED_COUNT ) {    // µ½´ï³¤°´¼ÆÊıÖµ£¬³¤°´ÊÂ¼şÈë¶Ó
+    case KEY_DETCETD_LONG_COUNT:                        // é•¿æŒ‰è®¡æ—¶
+        if( long_count >= KEY_LONG_PRESSED_COUNT ) {    // åˆ°è¾¾é•¿æŒ‰è®¡æ•°å€¼ï¼Œé•¿æŒ‰äº‹ä»¶å…¥é˜Ÿ
             s_chState = KEY_DETCTED_WAIT_UP_EVENT2;
             long_count = 0;
             tKey.tEvent = KEY_LONG_PRESSED;
@@ -257,7 +257,7 @@ void key_detcted( void )
             break;
         }
 
-    case KEY_DETCTED_WAIT_UP_EVENT2:                    // °´¼üÈÔÎ´ÊÍ·Å£¬Á¬·¢ÊÂ¼şÅĞ¶Ï
+    case KEY_DETCTED_WAIT_UP_EVENT2:                    // æŒ‰é”®ä»æœªé‡Šæ”¾ï¼Œè¿å‘äº‹ä»¶åˆ¤æ–­
         if( 0 == Key_Dequeue( &key_fronted_queue, &tKey ) ) {
             s_chState = KEY_DETCTED_REPEAT_COUNT;
             long_count++;
@@ -292,11 +292,11 @@ void key_detcted( void )
 }
 
 /********************************************************************************************
-* º¯ÊıÃû³Æ£ºkey_task
-* ¹¦ÄÜËµÃ÷£º°´¼ü´¦Àíº¯Êı
-* ÊäÈë²ÎÊı£ºÎŞ
-* Êä³ö²ÎÊı£ºÎŞ
-* ÆäËüËµÃ÷£ºÍâ²¿º¯Êı10msµ÷ÓÃ
+* å‡½æ•°åç§°ï¼škey_task
+* åŠŸèƒ½è¯´æ˜ï¼šæŒ‰é”®å¤„ç†å‡½æ•°
+* è¾“å…¥å‚æ•°ï¼šæ— 
+* è¾“å‡ºå‚æ•°ï¼šæ— 
+* å…¶å®ƒè¯´æ˜ï¼šå¤–éƒ¨å‡½æ•°10msè°ƒç”¨
 *********************************************************************************************/
 void key_task( void )
 {
@@ -305,11 +305,11 @@ void key_task( void )
 }
 
 /********************************************************************************************
-* º¯ÊıÃû³Æ£ºget_key
-* ¹¦ÄÜËµÃ÷£º»ñÈ¡°´¼üÊÂ¼ş
-* ÊäÈë²ÎÊı£ºKey  £º°´¼üÊÂ¼ş±£´æ±äÁ¿Ö¸Õë
-* Êä³ö²ÎÊı£ºÎŞ
-* ÆäËüËµÃ÷£º
+* å‡½æ•°åç§°ï¼šget_key
+* åŠŸèƒ½è¯´æ˜ï¼šè·å–æŒ‰é”®äº‹ä»¶
+* è¾“å…¥å‚æ•°ï¼šKey  ï¼šæŒ‰é”®äº‹ä»¶ä¿å­˜å˜é‡æŒ‡é’ˆ
+* è¾“å‡ºå‚æ•°ï¼šæ— 
+* å…¶å®ƒè¯´æ˜ï¼š
 *********************************************************************************************/
 uint8_t get_key( key_event_t* Key )
 {
@@ -317,11 +317,11 @@ uint8_t get_key( key_event_t* Key )
 }
 
 /********************************************************************************************
-* º¯ÊıÃû³Æ£ºkey_clear
-* ¹¦ÄÜËµÃ÷£ºÇå³ı°´¼üÊÂ¼ş»º´æ
-* ÊäÈë²ÎÊı£ºÎŞ
-* Êä³ö²ÎÊı£ºÎŞ
-* ÆäËüËµÃ÷£ºÎŞ
+* å‡½æ•°åç§°ï¼škey_clear
+* åŠŸèƒ½è¯´æ˜ï¼šæ¸…é™¤æŒ‰é”®äº‹ä»¶ç¼“å­˜
+* è¾“å…¥å‚æ•°ï¼šæ— 
+* è¾“å‡ºå‚æ•°ï¼šæ— 
+* å…¶å®ƒè¯´æ˜ï¼šæ— 
 *********************************************************************************************/
 void key_clear( void )
 {

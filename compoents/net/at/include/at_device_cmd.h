@@ -9,13 +9,13 @@ extern "C" {
 #include "..\include\at_client.h"
 
 typedef struct {
-    uint8_t     chCCIDBuf[CCID_BUF_SIZE + 1];   // CCID³¤¶È20¸ö×Ö·û
+    uint8_t     chCCIDBuf[CCID_BUF_SIZE + 1];   // CCIDé•¿åº¦20ä¸ªå­—ç¬¦
     uint8_t     chVerBuf[VERSION_BUF_SIZE + 1];
 
-    uint32_t    wMqttState;     // ÊıÖµ±ØĞëÊ¹ÓÃ4×Ö½Ú£¬vsscanfÖĞµÄ %d °´ÕÕ4×Ö½Ú¼ÇËã
-    uint32_t    wCSQSignal;     // Í¬ÉÏ
-    uint32_t    wCREGQ;         // Í¬ÉÏ
-    uint32_t    wCGATT;         // Í¬ÉÏ
+    uint32_t    wMqttState;     // æ•°å€¼å¿…é¡»ä½¿ç”¨4å­—èŠ‚ï¼Œvsscanfä¸­çš„ %d æŒ‰ç…§4å­—èŠ‚è®°ç®—
+    uint32_t    wCSQSignal;     // åŒä¸Š
+    uint32_t    wCREGQ;         // åŒä¸Š
+    uint32_t    wCGATT;         // åŒä¸Š
     
     uint32_t    wCellId;
     uint32_t    wLac;

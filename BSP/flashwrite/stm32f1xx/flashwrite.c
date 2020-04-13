@@ -18,14 +18,14 @@
 #include ".\flashwrite.h"
 #include "..\..\hal\mcu\stm32f103rx\Inc\stm32f1xx_hal_conf.h"
 
-// ´óÈİÁ¿ÏµÁĞ
+// å¤§å®¹é‡ç³»åˆ—
 #if (FLASH_PAGE_SIZE == 0x0800)
     #define SECTOR_MASK                 (0xFFFFF800)
 #else
     #define SECTOR_MASK                 (0xFFFFFC00)
 #endif
 
-#define GET_SECTOR_START_ADDR(_ADDR)           (SECTOR_MASK & _ADDR)        // »ñÈ¡Ò»¸öÉÈÇøµÄÆğÊ¼µØÖ·
+#define GET_SECTOR_START_ADDR(_ADDR)           (SECTOR_MASK & _ADDR)        // è·å–ä¸€ä¸ªæ‰‡åŒºçš„èµ·å§‹åœ°å€
 
 static int32_t write_cpu_flash(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
 {
@@ -85,10 +85,10 @@ fail:
 }
 
 /**
- * \brief FLASHĞ´Èëº¯Êı
- * \param wFlashAddr    32Î»Ğ´ÈëµØÖ·
- * \param pchBuf        ×Ö½ÚÊı×éÖ¸Õë
- * \param wSize         ×Ö½ÚÊı×é³¤¶È
+ * \brief FLASHå†™å…¥å‡½æ•°
+ * \param wFlashAddr    32ä½å†™å…¥åœ°å€
+ * \param pchBuf        å­—èŠ‚æ•°ç»„æŒ‡é’ˆ
+ * \param wSize         å­—èŠ‚æ•°ç»„é•¿åº¦
  *
  */
 int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
@@ -103,17 +103,17 @@ int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
         return 0;
     }
 
-    // Ğ´ÈëµØÖ·2×Ö½Ú¶ÔÆë£¬Ğ´Èë×Ö½Ú¸öÊıÎª2µÄ±¶Êı
-    if ((wFlashAddr & 0x01) || (wSize & 0x01)) {    // FALSH°ë×ÖĞ´Èë
+    // å†™å…¥åœ°å€2å­—èŠ‚å¯¹é½ï¼Œå†™å…¥å­—èŠ‚ä¸ªæ•°ä¸º2çš„å€æ•°
+    if ((wFlashAddr & 0x01) || (wSize & 0x01)) {    // FALSHåŠå­—å†™å…¥
         return 0;
     }
 
-    wPrimaskStatus = __get_PRIMASK();               // »ñÈ¡ÖĞ¶Ï×´Ì¬
-    __set_PRIMASK(1);                               // ¹Ø±Õ×ÜÖĞ¶Ï
+    wPrimaskStatus = __get_PRIMASK();               // è·å–ä¸­æ–­çŠ¶æ€
+    __set_PRIMASK(1);                               // å…³é—­æ€»ä¸­æ–­
 
-    if (FLASH->CR & 0x00000080) {                   // ÅĞ¶ÏFLASHÊÇ·ñ±»Ëø×¡
+    if (FLASH->CR & 0x00000080) {                   // åˆ¤æ–­FLASHæ˜¯å¦è¢«é”ä½
         HAL_FLASH_Unlock();
-        chOriginLocked = 1;                         // ±ãÓÚºóÃæÅĞ¶ÏÊÇ·ñÒªÖØĞÂËø×¡
+        chOriginLocked = 1;                         // ä¾¿äºåé¢åˆ¤æ–­æ˜¯å¦è¦é‡æ–°é”ä½
     }
 
     while (wSize) {
@@ -133,7 +133,7 @@ int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
         HAL_FLASH_Lock();
     }
 
-    __set_PRIMASK(wPrimaskStatus);                  // ±ÜÃâÎó¿ªÖĞ¶Ï
+    __set_PRIMASK(wPrimaskStatus);                  // é¿å…è¯¯å¼€ä¸­æ–­
 
     return nReturn;
 }

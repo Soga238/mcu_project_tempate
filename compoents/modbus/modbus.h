@@ -18,48 +18,48 @@
 #include "..\compoents_cfg.h"
 #include "..\service\soft_timer\soft_timer.h"
 
-#define MB_SLAVE_ADDREESS_MIN       0x01        /*! ´Ó»úµØÖ·×îĞ¡Öµ             */
-#define MB_SLAVE_ADDREESS_MAX       0xF7        /*! ´Ó»úµØÖ·×î´óÖµ             */
+#define MB_SLAVE_ADDREESS_MIN       0x01        /*! ä»æœºåœ°å€æœ€å°å€¼             */
+#define MB_SLAVE_ADDREESS_MAX       0xF7        /*! ä»æœºåœ°å€æœ€å¤§å€¼             */
 
-#define MB_READ_REGCNT_MIN          (0x0001)    /*! ¶ÁÈ¡±£³Ö¼Ä´æÆ÷µÄ×îĞ¡³¤¶È   */
-#define MB_READ_REGCNT_MAX          (0x007D)    /*! ¶ÁÈ¡±£³Ö¼Ä´æÆ÷µÄ×î´ó³¤¶È   */
+#define MB_READ_REGCNT_MIN          (0x0001)    /*! è¯»å–ä¿æŒå¯„å­˜å™¨çš„æœ€å°é•¿åº¦   */
+#define MB_READ_REGCNT_MAX          (0x007D)    /*! è¯»å–ä¿æŒå¯„å­˜å™¨çš„æœ€å¤§é•¿åº¦   */
 
-#define MB_READ_COILCNT_MIN         (0x0001)    /*! ¶ÁÈ¡ÏßÈ¦µÄ×îĞ¡³¤¶È         */
-#define MB_READ_COILCNT_MAX         (0x07D0)    /*! ¶ÁÈ¡ÏßÈ¦µÄ×î´ó³¤¶È         */
+#define MB_READ_COILCNT_MIN         (0x0001)    /*! è¯»å–çº¿åœˆçš„æœ€å°é•¿åº¦         */
+#define MB_READ_COILCNT_MAX         (0x07D0)    /*! è¯»å–çº¿åœˆçš„æœ€å¤§é•¿åº¦         */
 
-#define MB_MINMIUM_FRAME_SIZE       (5)         /*£¡ MOBDUSĞ­ÒéÖ¡×îĞ¡³¤¶È      */
+#define MB_MINMIUM_FRAME_SIZE       (5)         /*ï¼ MOBDUSåè®®å¸§æœ€å°é•¿åº¦      */
 #define COIL_VALUE_OFF              0x00
 #define COIL_VALUE_ON               0x01
 /*
 *********************************************************************************
-*                               MODBUS ¹¦ÄÜÂë
+*                               MODBUS åŠŸèƒ½ç 
 *********************************************************************************
 */
-#define MB_CODE_NONE                            0       /*! Î´¶¨Òå¹¦ÄÜÂë         */
-#define MB_CODE_READ_COILS                      1       /*! ¶ÁÈ¡¶à¸öÏßÈ¦         */
-#define MB_CODE_READ_DISCRETE_INPUTS            2       /*! ¶ÁÈ¡¶à¸öÊäÈëÏßÈ¦     */
-#define MB_CODE_READ_HOLDING_REGISTERS          3       /*! ¶Áµ¥/¶à¸ö±£³Ö¼Ä´æÆ÷  */
-#define MB_CODE_READ_INPUT_REGISTERS            4       /*! ¶Áµ¥/¶à¸öÊäÈë¼Ä´æÆ÷  */
-#define MB_CODE_WRITE_COIL                      5       /*! Ç¿ÖÆµ¥¸öÏßÈ¦         */
-#define MB_CODE_WRITE_REGISTER                  6       /*! Ğ´µ¥¸ö±£³Ö¼Ä´æÆ÷     */
-#define MB_CODE_WRITE_MULTIPLE_COILS            15      /*! Ğ´¶à¸öÏßÈ¦¼Ä´æÆ÷     */
-#define MB_CODE_WRITE_MULTIPLE_REGISTERS        16      /*! Ğ´¶à¸ö±£³Ö¼Ä´æÆ÷     */
-#define MB_CODE_WRITE_MULTIPLE_REGISTERS_RDHR   23      /*! ¶Á/Ğ´¶à¸ö±£³Ö¼Ä´æÆ÷  */
+#define MB_CODE_NONE                            0       /*! æœªå®šä¹‰åŠŸèƒ½ç          */
+#define MB_CODE_READ_COILS                      1       /*! è¯»å–å¤šä¸ªçº¿åœˆ         */
+#define MB_CODE_READ_DISCRETE_INPUTS            2       /*! è¯»å–å¤šä¸ªè¾“å…¥çº¿åœˆ     */
+#define MB_CODE_READ_HOLDING_REGISTERS          3       /*! è¯»å•/å¤šä¸ªä¿æŒå¯„å­˜å™¨  */
+#define MB_CODE_READ_INPUT_REGISTERS            4       /*! è¯»å•/å¤šä¸ªè¾“å…¥å¯„å­˜å™¨  */
+#define MB_CODE_WRITE_COIL                      5       /*! å¼ºåˆ¶å•ä¸ªçº¿åœˆ         */
+#define MB_CODE_WRITE_REGISTER                  6       /*! å†™å•ä¸ªä¿æŒå¯„å­˜å™¨     */
+#define MB_CODE_WRITE_MULTIPLE_COILS            15      /*! å†™å¤šä¸ªçº¿åœˆå¯„å­˜å™¨     */
+#define MB_CODE_WRITE_MULTIPLE_REGISTERS        16      /*! å†™å¤šä¸ªä¿æŒå¯„å­˜å™¨     */
+#define MB_CODE_WRITE_MULTIPLE_REGISTERS_RDHR   23      /*! è¯»/å†™å¤šä¸ªä¿æŒå¯„å­˜å™¨  */
 /*
 *********************************************************************************
-*                               MODBUS ±ê×¼Òì³£
+*                               MODBUS æ ‡å‡†å¼‚å¸¸
 *********************************************************************************
 */
-#define MB_EX_NONE                              0x00    /*! ÎŞÒì³£               */
-#define MB_EX_ILLEGAL_FUNCTION                  0x01    /*! ·Ç·¨¹¦ÄÜ             */
-#define MB_EX_ILLEGAL_DATA_ADDRESS              0x02    /*! ·Ç·¨Êı¾İµØÖ·         */
-#define MB_EX_ILLEGAL_DATA_VALUE                0x03    /*! ·Ç·¨Êı¾İÖµ           */
-#define MB_EX_SLAVE_DEVICE_FAILURE              0x04    /*! ´Ó»úÉè±¸¹ÊÕÏ         */
-#define MB_EX_ACKNOWLEDGE                       0x05    /*! È·ÈÏ                 */
-#define MB_EX_SLAVE_BUSY                        0x06    /*! ´Ó»ú·±Ã¦             */
-#define MB_EX_MEMORY_PARITY_ERROR               0x08    /*! ÄÚ´æÆæÅ¼Ğ£Ñé´íÎŞ     */
-#define MB_EX_GATEWAY_PATH_FAILED               0x0A    /*! ²»¿ÉÓÃÍø¹ØÂ·¾¶       */
-#define MB_EX_GATEWAY_TGT_FAILED                0x0B    /*! Íø¹ØÄ¿±êÉè±¸ÏìÓ¦Ê§°Ü */
+#define MB_EX_NONE                              0x00    /*! æ— å¼‚å¸¸               */
+#define MB_EX_ILLEGAL_FUNCTION                  0x01    /*! éæ³•åŠŸèƒ½             */
+#define MB_EX_ILLEGAL_DATA_ADDRESS              0x02    /*! éæ³•æ•°æ®åœ°å€         */
+#define MB_EX_ILLEGAL_DATA_VALUE                0x03    /*! éæ³•æ•°æ®å€¼           */
+#define MB_EX_SLAVE_DEVICE_FAILURE              0x04    /*! ä»æœºè®¾å¤‡æ•…éšœ         */
+#define MB_EX_ACKNOWLEDGE                       0x05    /*! ç¡®è®¤                 */
+#define MB_EX_SLAVE_BUSY                        0x06    /*! ä»æœºç¹å¿™             */
+#define MB_EX_MEMORY_PARITY_ERROR               0x08    /*! å†…å­˜å¥‡å¶æ ¡éªŒé”™æ—      */
+#define MB_EX_GATEWAY_PATH_FAILED               0x0A    /*! ä¸å¯ç”¨ç½‘å…³è·¯å¾„       */
+#define MB_EX_GATEWAY_TGT_FAILED                0x0B    /*! ç½‘å…³ç›®æ ‡è®¾å¤‡å“åº”å¤±è´¥ */
 
 /*********************************************************************
 *
@@ -67,54 +67,54 @@
 *
 **********************************************************************
 */
-typedef uint16_t (*pSerialFun)(uint8_t *, uint16_t);     /*! ´®¿Úº¯ÊıÖ¸Õë        */
+typedef uint16_t (*pSerialFun)(uint8_t *, uint16_t);     /*! ä¸²å£å‡½æ•°æŒ‡é’ˆ        */
 
 typedef struct serial_ctl serial_ctl_t;
 struct serial_ctl {
-    uint8_t    *pSndBuf;            /*! Êı¾İ½ÓÊÕ»º³åÇø      */
-    uint8_t    *pRcvBuf;            /*! Êı¾İ·¢ËÍ»º³åÇø      */
+    uint8_t    *pSndBuf;            /*! æ•°æ®æ¥æ”¶ç¼“å†²åŒº      */
+    uint8_t    *pRcvBuf;            /*! æ•°æ®å‘é€ç¼“å†²åŒº      */
 
-    uint16_t    hwSndBufSize;       /*! Êı¾İ½ÓÊÕ»ºÇø³¤¶È    */
-    uint16_t    hwRcvBufSize;       /*! Êı¾İ·¢ËÍ»ºÇø³¤¶È    */
+    uint16_t    hwSndBufSize;       /*! æ•°æ®æ¥æ”¶ç¼“åŒºé•¿åº¦    */
+    uint16_t    hwRcvBufSize;       /*! æ•°æ®å‘é€ç¼“åŒºé•¿åº¦    */
 
-    uint16_t    hwSndLen;           /*! ·¢ËÍÊı¾İ³¤¶È        */
-    uint16_t    hwRcvLen;           /*! ÒÑ½ÓÊÕÊı¾İ³¤¶È      */
+    uint16_t    hwSndLen;           /*! å‘é€æ•°æ®é•¿åº¦        */
+    uint16_t    hwRcvLen;           /*! å·²æ¥æ”¶æ•°æ®é•¿åº¦      */
 
-    pSerialFun  fnSend;             /*! ´®¿Ú·¢ËÍº¯ÊıÖ¸Õë    */
-    pSerialFun  fnRecv;             /*! ´®¿Ú½ÓÊÕº¯ÊıÖ¸Õë    */
+    pSerialFun  fnSend;             /*! ä¸²å£å‘é€å‡½æ•°æŒ‡é’ˆ    */
+    pSerialFun  fnRecv;             /*! ä¸²å£æ¥æ”¶å‡½æ•°æŒ‡é’ˆ    */
 };
 
 /**
- *  \brief modbusÇëÇó½á¹¹Ìå£¬ÊôÓÚÖ÷¶¯¶ÁÈ¡µÄÒ»·½
+ *  \brief modbusè¯·æ±‚ç»“æ„ä½“ï¼Œå±äºä¸»åŠ¨è¯»å–çš„ä¸€æ–¹
  */
 typedef struct mb_request {
-    uint32_t wTimeout;              /*! ´®¿Ú½ÓÊÕ³¬Ê±Ê±¼ä    */
-    timer_table_t *ptTimer;         /*! Èí¶¨Ê±Æ÷½á¹¹ÌåÖ¸Õë  */
+    uint32_t wTimeout;              /*! ä¸²å£æ¥æ”¶è¶…æ—¶æ—¶é—´    */
+    timer_table_t *ptTimer;         /*! è½¯å®šæ—¶å™¨ç»“æ„ä½“æŒ‡é’ˆ  */
 
-    uint16_t *phwHR;                /*! Êı¾İÖµ½ÓÊÕ»ºÇø      */
-    const uint16_t *phwWR;          /*! Êı¾İÖµ·¢ËÍ»ºÇø      */
+    uint16_t *phwHR;                /*! æ•°æ®å€¼æ¥æ”¶ç¼“åŒº      */
+    const uint16_t *phwWR;          /*! æ•°æ®å€¼å‘é€ç¼“åŒº      */
     
-    /*!! ±£´æĞ´Èëµ¥¸öÊı¾İÊ±´æ·ÅµÄÊı¾İ */
+    /*!! ä¿å­˜å†™å…¥å•ä¸ªæ•°æ®æ—¶å­˜æ”¾çš„æ•°æ® */
     uint16_t hwValue;
 
-    uint8_t  chSlaveNum;            /*! ´Ó»úÕ¾Ì¨ºÅ          */
-    uint8_t  chCode;                /*! ¹¦ÄÜÂë              */
-    uint16_t hwDataAddr;            /*! Êı¾İµØÖ·            */
-    uint16_t hwDataNum;             /*! Êı¾İ¶ÁÈ¡»òĞ´Èë¸öÊı  */
+    uint8_t  chSlaveNum;            /*! ä»æœºç«™å°å·          */
+    uint8_t  chCode;                /*! åŠŸèƒ½ç               */
+    uint16_t hwDataAddr;            /*! æ•°æ®åœ°å€            */
+    uint16_t hwDataNum;             /*! æ•°æ®è¯»å–æˆ–å†™å…¥ä¸ªæ•°  */
 } mb_request_t;
 
 /**
- *  \brief modbusÓ¦´ğ½á¹¹Ìå£¬ÊôÓÚ±»¶¯¶ÁÈ¡µÄÒ»·½
+ *  \brief modbusåº”ç­”ç»“æ„ä½“ï¼Œå±äºè¢«åŠ¨è¯»å–çš„ä¸€æ–¹
  */
 typedef struct mb_response {
-    uint8_t chSlaveNum;             /*! ´Ó»úÕ¾Ì¨ºÅ          */
-    uint8_t chCode;                 /*! ¹¦ÄÜÂë              */
+    uint8_t chSlaveNum;             /*! ä»æœºç«™å°å·          */
+    uint8_t chCode;                 /*! åŠŸèƒ½ç               */
 
-    uint16_t hwByteCount;           /*! ×Ö½Ú¸öÊı            */
-    uint16_t hwDataAddr;            /*! Êı¾İµØÖ·            */
-    uint16_t hwDataNum;             /*! Êı¾İ¶ÁÈ¡»òĞ´Èë¸öÊı  */
+    uint16_t hwByteCount;           /*! å­—èŠ‚ä¸ªæ•°            */
+    uint16_t hwDataAddr;            /*! æ•°æ®åœ°å€            */
+    uint16_t hwDataNum;             /*! æ•°æ®è¯»å–æˆ–å†™å…¥ä¸ªæ•°  */
 
-    uint8_t *pchRegStart;           /*! Ó¦´ğÊı¾İ»º³åÇøÍ·Ö¸Õë*/
+    uint8_t *pchRegStart;           /*! åº”ç­”æ•°æ®ç¼“å†²åŒºå¤´æŒ‡é’ˆ*/
 } mb_response_t;
 
 typedef enum {
@@ -123,18 +123,18 @@ typedef enum {
 } mb_eu_state_t;
 
 typedef struct {
-    mb_request_t tRequest;          /*! modbusÇëÇó½á¹¹Ìå    */
-    mb_response_t tResponse;        /*! modbusÓ¦´ğ½á¹¹Ìå    */
-    serial_ctl_t tSerialCtl;        /*! ´®¿Ú²Ù×÷½á¹¹Ìå      */
+    mb_request_t tRequest;          /*! modbusè¯·æ±‚ç»“æ„ä½“    */
+    mb_response_t tResponse;        /*! modbusåº”ç­”ç»“æ„ä½“    */
+    serial_ctl_t tSerialCtl;        /*! ä¸²å£æ“ä½œç»“æ„ä½“      */
 
-    uint8_t chState;                /*! ÄÚ²¿×´Ì¬»ú±äÁ¿      */
+    uint8_t chState;                /*! å†…éƒ¨çŠ¶æ€æœºå˜é‡      */
     mb_eu_state_t tStatus;
 
-    uint8_t chRecvBlock;            /*! ÊÇ·ñ½ÓÊÕ×èÈû        */
+    uint8_t chRecvBlock;            /*! æ˜¯å¦æ¥æ”¶é˜»å¡        */
     
-    uint32_t wEvent;                /*! ÄÚ²¿ÊÂ¼ş±äÁ¿        */
+    uint32_t wEvent;                /*! å†…éƒ¨äº‹ä»¶å˜é‡        */
     
-    /*£¡ uint8_t chErrorCode; */
+    /*ï¼ uint8_t chErrorCode; */
 } mb_control_t, mb_master_t, mb_slave_t;
 
 /*********************************************************************

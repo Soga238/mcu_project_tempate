@@ -26,11 +26,11 @@
 */
 typedef struct __cache_data cache_data_t;
 struct __cache_data {
-    uint8_t     chExpirationCounter;    // ¹ıÆÚ¼ÆÊıÆ÷
-    uint8_t     chPort;                 // ID¶ÔÓ¦´Ó»úËùÔÚ¶Ë¿Ú
+    uint8_t     chExpirationCounter;    // è¿‡æœŸè®¡æ•°å™¨
+    uint8_t     chPort;                 // IDå¯¹åº”ä»æœºæ‰€åœ¨ç«¯å£
 
-    uint8_t     chID;                   // ¶ÀÒ»ÎŞ¶şµÄÄÚ²¿´Ó»úID£¬ ±ÜÃâÓĞÖØ¸´£¨Õ¾ºÅ£©µÄÉè±¸
-    uint8_t     chCode;                 // ¹¦ÄÜÂë
+    uint8_t     chID;                   // ç‹¬ä¸€æ— äºŒçš„å†…éƒ¨ä»æœºIDï¼Œ é¿å…æœ‰é‡å¤ï¼ˆç«™å·ï¼‰çš„è®¾å¤‡
+    uint8_t     chCode;                 // åŠŸèƒ½ç 
     uint16_t    hwDataAddr;
     uint16_t    hwDataNumber;
     union {

@@ -23,15 +23,15 @@
 **********************************************************************
 */
 
-#define MB_SER_ADU_SIZE_MIN                 (6u)          /*! RTU����֡����С����            */
-#define MB_SER_ADU_SIZE_MAX                 (256u)        /*! RTU����֡����󳤶�            */
+#define MB_SER_ADU_SIZE_MIN                 (6u)          /*! RTU串行帧的最小长度            */
+#define MB_SER_ADU_SIZE_MAX                 (256u)        /*! RTU串行帧的最大长度            */
 
 // (PDU_SIZE + 3) = ADU_SIZE
-#define MB_SER_PDU_SIZE_MIN                 (3u)          /*! RTU����֡����С����            */
-#define MB_SER_PDU_SIZE_MAX                 (253u)        /*! RTU����֡����󳤶�            */
+#define MB_SER_PDU_SIZE_MIN                 (3u)          /*! RTU串行帧的最小长度            */
+#define MB_SER_PDU_SIZE_MAX                 (253u)        /*! RTU串行帧的最大长度            */
 
-#define MB_FUNC_WRITE_REGCNT_MIN            (0x0001)      /*! д�뱣�ּĴ�������С����       */
-#define MB_FUNC_WRITE_REGCNT_MAX            (0x007B)      /*! д�뱣�ּĴ�������󳤶�       */
+#define MB_FUNC_WRITE_REGCNT_MIN            (0x0001)      /*! 写入保持寄存器的最小长度       */
+#define MB_FUNC_WRITE_REGCNT_MAX            (0x007B)      /*! 写入保持寄存器的最大长度       */
 
 #define EV_MASTER_NONE                      (0)
 #define EV_MASTER_RECV_TIMEOUT              (1 << 0)
@@ -632,7 +632,7 @@ int8_t mb_do_request(mb_master_t *ptMaster, const mb_request_t *ptRequest)
 }
 
 // -------------------------------------------------------------------------
-//                              �ӻ�
+//                              从机
 // -------------------------------------------------------------------------
 
 __WEAK void port_slave_cb(mb_slave_t *ptSlave, mb_request_t *ptRequest, mb_response_t *ptResponse)

@@ -12,11 +12,11 @@ struct cache_node {
 
 typedef struct cache_data_list_t cache_data_list_t;
 struct cache_data_list_t {
-    cache_node_t *ptBuffer;         // Ö¸Ïò¾²Ì¬½ÚµãÊı×é
-    int32_t nBufferSize;            // Êı×é³¤¶È
+    cache_node_t *ptBuffer;         // æŒ‡å‘é™æ€èŠ‚ç‚¹æ•°ç»„
+    int32_t nBufferSize;            // æ•°ç»„é•¿åº¦
 
     int32_t nLength;
-    cache_node_t *ptHead;           // Í·Ö¸Õë
+    cache_node_t *ptHead;           // å¤´æŒ‡é’ˆ
 
     cache_node_t *ptPeekHead;
     int32_t nPeekedCount;

@@ -26,40 +26,40 @@ extern "C" {
 
 #define LZ_BITS_PER_BYTE    8
 
-/** \brief bits×ª»»Îª×Ö½Ú¸öÊı */
+/** \brief bitsè½¬æ¢ä¸ºå­—èŠ‚ä¸ªæ•° */
 #define LZ_BIT_BYTE(n)              ((n) >> 3)
 
-/** \brief ¼ÆËãn bitsÑÚÂë */
+/** \brief è®¡ç®—n bitsæ©ç  */
 #define LZ_BIT_MASK(n)              (1UL << ((n) % LZ_BIT_PER_LONG))
 
-/** \brief bitÒÆÎ» */
+/** \brief bitç§»ä½ */
 #define LZ_BIT(bit)                 (1u << (bit))
 
-/** \brief bitÖÃÎ» */
+/** \brief bitç½®ä½ */
 #define LZ_BIT_SET(data, bit)       ((data) |= LZ_BIT(bit))
 
-/** \brief bitÇåÁã */
+/** \brief bitæ¸…é›¶ */
 #define LZ_BIT_CLR(data, bit)       ((data) &= ~LZ_BIT(bit))
 
-/** \brief bit·­×ª */
+/** \brief bitç¿»è½¬ */
 #define LZ_BIT_TOGGLE(data, bit)    ((data) ^= LZ_BIT(bit))
 
-/** \brief ²âÊÔbitÊÇ·ñÖÃÎ» */
+/** \brief æµ‹è¯•bitæ˜¯å¦ç½®ä½ */
 #define LZ_BIT_ISSET(data, bit)     ((data) & LZ_BIT(bit))
 
-/** \brief »ñÈ¡bitÖµ */
+/** \brief è·å–bitå€¼ */
 #define LZ_BIT_GET(data, bit)       (LZ_BIT_ISSET(data, bit) ? 1 : 0)
 
-/** \brief bitÖÃÎ», ¸ù¾İ mask Ö¸¶¨µÄÎ» */
+/** \brief bitç½®ä½, æ ¹æ® mask æŒ‡å®šçš„ä½ */
 #define LZ_BIT_SET_MASK(data, mask)         ((data) |= (mask))
 
-/** \brief bitÇåÁã, ¸ù¾İ mask Ö¸¶¨µÄÎ» */
+/** \brief bitæ¸…é›¶, æ ¹æ® mask æŒ‡å®šçš„ä½ */
 #define LZ_BIT_CLR_MASK(data, mask)         ((data) &= ~(mask))
 
-/** \brief »ñÈ¡ n bits ÑÚÂëÖµ */
+/** \brief è·å– n bits æ©ç å€¼ */
 #define LZ_BITS_MASK(n)             (~((~0u) << (n)))
 
-/** \brief »ñÈ¡Î»¶ÎÖµ */
+/** \brief è·å–ä½æ®µå€¼ */
 #define LZ_BITS_GET(data, start, len)   \
                    (((data) >> (start)) & LZ_BITS_MASK(len))
 

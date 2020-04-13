@@ -30,11 +30,11 @@
 */
 
 #ifndef MAXMIUM_CACHE_BUF_SIZE
-    #define MAXMIUM_CACHE_BUF_SIZE          64  // »º´æÊı¾İ¸öÊı
+    #define MAXMIUM_CACHE_BUF_SIZE          64  // ç¼“å­˜æ•°æ®ä¸ªæ•°
 #endif
 
 #define EXPIRATION_ININTIAL_VALUE           5
-#define UPDATE_TIME_PERIOD                  250 // ¸üĞÂÊ±¼äÖÜÆÚ£¬µ¥Î»ºÁÃë
+#define UPDATE_TIME_PERIOD                  250 // æ›´æ–°æ—¶é—´å‘¨æœŸï¼Œå•ä½æ¯«ç§’
 
 /*********************************************************************
 *
@@ -107,7 +107,7 @@ int32_t make_cache_response_with_request(const proxy_request_t *ptRequest, proxy
 */
 
 /**
- * \brief ³õÊ¼»¯»º´æÊı¾İ¼ÇÂ¼Á´±í
+ * \brief åˆå§‹åŒ–ç¼“å­˜æ•°æ®è®°å½•é“¾è¡¨
  */
 int32_t cache_record_init(void)
 {
@@ -119,7 +119,7 @@ int32_t cache_record_init(void)
 }
 
 /**
- * \brief       ¶¨Ê±µ÷ÓÃ£¬É¾³ı¹ıÆÚ¼ÆÊıÆ÷ÎªÁãµÄ»º´æ¼ÇÂ¼
+ * \brief       å®šæ—¶è°ƒç”¨ï¼Œåˆ é™¤è¿‡æœŸè®¡æ•°å™¨ä¸ºé›¶çš„ç¼“å­˜è®°å½•
  * \return      fsm_rt_t
  */
 fsm_initialiser(delete_expired_cache_record)
@@ -156,7 +156,7 @@ fsm_implementation(delete_expired_cache_record)
 }
 
 /**
- * \brief       ¶¨Ê±µ÷ÓÃ£¬¶ÁÈ¡Éè±¸¼Ä´æÆ÷Êı¾İ£¬¸üĞÂ×ÔÉí»º´æ
+ * \brief       å®šæ—¶è°ƒç”¨ï¼Œè¯»å–è®¾å¤‡å¯„å­˜å™¨æ•°æ®ï¼Œæ›´æ–°è‡ªèº«ç¼“å­˜
  * \return      fsm_rt_t
  */
 fsm_initialiser(update_cache_record)
@@ -198,7 +198,7 @@ fsm_implementation(update_cache_record)
                 this.ptResponse->chPortDst = this.ptRequest->chPortSrc;
                 update_state_to(UPDATE_RECORD);
             } else {
-                /*! ¶ÁÈ¡»º´æÊ§°Ü£¬É¾³ıÇëÇó¶ÔÓ¦µÄ»º´æ¼ÇÂ¼ */
+                /*! è¯»å–ç¼“å­˜å¤±è´¥ï¼Œåˆ é™¤è¯·æ±‚å¯¹åº”çš„ç¼“å­˜è®°å½• */
                 delete_cache_record_by_request(this.ptRequest);
                 MLOG_RAW(RTT_CTRL_TEXT_BRIGHT_GREEN"[response] read failed\r\n");
             }
@@ -229,8 +229,8 @@ fsm_implementation(update_cache_record)
 }
 
 /**
- * \brief       ¸ù¾İ request ÇëÇó£¬´Ó»º´æÖĞ¶ÁÈ¡Êı¾İ
- * \param[in]   request ÇëÇó½á¹¹ÌåÖ¸Õë
+ * \brief       æ ¹æ® request è¯·æ±‚ï¼Œä»ç¼“å­˜ä¸­è¯»å–æ•°æ®
+ * \param[in]   request è¯·æ±‚ç»“æ„ä½“æŒ‡é’ˆ
  * \return      fsm_rt_t
  */
 fsm_initialiser(read_cache_data, args(proxy_request_t *ptRequest))
@@ -268,7 +268,7 @@ fsm_implementation(read_cache_data, args(proxy_response_t **pptResponse))
             *pptResponse = this.ptResponse;
             update_state_to(ADD_REPLY_TIME);
         } else {
-            /*! µ±Ã»ÓĞ»º´æ¿É¶ÁµÄÊ±ºò£¬²»ĞèÒªÁ¢¼´·µ»Ø */
+            /*! å½“æ²¡æœ‰ç¼“å­˜å¯è¯»çš„æ—¶å€™ï¼Œä¸éœ€è¦ç«‹å³è¿”å› */
             if (++this.wDelayCounter > MINMIUM_READ_CACHE_WAIT_TIME) {
                 *pptResponse = NULL;
                 RAW_DATA_FREE(this.ptRaw);
@@ -279,7 +279,7 @@ fsm_implementation(read_cache_data, args(proxy_response_t **pptResponse))
     }
 
     state(ADD_REPLY_TIME) {
-        /*! ÈËÎªÔö¼Ó¶ÁÈ¡»º´æµÄÊ±¼ä */
+        /*! äººä¸ºå¢åŠ è¯»å–ç¼“å­˜çš„æ—¶é—´ */
         if (++this.wDelayCounter > MINMIUM_READ_CACHE_PROCESS_TIME) {
             this.wDelayCounter = 0;
             fsm_cpl();
@@ -432,10 +432,10 @@ static int32_t add_attr_to_refresh_cache_record_obj(update_cache_data_t *ptData,
 }
 
 /**
-* \brief       ¸ù¾İ request ÇëÇóºÍ resposne Ó¦´ğ£¬ ¸üĞÂ»º´æ¼ÇÂ¼ÀïµÄÊı¾İ
-* \param[in]   ptRequest     request ÇëÇó½á¹¹ÌåÖ¸Õë
-* \param[in]   ptResponse    response Ó¦´ğ½á¹¹ÌåÖ¸Õë
-* \return      -1(Ê§°Ü)
+* \brief       æ ¹æ® request è¯·æ±‚å’Œ resposne åº”ç­”ï¼Œ æ›´æ–°ç¼“å­˜è®°å½•é‡Œçš„æ•°æ®
+* \param[in]   ptRequest     request è¯·æ±‚ç»“æ„ä½“æŒ‡é’ˆ
+* \param[in]   ptResponse    response åº”ç­”ç»“æ„ä½“æŒ‡é’ˆ
+* \return      -1(å¤±è´¥)
 */
 int32_t refresh_cache_record(const proxy_request_t *ptRequest, const proxy_response_t *ptResponse)
 {
@@ -463,10 +463,10 @@ static inline void refresh_cache_data_expiration_counter(cache_data_t *ptCache)
 }
 
 /**
-* \brief       ¸ù¾İ request ÇëÇó, ´Ó»º´æÖĞÕÒ³öÆ¥ÅäµÄÊı¾İ£¬Ìî³äµ½ response ½á¹¹ÌåÄÚ
-* \param[in]   ptRequest     request ÇëÇó½á¹¹ÌåÖ¸Õë
-* \param[out]  ptResponse    response Ó¦´ğ½á¹¹ÌåÖ¸Õë
-* \return      -1(Ê§°Ü)
+* \brief       æ ¹æ® request è¯·æ±‚, ä»ç¼“å­˜ä¸­æ‰¾å‡ºåŒ¹é…çš„æ•°æ®ï¼Œå¡«å……åˆ° response ç»“æ„ä½“å†…
+* \param[in]   ptRequest     request è¯·æ±‚ç»“æ„ä½“æŒ‡é’ˆ
+* \param[out]  ptResponse    response åº”ç­”ç»“æ„ä½“æŒ‡é’ˆ
+* \return      -1(å¤±è´¥)
 */
 int32_t make_cache_response_with_request(const proxy_request_t *ptRequest, proxy_response_t *ptResponse)
 {

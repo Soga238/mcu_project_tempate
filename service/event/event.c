@@ -25,8 +25,8 @@
 
 
 /**
- * \brief       µÈ´ıEVENT´¥·¢
- * \param[in]   ptEvent     EVENTÊı¾İ½á¹¹Ìå
+ * \brief       ç­‰å¾…EVENTè§¦å‘
+ * \param[in]   ptEvent     EVENTæ•°æ®ç»“æ„ä½“
  * \return      true
  *              false
  */
@@ -44,8 +44,8 @@ bool wait_event(event_t *ptEvent)
 }
 
 /**
- * \brief       ´¥·¢EVENT
- * \param[in]   ptEvent     EVENTÊı¾İ½á¹¹Ìå
+ * \brief       è§¦å‘EVENT
+ * \param[in]   ptEvent     EVENTæ•°æ®ç»“æ„ä½“
  * \return      true
  *              false
  */
@@ -59,9 +59,9 @@ bool set_event(event_t *ptEvent)
 }
 
 /**
- * \brief       ³õÊ¼»¯EVENT½á¹¹Ìå
- * \param[in]   ptEvent     EVENTÊı¾İ½á¹¹Ìå
- * \param[in]   bIsAutoReset    ×Ô¶¯¸´Î»¿ª¹Ø
+ * \brief       åˆå§‹åŒ–EVENTç»“æ„ä½“
+ * \param[in]   ptEvent     EVENTæ•°æ®ç»“æ„ä½“
+ * \param[in]   bIsAutoReset    è‡ªåŠ¨å¤ä½å¼€å…³
  * \return      true
  *              false
  */
@@ -81,8 +81,8 @@ bool init_event(event_t *ptEvent, bool bValue, bool bManual)
 }
 
 /**
- * \brief       ¸´Î»EVENTµ½Î´´¥·¢×´Ì¬
- * \param[in]   ptEvent     EVENTÊı¾İ½á¹¹Ìå
+ * \brief       å¤ä½EVENTåˆ°æœªè§¦å‘çŠ¶æ€
+ * \param[in]   ptEvent     EVENTæ•°æ®ç»“æ„ä½“
  * \return      true
  *              false
  */

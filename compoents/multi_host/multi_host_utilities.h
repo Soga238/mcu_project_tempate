@@ -59,86 +59,86 @@ typedef struct overlapping_area_output {
 */
 
 /**
- * \brief       IDºÅ×ªMODBUS´Ó»úµØÖ·
- * \param[in]   chPort     ¶Ë¿ÚºÅ
- * \param[in]   chId       IDÖµ
- * \param[out]  pchSlave   MODBUS´Ó»úµØÖ·
- * \return      -1(Ê§°Ü)
+ * \brief       IDå·è½¬MODBUSä»æœºåœ°å€
+ * \param[in]   chPort     ç«¯å£å·
+ * \param[in]   chId       IDå€¼
+ * \param[out]  pchSlave   MODBUSä»æœºåœ°å€
+ * \return      -1(å¤±è´¥)
  */
 extern int8_t id_to_address(uint8_t chPort, uint8_t chId, uint8_t *pchSlave);
 
 /**
- * \brief       ¼ÆËã´ÓÖ÷»ú·¢ËÍÇëÇó£¬µ½´Ó»ú·µ»ØÓ¦´ğµÄµÈ´ıÊ±¼ä£¨Ô¤¹ÀÖµ£©
- * \param[in]   ptData        Ö¸Ïò raw_data_t ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \param[in]   wBaudrate     ²¨ÌØÂÊ
- * \return      µÈ´ıÊ±¼ä£¬µ¥Î»ºÁÃë
+ * \brief       è®¡ç®—ä»ä¸»æœºå‘é€è¯·æ±‚ï¼Œåˆ°ä»æœºè¿”å›åº”ç­”çš„ç­‰å¾…æ—¶é—´ï¼ˆé¢„ä¼°å€¼ï¼‰
+ * \param[in]   ptData        æŒ‡å‘ raw_data_t ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \param[in]   wBaudrate     æ³¢ç‰¹ç‡
+ * \return      ç­‰å¾…æ—¶é—´ï¼Œå•ä½æ¯«ç§’
  */
 extern uint32_t calc_wait_response_time(const raw_data_t *ptData, uint32_t wBaudrate);
 
 /**
- * \brief       ½«´Ó¶Ë¿Ú½ÓÊÕµ½µÄÀàĞÍÎª raw_data_t µÄÊı¾İ£¬×ª»»³É request ÇëÇó¸ñÊ½
- * \param[in]   ptRawData     Ö¸Ïò raw_data_t ÀàĞÍµÄ½á¹¹ÌåµÄÊı¾İ
- * \param[out]  ptCfg         Ö¸Ïò request_cfg_t ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       å°†ä»ç«¯å£æ¥æ”¶åˆ°çš„ç±»å‹ä¸º raw_data_t çš„æ•°æ®ï¼Œè½¬æ¢æˆ request è¯·æ±‚æ ¼å¼
+ * \param[in]   ptRawData     æŒ‡å‘ raw_data_t ç±»å‹çš„ç»“æ„ä½“çš„æ•°æ®
+ * \param[out]  ptCfg         æŒ‡å‘ request_cfg_t ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 extern int32_t raw_data_transform_request(raw_data_t *ptRawData, proxy_request_t *ptRequest);
 
 /**
- * \brief       ½«´Ó¶Ë¿Ú½ÓÊÕµ½µÄÀàĞÍÎª raw_data_t µÄÊı¾İ£¬×ª»»³É response ÇëÇó¸ñÊ½
- * \param[in]   ptRawData     Ö¸Ïò raw_data_t ÀàĞÍµÄ½á¹¹ÌåµÄÊı¾İ
- * \param[out]  ptCfg         Ö¸Ïò response_cfg_t ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       å°†ä»ç«¯å£æ¥æ”¶åˆ°çš„ç±»å‹ä¸º raw_data_t çš„æ•°æ®ï¼Œè½¬æ¢æˆ response è¯·æ±‚æ ¼å¼
+ * \param[in]   ptRawData     æŒ‡å‘ raw_data_t ç±»å‹çš„ç»“æ„ä½“çš„æ•°æ®
+ * \param[out]  ptCfg         æŒ‡å‘ response_cfg_t ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 extern int32_t raw_data_transform_response(raw_data_t *ptRawData, proxy_response_t *ptResponse);
 
 /**
- * \brief       ÍêÈ«¿½±´Ò»¸ö request ÇëÇó
- * \param[in]   ptRequest        Ö¸Ïò request ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
- * \return      requestÇëÇóµÄ¿½±´
- *              NULL(¿½±´Ê§°Ü)
+ * \brief       å®Œå…¨æ‹·è´ä¸€ä¸ª request è¯·æ±‚
+ * \param[in]   ptRequest        æŒ‡å‘ request ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      requestè¯·æ±‚çš„æ‹·è´
+ *              NULL(æ‹·è´å¤±è´¥)
  */
 
 extern proxy_request_t *proxy_mb_request_copy(const proxy_request_t *ptRequest);
 
 /**
- * \brief       ¸ù¾İ response_cfg_t ÀàĞÍµÄ½á¹¹Ìå£¬Éú³É MODBUS Ğ­ÒéÌåÊı¾İ
- * \param[in]   pchBuffer     Ö¸Ïò×Ö½ÚÊı×éµÄÍ·Ö¸Õë
- * \param[in]   hwBufferSize  ×Ö½ÚÊı×é³¤¶È
- * \param[out]  ptCfg         Ö¸Ïò response_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ ¹æ® response_cfg_t ç±»å‹çš„ç»“æ„ä½“ï¼Œç”Ÿæˆ MODBUS åè®®ä½“æ•°æ®
+ * \param[in]   pchBuffer     æŒ‡å‘å­—èŠ‚æ•°ç»„çš„å¤´æŒ‡é’ˆ
+ * \param[in]   hwBufferSize  å­—èŠ‚æ•°ç»„é•¿åº¦
+ * \param[out]  ptCfg         æŒ‡å‘ response_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 extern int32_t make_response_body(uint8_t *pchBuffer, uint16_t hwBufferSize, const response_cfg_t *ptBodyCfg);
 
 /**
- * \brief       ¸ù¾İ request_cfg_t ÀàĞÍµÄ½á¹¹Ìå£¬Éú³É MODBUS Ğ­ÒéÌåÊı¾İ
- * \param[in]   pchBuffer     Ö¸Ïò×Ö½ÚÊı×éµÄÍ·Ö¸Õë
- * \param[in]   hwBufferSize  ×Ö½ÚÊı×é³¤¶È
- * \param[out]  ptCfg         Ö¸Ïò request_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ ¹æ® request_cfg_t ç±»å‹çš„ç»“æ„ä½“ï¼Œç”Ÿæˆ MODBUS åè®®ä½“æ•°æ®
+ * \param[in]   pchBuffer     æŒ‡å‘å­—èŠ‚æ•°ç»„çš„å¤´æŒ‡é’ˆ
+ * \param[in]   hwBufferSize  å­—èŠ‚æ•°ç»„é•¿åº¦
+ * \param[out]  ptCfg         æŒ‡å‘ request_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 extern int32_t make_request_body(uint8_t *pchBuffer, uint16_t hwBufferSize, const request_cfg_t *ptCfg);
 
 /**
- * \brief       ±È½Ï request ÇëÇóºÍ response Ó¦´ğÊÇ·ñÆ¥Åä
- * \param[in]   ptReqCfg        Ö¸Ïò request_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \param[in]   ptRespCfg       Ö¸Ïò response_cfg_t ½á¹¹ÌåµÄÖ¸Õë
- * \return      -1(Ê§°Ü)
+ * \brief       æ¯”è¾ƒ request è¯·æ±‚å’Œ response åº”ç­”æ˜¯å¦åŒ¹é…
+ * \param[in]   ptReqCfg        æŒ‡å‘ request_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \param[in]   ptRespCfg       æŒ‡å‘ response_cfg_t ç»“æ„ä½“çš„æŒ‡é’ˆ
+ * \return      -1(å¤±è´¥)
  */
 extern int32_t is_response_match_request(const request_cfg_t *ptReqfg, const response_cfg_t *ptRespCfg);
 
 /**
-* \brief       ÅĞ¶ÏÒ»¸ö request ÊÇÒ»¸öĞ´²Ù×÷
-* \param[in]   ptRequest        Ö¸Ïò request ÀàĞÍ½á¹¹ÌåµÄÖ¸Õë
+* \brief       åˆ¤æ–­ä¸€ä¸ª request æ˜¯ä¸€ä¸ªå†™æ“ä½œ
+* \param[in]   ptRequest        æŒ‡å‘ request ç±»å‹ç»“æ„ä½“çš„æŒ‡é’ˆ
 * \return      true
 *              false
 */
 extern bool is_request_write_operation(const proxy_request_t *ptRequest);
 
 /**
-* \brief       ¼ÆËãÁ½¸öÇøÓòµÄÖØµş²¿·Ö
-* \param[in]   ptInput  °üº¬Á½¸öÇøÓòĞÅÏ¢µÄÊäÈë½á¹¹Ìå
-* \param[out]  ptOutput °üº¬ÖØµşÇøÓòĞÅÏ¢µÄÊä³ö½á¹¹Ìå
-* \return      -1(Ê§°Ü)
+* \brief       è®¡ç®—ä¸¤ä¸ªåŒºåŸŸçš„é‡å éƒ¨åˆ†
+* \param[in]   ptInput  åŒ…å«ä¸¤ä¸ªåŒºåŸŸä¿¡æ¯çš„è¾“å…¥ç»“æ„ä½“
+* \param[out]  ptOutput åŒ…å«é‡å åŒºåŸŸä¿¡æ¯çš„è¾“å‡ºç»“æ„ä½“
+* \return      -1(å¤±è´¥)
 */
 extern int32_t calc_overlapping_area(const overlapping_area_input_t *ptInput, overlapping_area_output_t *ptOutput);
 

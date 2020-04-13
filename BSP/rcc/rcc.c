@@ -17,7 +17,7 @@
 #include "stm32f10x_flash.h"
 
 /**
- * \brief   ³õÊ¼»¯ÏµÍ³Ê±ÖÓ
+ * \brief   åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿ
  * \retval
  */
 void rcc_init(void)
@@ -52,15 +52,15 @@ void rcc_init(void)
     while (RCC_GetFlagStatus(RCC_FLAG_HSIRDY) == 0) {
         ;
     }
-    // Ê¹ÄÜ FLASH Ô¤´æÈ¡»º³åÇø
+    // ä½¿èƒ½ FLASH é¢„å­˜å–ç¼“å†²åŒº
     FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
  
-    // SYSCLK ÖÜÆÚÓëÉÁ´æ·ÃÎÊÊ±¼äµÄ±ÈÀýÉèÖÃ£¬ÕâÀïÍ³Ò»ÉèÖÃ³É 2
-    // ÉèÖÃ³É 2 µÄÊ±ºò£¬SYSCLK µÍÓÚ 48M Ò²¿ÉÒÔ¹¤×÷£¬Èç¹ûÉèÖÃ³É 0 »òÕß 1 µÄÊ±ºò£¬
-    // Èç¹ûÅäÖÃµÄ SYSCLK ³¬³öÁË·¶Î§µÄ»°£¬Ôò»á½øÈëÓ²¼þ´íÎó£¬³ÌÐò¾ÍËÀÁË
-    // 0£º0 < SYSCLK <= 24M
-    // 1£º24< SYSCLK <= 48M
-    // 2£º48< SYSCLK <= 72M
+    // SYSCLK å‘¨æœŸä¸Žé—ªå­˜è®¿é—®æ—¶é—´çš„æ¯”ä¾‹è®¾ç½®ï¼Œè¿™é‡Œç»Ÿä¸€è®¾ç½®æˆ 2
+    // è®¾ç½®æˆ 2 çš„æ—¶å€™ï¼ŒSYSCLK ä½ŽäºŽ 48M ä¹Ÿå¯ä»¥å·¥ä½œï¼Œå¦‚æžœè®¾ç½®æˆ 0 æˆ–è€… 1 çš„æ—¶å€™ï¼Œ
+    // å¦‚æžœé…ç½®çš„ SYSCLK è¶…å‡ºäº†èŒƒå›´çš„è¯ï¼Œåˆ™ä¼šè¿›å…¥ç¡¬ä»¶é”™è¯¯ï¼Œç¨‹åºå°±æ­»äº†
+    // 0ï¼š0 < SYSCLK <= 24M
+    // 1ï¼š24< SYSCLK <= 48M
+    // 2ï¼š48< SYSCLK <= 72M
     FLASH_SetLatency(FLASH_Latency_2);
 
     RCC_PLLConfig(RCC_PLLSource_HSI_Div2, RCC_PLLMul_16);        // 8M / 2 * 9 = 64M
@@ -78,7 +78,7 @@ void rcc_init(void)
     }
 #endif
     
-    // ¸üÐÂÏµÍ³Ê±ÖÓ±äÁ¿£¬»á±»µÚÈý·½ÓÃ»§³ÌÐòµ÷ÓÃ
+    // æ›´æ–°ç³»ç»Ÿæ—¶é’Ÿå˜é‡ï¼Œä¼šè¢«ç¬¬ä¸‰æ–¹ç”¨æˆ·ç¨‹åºè°ƒç”¨
     SystemCoreClockUpdate();
 }
 

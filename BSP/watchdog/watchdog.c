@@ -19,10 +19,10 @@
 extern IWDG_HandleTypeDef hiwdg;
 
 /*
- * ���� IWDG �ĳ�ʱʱ��
+ * 设置 IWDG 的超时时间
  * Tout = prv/40 * rlv (s)
- *      prv������[4,8,16,32,64,128,256]
- * prv:Ԥ��Ƶ��ֵ��ȡֵ���£�
+ *      prv可以是[4,8,16,32,64,128,256]
+ * prv:预分频器值，取值如下：
  *     @arg IWDG_Prescaler_4: IWDG prescaler set to 4
  *     @arg IWDG_Prescaler_8: IWDG prescaler set to 8
  *     @arg IWDG_Prescaler_16: IWDG prescaler set to 16
@@ -31,15 +31,15 @@ extern IWDG_HandleTypeDef hiwdg;
  *     @arg IWDG_Prescaler_128: IWDG prescaler set to 128
  *     @arg IWDG_Prescaler_256: IWDG prescaler set to 256
  *
- *        �������Ź�ʹ��LSI��Ϊʱ�ӡ�
- *        LSI ��Ƶ��һ���� 30~60KHZ ֮�䣬�����¶Ⱥ͹������ϻ���һ����Ư�ƣ���
- *        ��һ��ȡ 40KHZ�����Զ������Ź��Ķ�ʱʱ�䲢һ���ǳ���ȷ��ֻ�����ڶ�ʱ�侫��
- *        Ҫ��Ƚϵ͵ĳ��ϡ�
+ *        独立看门狗使用LSI作为时钟。
+ *        LSI 的频率一般在 30~60KHZ 之间，根据温度和工作场合会有一定的漂移，我
+ *        们一般取 40KHZ，所以独立看门狗的定时时间并一定非常精确，只适用于对时间精度
+ *        要求比较低的场合。
  *
- * rlv:��װ�ؼĴ�����ֵ��ȡֵ��ΧΪ��0-0XFFF
- * �������þ�����
- * IWDG_Config(IWDG_Prescaler_64 ,625);  // IWDG 1s ��ʱ��� 
- *                        ��64 / 40��* 625 = 1s
+ * rlv:重装载寄存器的值，取值范围为：0-0XFFF
+ * 函数调用举例：
+ * IWDG_Config(IWDG_Prescaler_64 ,625);  // IWDG 1s 超时溢出 
+ *                        （64 / 40）* 625 = 1s
  */
 void iwdg_config(uint8_t prv, uint16_t rlv)
 {

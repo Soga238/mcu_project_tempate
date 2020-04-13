@@ -30,9 +30,9 @@ extern "C" {
 */
 
 typedef struct {
-    const uint8_t   *pchClientID;   // 产品名称存储数组
-    const uint8_t   *pchUserName;   // 设备名称存储数组
-    const uint8_t   *pchPassword;   // 设备密钥存储数组
+    const uint8_t   *pchClientID;   // 浜у搧鍚嶇О瀛樺偍鏁扮粍
+    const uint8_t   *pchUserName;   // 璁惧鍚嶇О瀛樺偍鏁扮粍
+    const uint8_t   *pchPassword;   // 璁惧瀵嗛挜瀛樺偍鏁扮粍
 } at_mqtt_info_t;
 
 typedef struct {

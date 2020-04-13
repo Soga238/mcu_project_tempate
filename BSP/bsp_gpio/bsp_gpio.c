@@ -59,7 +59,7 @@ void bsp_gpio_init(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_PIN_LED2;
     GPIO_Init(GPIO_PORT_LED2, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_PIN_LED3;    // PB3 设置无效，与PB15 物理短接
+    GPIO_InitStructure.GPIO_Pin = GPIO_PIN_LED3;    // PB3 璁剧疆鏃犳晥锛屼笌PB15 鐗╃悊鐭帴
     GPIO_Init(GPIO_PORT_LED3, &GPIO_InitStructure);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_PIN_LED4;

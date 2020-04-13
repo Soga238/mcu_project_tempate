@@ -7,43 +7,43 @@ typedef struct {
     uint8_t     chPort;
     uint8_t     chBuf[RAW_DATA_BUF_SIZE];
     uint16_t    hwBufSize;
-} raw_data_t;                       /*! ´®¿ÚÊÕ·¢½á¹¹Ìå     */
+} raw_data_t;                       /*! ä¸²å£æ”¶å‘ç»“æ„ä½“     */
 
 typedef struct {
     union {
-        uint16_t *phwWR;            /*! ¼Ä´æÆ÷Êı¾İÖ¸Õë      */
+        uint16_t *phwWR;            /*! å¯„å­˜å™¨æ•°æ®æŒ‡é’ˆ      */
         uint8_t  *pchWR;
     };
 
-    uint8_t  chSlave;               /*! ´Ó»úÕ¾Ì¨ºÅ          */
-    uint8_t  chCode;                /*! ¹¦ÄÜÂë              */
-    uint16_t hwDataAddr;            /*! Êı¾İµØÖ·            */
-    uint16_t hwDataNumber;          /*! Êı¾İ¶ÁÈ¡»òĞ´Èë¸öÊı   */
+    uint8_t  chSlave;               /*! ä»æœºç«™å°å·          */
+    uint8_t  chCode;                /*! åŠŸèƒ½ç               */
+    uint16_t hwDataAddr;            /*! æ•°æ®åœ°å€            */
+    uint16_t hwDataNumber;          /*! æ•°æ®è¯»å–æˆ–å†™å…¥ä¸ªæ•°   */
 } request_cfg_t;
 
 typedef struct {
     union {
-        uint16_t *phwHR;            /*! ¼Ä´æÆ÷Êı¾İÖ¸Õë      */
+        uint16_t *phwHR;            /*! å¯„å­˜å™¨æ•°æ®æŒ‡é’ˆ      */
         uint8_t  *pchHR;
     };
 
-    uint8_t  chSlave;               /*! ´Ó»úÕ¾Ì¨ºÅ          */
-    uint8_t  chCode;                /*! ¹¦ÄÜÂë              */
+    uint8_t  chSlave;               /*! ä»æœºç«™å°å·          */
+    uint8_t  chCode;                /*! åŠŸèƒ½ç               */
 
-    /*! hwDataAddr ºÍ hwOutputNumber Ğ´ÈëÊı¾İ·µ»ØÊ±¿ÉÓÃ */
-    uint16_t hwDataAddr;            /*! Ğ´ÈëµØÖ·            */
-    uint16_t hwOutputNumber;        /*£¡Ğ´ÈëÊıÁ¿            */
+    /*! hwDataAddr å’Œ hwOutputNumber å†™å…¥æ•°æ®è¿”å›æ—¶å¯ç”¨ */
+    uint16_t hwDataAddr;            /*! å†™å…¥åœ°å€            */
+    uint16_t hwOutputNumber;        /*ï¼å†™å…¥æ•°é‡            */
     
-    uint8_t  chByteCount;           /*! Êµ¼Ê×Ö½Ú¸öÊı        */
+    uint8_t  chByteCount;           /*! å®é™…å­—èŠ‚ä¸ªæ•°        */
     uint8_t  chExceptionCode;
 
 } response_cfg_t;
 
 
-/*! ´úÀíÔ­Ê¼ÇëÇó½á¹¹Ìå */
+/*! ä»£ç†åŸå§‹è¯·æ±‚ç»“æ„ä½“ */
 typedef struct {
     request_cfg_t tBodyCfg;
-    raw_data_t       *ptRaw;        /*! modbusÔ­Ê¼Í¨Ñ¶Êı¾İÖ¡ */
+    raw_data_t       *ptRaw;        /*! modbusåŸå§‹é€šè®¯æ•°æ®å¸§ */
 
     uint8_t     chPortSrc;
     uint8_t     chPortDstBuf[TOTAL_PORT_NUM - 1];
@@ -51,10 +51,10 @@ typedef struct {
     uint8_t     chID;
 } proxy_request_t;
 
-/*! ´úÀíÔ­Ê¼ÇëÇó½á¹¹Ìå */
+/*! ä»£ç†åŸå§‹è¯·æ±‚ç»“æ„ä½“ */
 typedef struct {
     response_cfg_t tBodyCfg;
-    raw_data_t       *ptRaw;        /*! modbusÔ­Ê¼Í¨Ñ¶Êı¾İÖ¡ */
+    raw_data_t       *ptRaw;        /*! modbusåŸå§‹é€šè®¯æ•°æ®å¸§ */
 
     uint8_t     chPortSrc;
     uint8_t     chPortDst;

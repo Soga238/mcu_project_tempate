@@ -37,7 +37,7 @@ extern_simple_fsm(receive_data,
 extern_fsm_implementation(receive_data);
 extern_fsm_initialiser(receive_data);
 
-// 发送单端口数据
+// 鍙戦�佸崟绔彛鏁版嵁
 extern_simple_fsm(send_port_data,
                   def_params(
                       raw_data_t *ptData;
@@ -46,7 +46,7 @@ extern_simple_fsm(send_port_data,
 extern_fsm_implementation(send_port_data);
 extern_fsm_initialiser(send_port_data, args(uint8_t chPort))
 
-// 发送所有端口的数据
+// 鍙戦�佹墍鏈夌鍙ｇ殑鏁版嵁
 extern_simple_fsm(send_data,
                   def_params(
                       raw_data_t *ptData;

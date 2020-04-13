@@ -72,7 +72,7 @@ port_config_t s_tPortConfigBuf[TOTAL_PORT_NUM] = {
             .wBaudRate = CH4_PORT_BAUDRATE,
         }
     }
-};       // 端口配置实例数组
+};       // 绔彛閰嶇疆瀹炰緥鏁扮粍
 
 port_resource_t s_tPortResource[TOTAL_PORT_NUM] = {
     {
