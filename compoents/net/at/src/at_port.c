@@ -28,7 +28,7 @@ extern uart_dev_t g_tATUart;
 typedef struct {
     int32_t nPort;
     struct at_client tClient;
-}at_client_map_t;
+} at_client_map_t;
 
 /* Private define --------------------------------------------------*/
 /* Private macro ---------------------------------------------------*/

@@ -342,7 +342,7 @@ void at_obj_set_urc_table(at_client_t client, const struct at_urc *urc_table, rt
 
     for (idx = 0; idx < table_sz; idx++) {
         ASSERT(urc_table[idx].cmd_prefix != NULL);
-        //ASSERT(urc_table[idx].cmd_suffix != NULL);  // ?����?��D?���o��???o����o
+        //ASSERT(urc_table[idx].cmd_suffix != NULL);  // 可以有前缀但没后缀
     }
 
     client->urc_table = urc_table;

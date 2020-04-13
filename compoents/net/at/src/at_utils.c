@@ -16,6 +16,7 @@
 
 /* Includes --------------------------------------------------------*/
 #include "..\include\at_utils.h"
+#include "..\include\at_port.h"
 #include <stdio.h>
 
 /* Global variables ------------------------------------------------*/
@@ -59,9 +60,10 @@ const uint8_t *at_extract_last_cmd(uint8_t *pchBuf, int32_t *pnLength)
     return s_chSendBuf;
 }
 
-int32_t at_vprintf(void *_, const char *format, va_list args)
+int32_t at_vprintf(void *client, const char *format, va_list args)
 {
     s_nLastCmdLength = vsnprintf((char *)s_chSendBuf, sizeof(s_chSendBuf), format, args);
+    at_client_obj_send(client, s_chSendBuf, s_nLastCmdLength);
     return s_nLastCmdLength;
 }
 
