@@ -17,26 +17,16 @@
 #define __BSP_CFG_H__
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
-/*
-#include "..\utility\lz_types.h"
-#include "..\utility\lz_bitops.h"
-#include "..\utility\lz_common.h"
-#include "..\compoents\3rdparty\SEGGER RTT\SEGGER_RTT.h"
-*/
-
-#include "..\usrapp\usrapp_cfg.h"
-
-#define __ulog(format, ...)         SEGGER_RTT_printf(0u, format"\n", ##__VA_ARGS__);
-#define ULOG_D                      __ulog
+#include "..\usr_app\usr_app_cfg.h"
 
 #define XHAL_OK                     0
-#define XHAL_FAIL                   -1
+#define XHAL_FAIL                  -1
 
 #define WAIT_FOREVER                osWaitForever
-        
+
 /*! user peripherals */
 #include "..\hal\mcu\stm32f1xx\Inc\main.h"
 

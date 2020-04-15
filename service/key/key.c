@@ -99,9 +99,10 @@ static int8_t key_check( uint8_t* keyValue )
         }
         s_chState = KEY_CHECK_SCAN_END;                 // 进入扫描结束状态
 
+    // fall through
     case KEY_CHECK_SCAN_END:
-        s_chState = KEY_CHECK_START;
         *keyValue = s_chCurrentValue;                  // 保存此次读取的键值
+        s_chState = KEY_CHECK_START;
         return 1;
 
     default:
@@ -165,9 +166,10 @@ static int8_t key_fronted( void )
         }
         s_chState = KEY_TRIGER_END;
 
+    // fall through
     case KEY_TRIGER_END:                                // 按键变化记录结束状态
-        s_chState = KEY_TRIGER_START;
         key_history_value = key_now_value;
+        s_chState = KEY_TRIGER_START;
         return 0;
 
     default:

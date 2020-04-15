@@ -32,7 +32,7 @@ extern "C" {
 */
 #define HEAP_LOG_RAW(fmt)
 
-#define CONFIG_TOTAL_HEAP_SIZE          (1024 * 10)
+#define CONFIG_TOTAL_HEAP_SIZE          (GLOBAL_HEAP_SIZE)
 
 #define PORT_BYTE_ALIGNMENT             (8)
 #if PORT_BYTE_ALIGNMENT == 8

@@ -52,7 +52,7 @@ bool json_cmd_add(uartcmd_dev_t *ptDev, const uint8_t *pchName, bool (*fnHandler
 static bool __execute(uartcmd_dev_t *ptDev, const uint8_t *pchName, void *pArg)
 {
     for (uint8_t i = 0; i < ptDev->chCount; i++) {
-        if (0 == strcmp((char *)pchName, (char *)ptDev->tList[i].chNameArray)) {
+        if (0 == strncmp((char *)pchName, (char *)ptDev->tList[i].chNameArray, JSON_CMD_NAME_SIZE)) {
             if (NULL != ptDev->tList[i].fnHandler) {
                 return ptDev->tList[i].fnHandler(pArg);
             }

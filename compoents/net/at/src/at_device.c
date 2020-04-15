@@ -201,7 +201,7 @@ int32_t at_device_check_mqtt(void)
         return -1;
     }
 
-    for (i = 0; i < RETRY_COUNT; i++) {
+    for (i = 0; i <= RETRY_COUNT; i++) {
         if (at_cmd_get_work_state(s_ptATClient, &s_tGsmParam)) {
             break;
         } else if (RETRY_COUNT == i) {
@@ -210,7 +210,7 @@ int32_t at_device_check_mqtt(void)
         }
     }
 
-    for (i = 0; i < RETRY_COUNT; i++) {
+    for (i = 0; i <= RETRY_COUNT; i++) {
         if (at_cmd_get_mqttstate(s_ptATClient, &s_tGsmParam.wMqttState)) {
             break;
         } else if (RETRY_COUNT == i) {

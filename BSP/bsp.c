@@ -81,10 +81,10 @@ const i2c_gpio_dev_mapping_t c_tI2cDevMap[TOTAL_I2C_DEV_NUM] = {
 
 uint8_t get_key_scan_value(void)
 {
-    uint32_t wKeyVal = 1;
+    int32_t nKeyVal = GPIO_LEVEL_HIGH;
 
-    if (XHAL_OK == xhal_gpio_get_by_port(PORT_KEY, &wKeyVal)) {
-        if (0 == wKeyVal) {
+    if (XHAL_OK == xhal_gpio_get_by_port(PORT_KEY, &nKeyVal)) {
+        if (0 == nKeyVal) {
             return KEY_VALUE1;
         }
     }
