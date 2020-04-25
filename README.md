@@ -1,5 +1,5 @@
-# mcu_project_tempate
-单片机项目工程模板, 方便快速开发项目
+# mcu project tempate
+mcu project tempate, convenient for users to quickly develop mcu projects.
 
 ### bsp driver
 
