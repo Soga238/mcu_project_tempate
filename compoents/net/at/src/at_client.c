@@ -51,19 +51,19 @@ at_response_t at_create_resp(rt_size_t buf_size, rt_size_t line_num, rt_int32_t 
     at_response_t resp = NULL;
 
     if (RESP_BUF_SIZE_MAX < buf_size) {
-        ALOG_W("No memory for response object!\r\n");
+        ALOG_W("No memory for response object\r\n");
         return NULL;
     }
 
     resp = (at_response_t)osMemoryPoolAlloc(s_tMemPoolResp, 0);
     if (NULL == resp) {
-        ALOG_W("No memory for response object!\r\n");
+        ALOG_W("No memory for response object\r\n");
         return  NULL;
     }
 
     resp->buf = osMemoryPoolAlloc(s_tMemPoolRespBuf, 0);
     if (NULL == resp->buf) {
-        ALOG_W("No memory for response buffer!\r\n");
+        ALOG_W("No memory for response buffer\r\n");
         osMemoryPoolFree(s_tMemPoolResp, resp);
         return  NULL;
     }
@@ -103,7 +103,7 @@ at_response_t at_resp_set_info(at_response_t resp, rt_size_t buf_size, rt_size_t
 
     /*! \note use RTX static memory */
     if (RESP_BUF_SIZE_MAX < buf_size) {
-        ALOG_W("No memory for response object!\r\n");
+        ALOG_W("No memory for response object\r\n");
         return NULL;
     }
 
@@ -254,11 +254,11 @@ int32_t at_obj_exec_cmd(at_client_t client, at_response_t resp, const char *expr
         status = osSemaphoreAcquire(client->resp_notice, resp->timeout);
         if (osOK == status) {
             if (client->resp_status != AT_RESP_OK) {
-                ALOG_W("exec(%s), state=%d!\r\n", at_get_last_cmd(&nLength), client->resp_status);
+                ALOG_W("exec(%s), state=%d\r\n", at_get_last_cmd(&nLength), client->resp_status);
                 result = RT_ERROR;
             }
         } else if (osErrorTimeout == status) {
-            ALOG_W("exec(%s) timeout (%d ticks)!\r\n", at_get_last_cmd(&nLength), resp->timeout);
+            ALOG_W("exec(%s) timeout (%d ticks)\r\n", at_get_last_cmd(&nLength), resp->timeout);
             result = RT_ETIMEOUT;
         } else {
             ALOG_W("os error\r\n");
@@ -310,11 +310,11 @@ int32_t at_obj_exec_cmd_with_buf(at_client_t client, at_response_t resp, uint8_t
         if (osOK == status) {
             // receive response from AT server
             if (client->resp_status != AT_RESP_OK) {
-                ALOG_W("exec(%s), state=%d!\r\n", at_extract_last_cmd(pchBuf, &nLength), client->resp_status);
+                ALOG_W("exec(%s), state=%d\r\n", at_extract_last_cmd(pchBuf, &nLength), client->resp_status);
                 result = RT_ERROR;
             }
         } else if (osErrorTimeout == status) {
-            ALOG_W("exec(%s) timeout (%d ticks)!\r\n", at_extract_last_cmd(pchBuf, &nLength), resp->timeout);
+            ALOG_W("exec(%s) timeout (%d ticks)\r\n", at_extract_last_cmd(pchBuf, &nLength), resp->timeout);
             result = RT_ETIMEOUT;
         } else {
             ALOG_W("os error\r\n");
