@@ -183,4 +183,14 @@ uint8_t ringbuf_get_one_char(char_ring_t *ptRing, uint8_t *pchByte)
     return 0;
 }
 
+void ringbuf_reset(char_ring_t* ptRing)
+{
+    if (NULL != ptRing) {
+        ptRing->head = ptRing->tail = 0;
+        if (NULL != ptRing->pchBuf) {
+            memset(ptRing->pchBuf, 0x00, ptRing->size);
+        }
+    }
+}
+
 /*************************** End of file ****************************/
