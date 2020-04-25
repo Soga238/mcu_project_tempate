@@ -9,17 +9,11 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       Flash * FLASH Write                                          *
+*       flashwrite_cfg.h *                                           *
 *                                                                    *
 **********************************************************************
 */
-#ifndef FLASH_WRITE_H
-#define FLASH_WRITE_H
 
-#include ".\flashwrite_cfg.h"
-
-extern int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize);
-
-#endif
+#include "..\bsp_cfg.h"
 
 /*************************** End of file ****************************/

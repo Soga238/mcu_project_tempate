@@ -13,7 +13,7 @@
 *                                                                    *
 **********************************************************************
 */
-#include "./rcc.h"
+#include ".\rcc.h"
 #include "stm32f10x_flash.h"
 
 /**
@@ -63,7 +63,7 @@ void rcc_init(void)
     // 2：48< SYSCLK <= 72M
     FLASH_SetLatency(FLASH_Latency_2);
 
-    RCC_PLLConfig(RCC_PLLSource_HSI_Div2, RCC_PLLMul_16);        // 8M / 2 * 9 = 64M
+    RCC_PLLConfig(RCC_PLLSource_HSI_Div2, RCC_PLLMul_16);       // 8M / 2 * 9 = 64M
     RCC_HCLKConfig(RCC_SYSCLK_Div1);                            // HCLK = 64M
     RCC_PCLK1Config(RCC_HCLK_Div2);                             // PCLK = APB1 = 32M
     RCC_PCLK2Config(RCC_HCLK_Div1);                             // PCLK = APB2 = 64M

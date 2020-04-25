@@ -13,34 +13,29 @@
 *                                                                    *
 **********************************************************************
 */
-#include "iap_config.h"
-#include "config.h"
-#include "log.h"
-
+#include ".\flashwrite.h"
 #include "stm32f10x.h"
 
 // 大容量系列
 #if (FLASH_PAGE_SIZE == 0x0800)
-    #define SECTOR_MASK                 (0xFFFFF800)
+#define SECTOR_MASK                 (0xFFFFF800)
 #else
-    #define SECTOR_MASK                 (0xFFFFFC00)
+#define SECTOR_MASK                 (0xFFFFFC00)
 #endif
 
-#define GET_SECTOR_START_ADDR(_ADDR)           (SECTOR_MASK & _ADDR)        // 获取一个扇区的起始地址
+#define GET_SECTOR_START_ADDR(__ADDR)   (SECTOR_MASK & (__ADDR))    // 获取一个扇区的起始地址
 
-static int32_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
+static int32_t write_cpu_flash(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
 {
-    uint32_t i = 0;
-    uint32_t wTemp = 0;
+    uint32_t wTemp, i = 0;
     FLASH_Status tStatus = FLASH_COMPLETE;
 
     FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);
 
-    for (i = 0; i < (wSize >> 2); i++) {
-        if (0 == (wFlashAddr & (FLASH_PAGE_SIZE - 1))) {
-            tStatus = FLASH_ErasePage(GET_SECTOR_START_ADDR(wFlashAddr));   // 页擦除
+    for (i = 0; i < (wSize >> 2); i++, wFlashAddr += 4) {
+        if (GET_SECTOR_START_ADDR(wFlashAddr) == wFlashAddr) {    // 遇到扇区首地址才擦除
+            tStatus = FLASH_ErasePage(wFlashAddr);
             if (tStatus != FLASH_COMPLETE) {
-                LOG_ERROR("erase fail");
                 goto fail;
             }
         }
@@ -49,22 +44,16 @@ static int32_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
         wTemp |= pchBuf[(i << 2) + 1] << 8;
         wTemp |= pchBuf[(i << 2) + 2] << 16;
         wTemp |= pchBuf[(i << 2) + 3] << 24;
-
         tStatus = FLASH_ProgramWord(wFlashAddr, wTemp);
         if (!(tStatus == FLASH_COMPLETE && cup32(wFlashAddr) == wTemp)) {
-            LOG_ERROR("program fail");
             goto fail;
         }
-
-        wFlashAddr += 4;
     }
 
     if (wSize & 0x02) {
-
-        if (0 == (wFlashAddr & (FLASH_PAGE_SIZE - 1))) {
-            tStatus = FLASH_ErasePage(GET_SECTOR_START_ADDR(wFlashAddr));   // 页擦除
+        if (GET_SECTOR_START_ADDR(wFlashAddr) == wFlashAddr) {    // 遇到扇区首地址才擦除
+            tStatus = FLASH_ErasePage(wFlashAddr);
             if (tStatus != FLASH_COMPLETE) {
-                LOG_ERROR("erase fail");
                 goto fail;
             }
         }
@@ -73,7 +62,6 @@ static int32_t write_cpu_flash(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wS
         wTemp |= pchBuf[(i << 2) + 1] << 8;
         tStatus = FLASH_ProgramHalfWord(wFlashAddr, wTemp);
         if (!(tStatus == FLASH_COMPLETE && cup16(wFlashAddr) == wTemp)) {
-            LOG_ERROR("program fail");
             goto fail;
         }
     }
@@ -91,15 +79,15 @@ fail:
  * \param wSize         字节数组长度
  *
  */
-int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
+int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
 {
-    uint32_t wAddress = wFlashAddr, wBytes, wPrimaskStatus;
-    uint8_t *pchSrc = pchBuf;
-    int32_t  nReturn = 1;
-    uint8_t chOriginLocked = 0;
+    uint32_t wBytes, wPrimaskStatus, wAddress = wFlashAddr;
+    const uint8_t *pchSrc = pchBuf;
+    int32_t nReturn = 1;
+    uint8_t chFlashLocked = 0;
 
     if ((wFlashAddr < FLASH_BASE_ADDRESS) ||
-            (wFlashAddr + wSize) > (FLASH_BASE_ADDRESS + FLASH_TOTAL_SIZE)) {
+        (wFlashAddr + wSize) > (FLASH_BASE_ADDRESS + FLASH_TOTAL_SIZE)) {
         return 0;
     }
 
@@ -113,13 +101,13 @@ int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
 
     if (FLASH->CR & 0x00000080) {                   // 判断FLASH是否被锁住
         FLASH_Unlock();
-        chOriginLocked = 1;                         // 便于后面判断是否要重新锁住
+        chFlashLocked = 1;                          // 便于后面判断是否要重新锁住
     }
 
     while (wSize) {
-        wBytes = wFlashAddr - GET_SECTOR_START_ADDR(wFlashAddr);
+        wBytes = GET_SECTOR_START_ADDR(wAddress) + FLASH_PAGE_SIZE - wAddress;
         wBytes = wSize >= wBytes ? wBytes : wSize;
-        if (write_cpu_flash(wAddress, pchSrc, hwByteToWrite)) {
+        if (write_cpu_flash(wAddress, pchSrc, wBytes)) {
             wAddress += wBytes;
             pchSrc += wBytes;
             wSize -= wBytes;
@@ -129,7 +117,7 @@ int32_t flash_write(uint32_t wFlashAddr, uint8_t *pchBuf, uint32_t wSize)
         }
     }
 
-    if (1 == chOriginLocked) {
+    if (1 == chFlashLocked) {
         FLASH_Lock();
     }
 

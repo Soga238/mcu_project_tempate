@@ -9,17 +9,27 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       Flash * FLASH Write                                          *
+*       bsp.h *                                                      *
 *                                                                    *
 **********************************************************************
 */
-#ifndef FLASH_WRITE_H
-#define FLASH_WRITE_H
+#ifndef __TBSP_H__
+#define __TBSP_H__
 
-#include ".\flashwrite_cfg.h"
-
-extern int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize);
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* Includes --------------------------------------------------------*/
+#include ".\bsp_cfg.h"
+
+/* Exported constants ----------------------------------------------*/
+/* Exported functions --------------------------------------------- */
+extern bool bsp_init(void);
+extern void bsp_deinit(void);
+
+#ifdef __cplusplus
+}
+#endif
+#endif
 /*************************** End of file ****************************/

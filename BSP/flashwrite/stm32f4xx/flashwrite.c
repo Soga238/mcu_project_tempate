@@ -101,15 +101,14 @@ static const flash_sector_t *__get_sector(uint32_t wAddr)
  * \param wSize         字节数组长度
  *
  */
-static bool __is_sector_erased(const uint8_t *pchBuf, uint32_t wSize)
+static bool __is_sector_erased(const uint16_t *phwBuf, uint32_t wSize)
 {
-    uint32_t i = 0;
-    for (i = 0; i < wSize; ++i) {
-        if (pchBuf[0] != 0xFF) {
-            break;
+    for (uint32_t i = 0; i < wSize; ++i) {
+        if (phwBuf[i] != 0xFFFF) {
+            return false;
         }
     }
-    return i == wSize;
+    return true;
 }
 
 static int32_t write_cpu_flash(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
@@ -133,7 +132,7 @@ static int32_t write_cpu_flash(uint32_t wFlashAddr, const uint8_t *pchBuf, uint3
     // word write
     for (i = 0; i < (wSize >> 2); i++) {
         if ((ptSector->wSectorAddr == wFlashAddr) &&
-            !(__is_sector_erased((uint8_t *)ptSector->wSectorAddr, ptSector->wSectorSize))) {
+            !(__is_sector_erased((uint16_t *)ptSector->wSectorAddr, ptSector->wSectorSize >> 1))) {
             tEraseInfo.Banks = ptSector->chBank;
             tEraseInfo.Sector = ptSector->chSectorNum;
             if (HAL_OK != HAL_FLASHEx_Erase(&tEraseInfo, &wSectorError)) {
@@ -157,7 +156,7 @@ static int32_t write_cpu_flash(uint32_t wFlashAddr, const uint8_t *pchBuf, uint3
     // half word write
     if (wSize & 0x02) {
         if ((ptSector->wSectorAddr == wFlashAddr) &&
-            !(__is_sector_erased((uint8_t *)ptSector->wSectorAddr, ptSector->wSectorSize))) {
+            !(__is_sector_erased((uint16_t *)ptSector->wSectorAddr, ptSector->wSectorSize >> 1))) {
             tEraseInfo.Banks = ptSector->chBank;
             tEraseInfo.Sector = ptSector->chSectorNum;
             if (HAL_OK != HAL_FLASHEx_Erase(&tEraseInfo, &wSectorError)) {
@@ -196,16 +195,16 @@ int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
 
     const flash_sector_t *ptSector = NULL;
 
-    if ((wFlashAddr < FLASH_BASE_ADDRESS) ||
-        (wFlashAddr + wSize) > (FLASH_BASE_ADDRESS + FLASH_TOTAL_SIZE)) {
+    if ((wAddress < FLASH_BASE_ADDRESS) ||
+        (wAddress + wSize) > (FLASH_BASE_ADDRESS + FLASH_TOTAL_SIZE)) {
         return 0;
     }
 
-    if ((wFlashAddr & 0x01) || (wSize & 0x01)) {    // 写入地址2字节对齐，写入字节个数为2的倍数
+    if ((wAddress & 0x01) || (wSize & 0x01)) {    // 写入地址2字节对齐，写入字节个数为2的倍数
         return 0;
     }
 
-    ptSector = __get_sector(wFlashAddr);            // STM32F4 以块为最小擦除单元
+    ptSector = __get_sector(wAddress);            // STM32F4 以块为最小擦除单元
     if (NULL == ptSector) {
         return 0;
     }
@@ -219,7 +218,7 @@ int32_t flash_write(uint32_t wFlashAddr, const uint8_t *pchBuf, uint32_t wSize)
     }
 
     while (wSize) {
-        wBytes = MIN((ptSector->wSectorAddr + ptSector->wSectorSize - wFlashAddr), wSize);
+        wBytes = MIN((ptSector->wSectorAddr + ptSector->wSectorSize - wAddress), wSize);
         if (write_cpu_flash(wAddress, pchSrc, wBytes)) {
             wAddress += wBytes;
             pchSrc += wBytes;
