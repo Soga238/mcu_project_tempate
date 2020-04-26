@@ -11,6 +11,8 @@ mcu project tempate, convenient for users to quickly develop mcu projects.
 
 * flash eeprom
 
+* mcu flash
+
 * i2c
 
 * rcc
