@@ -1,5 +1,5 @@
 # mcu project tempate
-mcu project tempate, convenient for users to quickly develop mcu projects.
+mcu project tempate, convenient for users to quickly develop mcu projects. 
 
 ### bsp driver
 
