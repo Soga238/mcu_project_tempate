@@ -1,3 +1,18 @@
+/*********************************************************************
+*                      Hangzhou Lingzhi Lzlinks                      *
+*                        Internet of Things                          *
+**********************************************************************
+*                                                                    *
+*            (c) 2018 - 8102 Hangzhou Lingzhi Lzlinks                *
+*                                                                    *
+*       www.lzlinks.com     Support: embedzjh@gmail.com              *
+*                                                                    *
+**********************************************************************
+*                                                                    *
+*       at_device_cmd.h *                                            *
+*                                                                    *
+**********************************************************************
+*/
 #ifndef __AT_DEVICE_CMD_H__
 #define __AT_DEVICE_CMD_H__
 
@@ -43,3 +58,4 @@ extern bool at_cmd_get_nptm(struct at_client *ptClient, gsm_param_t *ptSimInfo);
 #endif
     
 #endif
+/*************************** End of file ****************************/
