@@ -33,6 +33,8 @@ mcu project tempate, convenient for users to quickly develop mcu projects.
 
 * easyflash
 
+* JSON
+
 ### service
 
 * critical
