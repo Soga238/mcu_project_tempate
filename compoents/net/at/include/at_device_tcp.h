@@ -9,15 +9,18 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       RINGBUF * Ring Buffer Quueue                                 *
+*       at_device_tcp.h *                                            *
 *                                                                    *
 **********************************************************************
 */
+#ifndef __AT_DEVICE_TCP_H__
+#define __AT_DEVICE_TCP_H__
 
-#ifndef __RINGBUF_H_
-#define __RINGBUF_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#include "..\service_cfg.h"
+#include "..\at_cfg.h"
 
 /*********************************************************************
 *
@@ -26,28 +29,38 @@
 **********************************************************************
 */
 
-typedef  struct char_ring_t char_ring_t;
-struct char_ring_t {
-    uint16_t head;
-    uint16_t tail;
-    uint16_t size;
-    uint8_t *pchBuf;
-};
+typedef struct {
+    const uint8_t   *pchCCID;
+    const uint8_t   *pchVer;
+
+    uint8_t  chTcpState;
+    uint8_t  chCSQSignal;
+
+    uint32_t wCid;
+    uint32_t wLoc;
+} at_gsm_param_t;
 
 /*********************************************************************
 *
-*       API functions
+*       Function prototypes
 *
 **********************************************************************
 */
-extern uint8_t  ringbuf_init(char_ring_t *ptRing, uint8_t *pchBuf, uint32_t wSize);
-extern uint16_t ringbuf_put(char_ring_t *ptRing, uint8_t *pchSrc, uint16_t wSize);
-extern uint16_t ringbuf_get(char_ring_t *ptRing, uint8_t *pchDst, uint16_t wReadSize);
-extern uint16_t ringbuf_get_len(char_ring_t *ptRing);
-extern uint16_t ringbuf_get_empty_len(char_ring_t *ptRing);
-extern uint8_t ringbuf_get_one_char(char_ring_t *ptRing, uint8_t *pchByte);
-extern void ringbuf_reset(char_ring_t* ptRing);
+extern bool at_device_init(void);
 
+extern bool at_device_open_tcp(void);
+
+extern bool at_device_close_tcp(void);
+
+extern bool at_device_check_status(void);
+
+extern int32_t at_device_tcp_send(const uint8_t* pchBuf, uint16_t hwLength, uint32_t wTimeout);
+
+extern int32_t at_device_tcp_recv(uint8_t* pchBuf, uint16_t hwLength, uint32_t wTimeout);
+
+#ifdef __cplusplus
+}
 #endif
 
+#endif
 /*************************** End of file ****************************/

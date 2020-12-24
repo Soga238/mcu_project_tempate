@@ -23,13 +23,14 @@ extern "C" {
 #include "..\usr_app\usr_app_cfg.h"
 
 //#include "cmsis_os2.h"
+
 //#define ENTER_ATOM_PROTECT()                    \
 //    do{                                         \
 //        uint32_t wIrqState = __get_PRIMASK();   \
 //        __set_PRIMASK(1u);}
-//
+
 //#define EXIT_ATOM_PROTECT() do{__set_PRIMASK(wIrqState);}while(0)
-//
+
 //#define SAFE_OPERATON(code)                     \
 //    do{                                         \
 //        uint32_t wIrqState = __get_PRIMASK();   \
@@ -37,7 +38,7 @@ extern "C" {
 //        #code;                                  \
 //        __set_PRIMASK(wIrqState);               \
 //    }while(0)
-//
+
 //#define RTOS_ATOM_PROTECT(code) do{             \
 //    uint32_t wLock = osKernelLock();            \
 //    #code;                                      \
@@ -50,7 +51,13 @@ extern "C" {
 //    do{                                         \
 //        osKernelRestoreLock(wLock);             \
 //    }while(0)
+    
+#define ENTER_ATOM_PROTECT() ((void)0)
+#define EXIT_ATOM_PROTECT() ((void)0)
         
+#define RTX_ENTER_ATOM_PROTECT() ((void)0)
+#define RTX_EXIT_ATOM_PROTECT() ((void)0)
+
 #ifdef __cplusplus
     }
 #endif

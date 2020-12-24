@@ -1,5 +1,5 @@
 # mcu project tempate
-mcu project tempate, convenient for users to quickly develop mcu projects.
+mcu project tempate, convenient for users to quickly develop mcu projects. 
 
 ### bsp driver
 
@@ -10,7 +10,7 @@ mcu project tempate, convenient for users to quickly develop mcu projects.
 * at24x
 
 * flash eeprom
- 
+
 * mcu flash
 
 * i2c

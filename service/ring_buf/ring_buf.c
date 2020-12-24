@@ -14,7 +14,7 @@
 **********************************************************************
 */
 
-#include "./ring_buf.h"
+#include ".\ring_buf.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -27,11 +27,11 @@
 #define IS_POWER_OF_2(size) ((size) & (size - 1))
 
 /**
- * /brief Initialize the circular queue
- * /param ptRing Pointer to the queue control block.
- * /param pchBuf Pointer to character array.
- * /param wSize  Size of character array.
- * /return  1:  Success
+ * \brief Initialize the circular queue
+ * \param ptRing Pointer to the queue control block.
+ * \param pchBuf Pointer to character array.
+ * \param wSize  Size of character array.
+ * \return  1:  Success
  *          0:  Fail
  */
 uint8_t ringbuf_init(char_ring_t *ptRing, uint8_t *pchBuf, uint32_t wSize)
@@ -53,11 +53,11 @@ uint8_t ringbuf_init(char_ring_t *ptRing, uint8_t *pchBuf, uint32_t wSize)
 }
 
 /**
- * /brief Put data to the circular queue
- * /param ptRing Pointer to the queue control block.
- * /param pchSrc Pointer to source character array.
- * /param wSize Number of character.
- * /return The number of characters actually insert into the queue.
+ * \brief Put data to the circular queue
+ * \param ptRing Pointer to the queue control block.
+ * \param pchSrc Pointer to source character array.
+ * \param wSize Number of character.
+ * \return The number of characters actually insert into the queue.
  */
 uint16_t ringbuf_put(char_ring_t *ptRing, uint8_t *pchSrc, uint16_t wSize)
 {
@@ -68,6 +68,9 @@ uint16_t ringbuf_put(char_ring_t *ptRing, uint8_t *pchSrc, uint16_t wSize)
     if (NULL == ptRing || NULL == pchSrc || 0 == wSize) {
         return 0;
     }
+
+    // enter atom protect
+    RTX_ENTER_ATOM_PROTECT();
 
     wTailToEnd = ptRing->size - ptRing->tail;
 
@@ -92,15 +95,18 @@ uint16_t ringbuf_put(char_ring_t *ptRing, uint8_t *pchSrc, uint16_t wSize)
     }
     ptRing->tail = (ptRing->tail + wBytes) & (ptRing->size - 1);
 
+    // exit atom protect
+    RTX_EXIT_ATOM_PROTECT();
+
     return wBytes;
 }
 
 /**
- * /brief Read data from a circular queue
- * /param ptRing Pointer to the queue control block.
- * /param pchDst Pointer to destination character array.
- * /param wReadSize The number of character to read
- * /return The number of characters actually read from the queue.
+ * \brief Read data from a circular queue
+ * \param ptRing Pointer to the queue control block.
+ * \param pchDst Pointer to destination character array.
+ * \param wReadSize The number of character to read
+ * \return The number of characters actually read from the queue.
  */
 uint16_t ringbuf_get(char_ring_t *ptRing, uint8_t *pchDst, uint16_t wReadSize)
 {
@@ -112,6 +118,9 @@ uint16_t ringbuf_get(char_ring_t *ptRing, uint8_t *pchDst, uint16_t wReadSize)
     if (NULL == ptRing || NULL == pchDst || 0 == wReadSize) {
         return 0;
     }
+
+    // enter atom protect
+    RTX_ENTER_ATOM_PROTECT();
 
     wValidBytes = (ptRing->tail - ptRing->head + ptRing->size) & (ptRing->size - 1);
     if (wValidBytes) {
@@ -129,13 +138,15 @@ uint16_t ringbuf_get(char_ring_t *ptRing, uint8_t *pchDst, uint16_t wReadSize)
         ptRing->head = (ptRing->head + wBytes) & (ptRing->size - 1);
     }
 
+    // exit atom protect
+    RTX_EXIT_ATOM_PROTECT();
     return wBytes;
 }
 
 /**
- * /brief Get the length of characters in the queue.
- * /param ptRing Pointer to the queue control block.
- * /return
+ * \brief Get the length of characters in the queue.
+ * \param ptRing Pointer to the queue control block.
+ * \return
  */
 uint16_t ringbuf_get_len(char_ring_t *ptRing)
 {
@@ -143,16 +154,22 @@ uint16_t ringbuf_get_len(char_ring_t *ptRing)
     if (NULL == ptRing) {
         return 0;
     }
-    
+
+    // enter atom protect
+    RTX_ENTER_ATOM_PROTECT();
+
     wValidLen = (ptRing->tail - ptRing->head + ptRing->size) & (ptRing->size - 1);
+
+    // exit atom protect
+    RTX_EXIT_ATOM_PROTECT();
 
     return wValidLen;
 }
 
 /**
- * /brief Get hte ramaning space in the queue.
- * /param ptRing Pointer to the queue control block.
- * /return
+ * \brief Get hte ramaning space in the queue.
+ * \param ptRing Pointer to the queue control block.
+ * \return
  */
 uint16_t ringbuf_get_empty_len(char_ring_t *ptRing)
 {
@@ -161,10 +178,14 @@ uint16_t ringbuf_get_empty_len(char_ring_t *ptRing)
     if (NULL == ptRing) {
         return 0;
     }
+    // enter atom protect
+    RTX_ENTER_ATOM_PROTECT();
 
     wLeftSpace = (ptRing->head + ptRing->size - ptRing->tail) & (ptRing->size - 1);
     wLeftSpace = wLeftSpace ? wLeftSpace - 1 : ptRing->size - 1;
 
+    // exit atom protect
+    RTX_EXIT_ATOM_PROTECT();
     return wLeftSpace;
 }
 
@@ -174,13 +195,26 @@ uint8_t ringbuf_get_one_char(char_ring_t *ptRing, uint8_t *pchByte)
         return 0;
     }
 
+    RTX_ENTER_ATOM_PROTECT();
+
     if (ptRing->tail != ptRing->head) {
         *pchByte = ptRing->pchBuf[ptRing->head];
         ptRing->head = (ptRing->head + 1) & (ptRing->size - 1);
         return 1;
     }
 
+    RTX_EXIT_ATOM_PROTECT();
     return 0;
+}
+
+void ringbuf_reset(char_ring_t* ptRing)
+{
+    if (NULL != ptRing) {
+        ptRing->head = ptRing->tail = 0;
+        if (NULL != ptRing->pchBuf) {
+            memset(ptRing->pchBuf, 0x00, ptRing->size);
+        }
+    }
 }
 
 /*************************** End of file ****************************/
